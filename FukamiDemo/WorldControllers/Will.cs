@@ -28,12 +28,24 @@ namespace WorldControllers
         #endregion // Properties
 
 
+        #region Events
+
+        public event EventHandler<UpdatedEventArgs> Updated;
+
+        #endregion // Events
+
+
         #region Private Methods
 
         #endregion // Private Methods
 
 
         #region Public Methods
+
+        public void RunPauseWilling()
+        {
+            _timer.IsRunning = !_timer.IsRunning;
+        }
 
         /// <summary>
         /// Adds or replaces the body into internal dictionary and underlying physical engine
@@ -74,10 +86,20 @@ namespace WorldControllers
             _engine = new PhysicsEngine();
             _engine.BroadPhase = new Physics2DDotNet.Detectors.SelectiveSweepDetector();
             _engine.Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver();
+            _engine.AddLogic(new GravityField(new Vector2D(0, 1000), new Lifespan()));
+
+            _engine.Updated += OnEngineUpdated;
 
             _timer = new PhysicsTimer(_engine.Update, .01f);
 
-            _engine.AddLogic(new GravityField(new Vector2D(0, 1000), new Lifespan()));
+        }
+
+        void OnEngineUpdated(object sender, UpdatedEventArgs e)
+        {
+            if (Updated != null)
+            {
+                Updated(sender, e);
+            }
         }
 
         public static Will Instance
