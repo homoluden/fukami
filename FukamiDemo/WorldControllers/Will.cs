@@ -55,25 +55,22 @@ namespace WorldControllers
         }
 
         /// <summary>
-        /// Adds or replaces the body into internal dictionary and underlying physical engine
+        /// Adds the body into internal dictionary and underlying physical engine
         /// </summary>
         /// <param name="newGuid">GUID of new Body</param>
         /// <param name="body">The Body which value will be copied</param>
         /// <returns>The actual value of added Body object.</returns>
-        public Body AddOrReplaceBody(Guid newGuid, Body body)
+        public void AddBody(Guid newGuid, Body body)
         {
             var actualAdded = _bodies.AddOrUpdate(newGuid, body, (g, b) =>
             {
+                body.Lifetime.Age = b.Lifetime.Age;
                 b.Lifetime.IsExpired = true;
 
-                var ancestor = new Body(body.State, body.Shape, body.Mass, body.Coefficients, new Lifespan() { Age = b.Lifetime.Age });
-                
-                return ancestor;
+                return body;
             });
 
             _engine.AddBody(actualAdded);
-
-            return actualAdded;
         }
 
         public void AddJoint(Joint joint)

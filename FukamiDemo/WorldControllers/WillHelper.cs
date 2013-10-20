@@ -40,7 +40,7 @@ namespace WorldControllers
         /// <param name="position">Initial Direction and Linear Position of the Body</param>
         /// <returns>Return the actual value of the Body added into world.</returns>
         /// <remarks>The Guid of new Body will be stored in Body.Tags["Guid"]. The raw Colored Drawable of new Body will be stored in Body.Tags["Drawable"].</remarks>
-        public static Body AddRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
+        public static BasePolygonBody AddRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
         {
             Vector2D[] vertexes = VertexHelper.CreateRectangle(width, height);
             vertexes = VertexHelper.Subdivide(vertexes, Math.Min(height, width) / 5);
@@ -49,15 +49,17 @@ namespace WorldControllers
 
             var boxDrawable = DrawableFactory.GetOrCreateColoredPolygonDrawable((ColoredPolygon)boxShape.Tag, ShapeType.Rectangle);
             
-            Body tempBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
+            Body newBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
             
             var newGuid = Guid.NewGuid();
+            newBody.Tags["Guid"] = newGuid;
+            newBody.Tags["Drawable"] = boxDrawable;
 
-            var actualBody = Will.Instance.AddOrReplaceBody(newGuid, tempBody);
-            actualBody.Tags["Guid"] = newGuid;
-            actualBody.Tags["Drawable"] = boxDrawable;
+            var rectBody = BasePolygonBody.Create(newBody);
+
+            Will.Instance.AddBody(newGuid, rectBody);            
             
-            return actualBody;
+            return rectBody;
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace WorldControllers
         /// <param name="mass">Mass of corresponding Body</param>
         /// <param name="position">Position of the Circle Shape</param>
         /// <returns>Newly created and added into world Body object.</returns>
-        public static Body AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
+        public static BasePolygonBody AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
         {
             CircleShape shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
             
@@ -76,9 +78,11 @@ namespace WorldControllers
             var newGuid = Guid.NewGuid();
             newBody.Tags["Guid"] = newGuid;
 
-            Will.Instance.AddOrReplaceBody(newGuid, newBody);
+            var circleBody = BasePolygonBody.Create(newBody);
 
-            return newBody;
+            Will.Instance.AddBody(newGuid, circleBody);
+
+            return circleBody;
         }
 
 
