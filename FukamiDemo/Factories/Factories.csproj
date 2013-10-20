@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ED568DF4-DDF7-456D-8565-78BBE6395D5E}</ProjectGuid>
+    <ProjectGuid>{05A7D33D-3674-4154-A797-8A5CEE6DEAB7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WorldControllers</RootNamespace>
-    <AssemblyName>WorldControllers</AssemblyName>
+    <RootNamespace>Factories</RootNamespace>
+    <AssemblyName>Factories</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,19 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Representation.cs" />
-    <Compile Include="Will.cs" />
+    <Compile Include="DrawableFactory.cs" />
+    <Compile Include="ShapeFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WillHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Drawables\Drawables.csproj">
       <Project>{84ed97ef-5f4c-4b29-a3e2-fb959d5fc81d}</Project>
       <Name>Drawables</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Factories\Factories.csproj">
-      <Project>{05a7d33d-3674-4154-a797-8a5cee6deab7}</Project>
-      <Name>Factories</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shapes\Shapes.csproj">
       <Project>{b1894b50-9f8d-4ce9-8f7a-13d3dd9f28b3}</Project>
