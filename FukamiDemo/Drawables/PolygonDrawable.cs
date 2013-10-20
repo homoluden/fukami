@@ -8,6 +8,14 @@ using System.Threading.Tasks;
 
 namespace Drawables
 {
+    public enum ShapeType
+    {
+        Triangle,
+        Rectangle,
+        Elipsis,
+        Mesh
+    }
+
     public class PolygonDrawable
     {
         public Polygon Polygon { get; private set; }
@@ -19,15 +27,19 @@ namespace Drawables
             Polygon = polygon;
         }
     }
+
     public class ColoredPolygonDrawable
     {
         public ColoredPolygon Polygon { get; private set; }
 
-        public ColoredPolygonDrawable(ColoredPolygon polygon)
+        public ShapeType BaseShape { get; private set; }
+
+        public ColoredPolygonDrawable(ColoredPolygon polygon, ShapeType shapeType = ShapeType.Mesh)
         {
             if (polygon == null) { throw new ArgumentNullException("polygon"); }
 
             Polygon = polygon;
+            BaseShape = shapeType;
         }
     }
 }

@@ -20,9 +20,10 @@ namespace WorldControllers
         {
             foreach (var member in chainMembers)
             {
-                Representation.Instance.AddOrReplaceDrawable(member.Guid, member.Drawable);
+                Representation.Instance.AddOrReplaceDrawable(member.Guid, member.Drawable, ShapeType.Rectangle);
             }
         }
+
 
     }
 }

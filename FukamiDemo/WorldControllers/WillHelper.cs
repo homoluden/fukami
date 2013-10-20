@@ -47,7 +47,7 @@ namespace WorldControllers
 
             var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertexes, Math.Min(height, width) / 5);
 
-            var boxDrawable = DrawableFactory.GetOrCreateColoredPolygonDrawable((ColoredPolygon)boxShape.Tag);
+            var boxDrawable = DrawableFactory.GetOrCreateColoredPolygonDrawable((ColoredPolygon)boxShape.Tag, ShapeType.Rectangle);
             
             Body tempBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
             

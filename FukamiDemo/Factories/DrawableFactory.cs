@@ -26,9 +26,9 @@ namespace Factories
             return _polygons.GetOrAdd(polygon, p => new PolygonDrawable(p));
         }
 
-        public static ColoredPolygonDrawable GetOrCreateColoredPolygonDrawable(ColoredPolygon polygon)
+        public static ColoredPolygonDrawable GetOrCreateColoredPolygonDrawable(ColoredPolygon polygon, ShapeType shapeType = ShapeType.Mesh)
         {
-            return _colPolygons.GetOrAdd(polygon, p => new ColoredPolygonDrawable(p));
+            return _colPolygons.GetOrAdd(polygon, p => new ColoredPolygonDrawable(p, shapeType));
         }
 
         static DrawableFactory ()
