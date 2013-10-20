@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Representation.cs" />
+    <Compile Include="RepresentationHelper.cs" />
     <Compile Include="Will.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WillHelper.cs" />
