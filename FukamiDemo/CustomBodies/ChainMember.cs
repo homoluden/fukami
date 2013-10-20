@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CustomBodies
 {
-    public class ChainMember : Body
+    public class ChainMember : BasePolygonBody
     {
         public Joint BegJoint 
         {
@@ -22,18 +22,6 @@ namespace CustomBodies
         {
             get { return (Joint)Tags["J2"]; }
             set { Tags["J2"] = value; }
-        }
-
-        public ColoredPolygonDrawable Drawable 
-        {
-            get { return (ColoredPolygonDrawable)Tags["Drawable"]; }
-            set { Tags["Drawable"] = value; } 
-        }
-
-        public Guid Guid
-        {
-            get { return (Guid)Tags["Guid"]; }
-            set { Tags["Guid"] = value; }
         }
 
         /// <summary>
