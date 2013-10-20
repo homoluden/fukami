@@ -66,11 +66,7 @@ namespace WorldControllers
         /// <param name="boxWidth">Chain member (rectangle) height</param>
         /// <param name="boxMass">Chain member mass</param>
         /// <param name="spacing">Distance between chain members</param>
-<<<<<<< HEAD
         /// <param name="length">The chain length</param>
-=======
-        /// <param name="length">The count of chain members</param>
->>>>>>> 7905a8d6824cd575bb1454039ed5e30e6122909b
         /// <returns>The list of Bodies created</returns>
         public static List<Body> AddChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
         {
