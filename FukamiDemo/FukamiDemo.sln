@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapes", "Shapes\Shapes.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drawables", "Drawables\Drawables.csproj", "{84ED97EF-5F4C-4B29-A3E2-FB959D5FC81D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomBodies", "CustomBodies\CustomBodies.csproj", "{D5DFD4A6-8425-4509-90E0-A35903A2988F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{84ED97EF-5F4C-4B29-A3E2-FB959D5FC81D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84ED97EF-5F4C-4B29-A3E2-FB959D5FC81D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84ED97EF-5F4C-4B29-A3E2-FB959D5FC81D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5DFD4A6-8425-4509-90E0-A35903A2988F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5DFD4A6-8425-4509-90E0-A35903A2988F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5DFD4A6-8425-4509-90E0-A35903A2988F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5DFD4A6-8425-4509-90E0-A35903A2988F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
