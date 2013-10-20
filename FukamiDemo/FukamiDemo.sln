@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Drawables", "Drawables\Draw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomBodies", "CustomBodies\CustomBodies.csproj", "{D5DFD4A6-8425-4509-90E0-A35903A2988F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renderers", "Renderers\Renderers.csproj", "{8598D86E-7BB3-4019-976C-67DB7DE601FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{BCD13DB9-CAC9-4C7A-A70E-FA5C7BC45ED5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,14 @@ Global
 		{D5DFD4A6-8425-4509-90E0-A35903A2988F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5DFD4A6-8425-4509-90E0-A35903A2988F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5DFD4A6-8425-4509-90E0-A35903A2988F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8598D86E-7BB3-4019-976C-67DB7DE601FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8598D86E-7BB3-4019-976C-67DB7DE601FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8598D86E-7BB3-4019-976C-67DB7DE601FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8598D86E-7BB3-4019-976C-67DB7DE601FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD13DB9-CAC9-4C7A-A70E-FA5C7BC45ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD13DB9-CAC9-4C7A-A70E-FA5C7BC45ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD13DB9-CAC9-4C7A-A70E-FA5C7BC45ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD13DB9-CAC9-4C7A-A70E-FA5C7BC45ED5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
