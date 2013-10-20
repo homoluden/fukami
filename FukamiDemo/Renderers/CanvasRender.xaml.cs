@@ -26,12 +26,17 @@ namespace Renderers
         {
             InitializeComponent();
 
-            Representation.Instance.RegisterRenderer(this as IRenderer);
+            Representation.Instance.RegisterRenderer(this as IRenderer, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         public void Dispose()
         {
             Representation.Instance.UnregisterRenderer(this as IRenderer);
+        }
+
+        public void RenderWorld(IWorldSnapshot snapshot)
+        {
+            throw new NotImplementedException();
         }
     }
 }

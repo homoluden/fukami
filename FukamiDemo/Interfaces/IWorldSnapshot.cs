@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Interfaces
 {
-    public interface IRenderer
+    public interface IWorldSnapshot
     {
-        void RenderWorld(IWorldSnapshot snapshot);
+        Physics2DDotNet.Body[] Bodies { get; set; }
+
+        Physics2DDotNet.Joints.Joint[] Joints { get; set; }
     }
 }

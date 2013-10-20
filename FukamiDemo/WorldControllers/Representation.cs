@@ -29,7 +29,7 @@ namespace WorldControllers
         private TaskScheduler _renderingContext;
         private bool _isRenderingCompleted = true;
 
-        private sbyte _updatesToSkip = WILL_UPDATE_SKIPS_COUNT);
+        private sbyte _updatesToSkip = WILL_UPDATE_SKIPS_COUNT;
 
         #endregion
 
@@ -108,8 +108,8 @@ namespace WorldControllers
                     IRenderer renderer;
                     if (_renderer.TryGetTarget(out renderer))
                     {
-                        // Rendering Call goes here
                         var snapshot = Will.Instance.GetWorldSnapshot();                        
+                        renderer.RenderWorld(snapshot);
                     }
                     else
                     {
