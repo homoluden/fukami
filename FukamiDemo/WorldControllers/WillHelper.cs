@@ -19,6 +19,7 @@ using Shapes;
 using Physics2DDotNet.Joints;
 using Drawables;
 using Shapes.Abstract;
+using CustomBodies;
 
 namespace WorldControllers
 {
@@ -69,14 +70,13 @@ namespace WorldControllers
         /// <param name="spacing">Distance between chain members</param>
         /// <param name="length">The chain length</param>
         /// <returns>The list of Bodies created</returns>
-        public static List<Body> BuildChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
+        public static IList<ChainMember> BuildChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
         {
-            var bodies = new List<Body>();
-            Body last = null;
+            var bodies = new List<ChainMember>();
+            ChainMember last = null;
             for (Scalar x = 0; x < length; x += boxLength + spacing, position.X += boxLength + spacing)
             {
-                var current = AddRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position));
-                bodies.Add(current);
+                var current = ChainMember.Create(AddRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)));
                 if (last != null)
                 {
                     Vector2D anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
@@ -84,10 +84,13 @@ namespace WorldControllers
                     var joint = new HingeJoint(last, current, anchor, new Lifespan());
                     joint.DistanceTolerance = 10;
 
-                    last.Tags["J2"] = current.Tags["J1"] = joint;
+                    last.EndJoint = current.BegJoint = joint;
 
                     Will.Instance.AddJoint(joint);
                 }
+
+                bodies.Add(current);
+                
                 last = current;
             }
             return bodies;

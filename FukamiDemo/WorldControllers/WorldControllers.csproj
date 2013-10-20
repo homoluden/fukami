@@ -52,6 +52,10 @@
     <Compile Include="WillHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomBodies\CustomBodies.csproj">
+      <Project>{d5dfd4a6-8425-4509-90e0-a35903a2988f}</Project>
+      <Name>CustomBodies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Drawables\Drawables.csproj">
       <Project>{84ed97ef-5f4c-4b29-a3e2-fb959d5fc81d}</Project>
       <Name>Drawables</Name>

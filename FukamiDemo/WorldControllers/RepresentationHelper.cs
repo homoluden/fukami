@@ -1,5 +1,6 @@
 ﻿using Drawables;
 using Physics2DDotNet;
+using CustomBodies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace WorldControllers
         /// </summary>
         /// <param name="chainMembers">The elements of the chain excluding the begining and ending fixed bodies</param>
         /// <remarks>Make it sure that all items in List has "Guid" and "Drawable" values in their "Body.Tags" dictionary</remarks>
-        public static void AddChainDrawablesUnsafe(IList<Body> chainMembers)
+        public static void AddChainDrawablesUnsafe(IList<ChainMember> chainMembers)
         {
-            foreach (var body in chainMembers)
+            foreach (var member in chainMembers)
             {
-                Representation.Instance.AddOrReplaceDrawable((Guid)body.Tags["Guid"], (ColoredPolygonDrawable)body.Tags["Drawable"]);
+                Representation.Instance.AddOrReplaceDrawable(member.Guid, member.Drawable);
             }
         }
 
