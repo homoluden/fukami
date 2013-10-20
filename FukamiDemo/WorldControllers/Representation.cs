@@ -19,7 +19,13 @@ namespace WorldControllers
 
         #region Public Methods
 
-        internal ColoredPolygonDrawable AddOrReplaceDrawable(Guid newGuid, ColoredPolygonDrawable drawable)
+        /// <summary>
+        /// Adds or replaces the drawable into internal dictionary
+        /// </summary>
+        /// <param name="newGuid">GUID of new Drawable</param>
+        /// <param name="body">The Drawable which value will be copied</param>
+        /// <returns>The actual value of added Drawable object.</returns>
+        public ColoredPolygonDrawable AddOrReplaceDrawable(Guid newGuid, ColoredPolygonDrawable drawable)
         {
             var actualAdded = _colPolygons.AddOrUpdate(newGuid, drawable, (g, d) =>
             {

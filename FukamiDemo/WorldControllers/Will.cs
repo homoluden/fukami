@@ -36,10 +36,10 @@ namespace WorldControllers
         #region Public Methods
 
         /// <summary>
-        /// Adds or replaces the body in internal dictionary and underlying physical engine
+        /// Adds or replaces the body into internal dictionary and underlying physical engine
         /// </summary>
         /// <param name="newGuid">GUID of new Body</param>
-        /// <param name="body">The Body value which will be copied</param>
+        /// <param name="body">The Body which value will be copied</param>
         /// <returns>The actual value of added Body object.</returns>
         public Body AddOrReplaceBody(Guid newGuid, Body body)
         {
