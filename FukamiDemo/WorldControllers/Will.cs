@@ -74,6 +74,21 @@ namespace WorldControllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Creates the copy of current World State
+        /// </summary>
+        /// <returns></returns>
+        public WorldSnapshot GetWorldSnapshot()
+        {
+            var snapshot = new WorldSnapshot()
+            {
+                Bodies = _engine.Bodies.ToArray(),
+                Joints = _engine.Joints.ToArray()
+            };
+
+            return snapshot;
+        }
+
         #endregion // Public Methods
 
 

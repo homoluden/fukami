@@ -109,6 +109,7 @@ namespace WorldControllers
                     if (_renderer.TryGetTarget(out renderer))
                     {
                         // Rendering Call goes here
+                        var snapshot = Will.Instance.GetWorldSnapshot();                        
                     }
                     else
                     {
