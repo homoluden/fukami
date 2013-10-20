@@ -71,10 +71,12 @@ namespace WorldControllers
         public static BasePolygonBody AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
         {
             CircleShape shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
-            
+
             var newBody = new Body(new PhysicsState(position), shape, mass, Coefficients.Duplicate(), new Lifespan());
+
             var newGuid = Guid.NewGuid();
             newBody.Tags["Guid"] = newGuid;
+            newBody.Tags["Drawable"] = shape.Tag;
 
             var circleBody = BasePolygonBody.Create(newBody);
 

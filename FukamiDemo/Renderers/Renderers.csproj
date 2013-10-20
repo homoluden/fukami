@@ -32,6 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdvanceMath, Version=2.0.0.32369, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExtLibs\Physics2D.Net\AdvanceMath.dll</HintPath>
+    </Reference>
+    <Reference Include="Physics2DDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExtLibs\Physics2D.Net\Physics2DDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -81,9 +89,21 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomBodies\CustomBodies.csproj">
+      <Project>{d5dfd4a6-8425-4509-90e0-a35903a2988f}</Project>
+      <Name>CustomBodies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Drawables\Drawables.csproj">
+      <Project>{84ed97ef-5f4c-4b29-a3e2-fb959d5fc81d}</Project>
+      <Name>Drawables</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj">
       <Project>{bcd13db9-cac9-4c7a-a70e-fa5c7bc45ed5}</Project>
       <Name>Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shapes\Shapes.csproj">
+      <Project>{b1894b50-9f8d-4ce9-8f7a-13d3dd9f28b3}</Project>
+      <Name>Shapes</Name>
     </ProjectReference>
     <ProjectReference Include="..\WorldControllers\WorldControllers.csproj">
       <Project>{ed568df4-ddf7-456d-8565-78bbe6395d5e}</Project>
