@@ -36,24 +36,6 @@ namespace WorldControllers
 
         #region Public Methods
 
-        /// <summary>
-        /// Adds or replaces the drawable into internal dictionary
-        /// </summary>
-        /// <param name="newGuid">GUID of new Drawable</param>
-        /// <param name="body">The Drawable which value will be copied</param>
-        /// <returns>The actual value of added Drawable object.</returns>
-        public ColoredPolygonDrawable AddOrReplaceDrawable(Guid newGuid, ColoredPolygonDrawable drawable, ShapeType shapeType = ShapeType.Mesh)
-        {
-            var actualAdded = _colPolygons.AddOrUpdate(newGuid, drawable, (g, d) =>
-            {
-                var ancestor = new ColoredPolygonDrawable(drawable.Polygon, shapeType);
-
-                return ancestor;
-            });
-
-            return actualAdded;
-        }
-
         public void RegisterRenderer(IRenderer renderer, TaskScheduler scheduler)
         {
             if (renderer == null)
