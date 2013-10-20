@@ -20,9 +20,9 @@ namespace Renderers
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl, IDisposable, IRenderer
+    public partial class CanvasRenderer : UserControl, IDisposable, IRenderer
     {
-        public UserControl1()
+        public CanvasRenderer()
         {
             InitializeComponent();
 
