@@ -18,6 +18,7 @@ using Factories;
 using Shapes;
 using Physics2DDotNet.Joints;
 using Drawables;
+using Shapes.Abstract;
 
 namespace WorldControllers
 {

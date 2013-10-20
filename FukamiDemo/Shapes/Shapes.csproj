@@ -45,10 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColoredPolygon.cs" />
-    <Compile Include="Polygon.cs" />
+    <Compile Include="Abstract\ColoredPolygon.cs" />
+    <Compile Include="Abstract\Polygon.cs" />
+    <Compile Include="Physic\ChainMember.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScalarColor3.cs" />
+    <Compile Include="Colors\ScalarColor3.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

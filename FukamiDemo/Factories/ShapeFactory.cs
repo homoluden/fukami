@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Shapes;
 using System.Collections.Concurrent;
+using Shapes.Abstract;
+using Shapes.Colors;
 
 namespace Factories
 {

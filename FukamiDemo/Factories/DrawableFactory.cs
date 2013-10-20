@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Physics2DDotNet.Shapes;
+using Shapes.Abstract;
 
 namespace Factories
 {

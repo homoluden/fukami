@@ -5,7 +5,7 @@ using Scalar = System.Double;
 using Scalar = System.Single;
 #endif
 
-namespace Shapes
+namespace Shapes.Colors
 {
     public struct ScalarColor3
     {
