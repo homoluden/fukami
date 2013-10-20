@@ -60,6 +60,8 @@ namespace FukamiDemo.ViewModels
 
         private void AddChainCommandExecute(object parameter)
         {
+            Will.Instance.RunPauseWilling(false);
+
             double boxlength = 50;
             double spacing = 4;
             double anchorLength = 30;
@@ -73,6 +75,7 @@ namespace FukamiDemo.ViewModels
             var joint2 = new HingeJoint(chain[chain.Count - 1], end2, point2, new Lifespan());
             joint2.DistanceTolerance = 10;
 
+            Will.Instance.RunPauseWilling(true);
         }
 
         private bool AddChainCommandCanExecute(object parameter)

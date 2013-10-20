@@ -42,9 +42,16 @@ namespace WorldControllers
 
         #region Public Methods
 
-        public void RunPauseWilling()
+        public void RunPauseWilling(bool? setToIsRunning = null)
         {
-            _timer.IsRunning = !_timer.IsRunning;
+            if (setToIsRunning.HasValue)
+            {
+                _timer.IsRunning = setToIsRunning.Value;
+            }
+            else
+            {
+                _timer.IsRunning = !_timer.IsRunning;
+            }
         }
 
         /// <summary>
