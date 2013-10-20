@@ -69,9 +69,9 @@ namespace WorldControllers
             return actualAdded;
         }
 
-        public void AddJoint(HingeJoint joint)
+        public void AddJoint(Joint joint)
         {
-            throw new NotImplementedException();
+            _engine.AddJoint(joint);
         }
 
         /// <summary>
