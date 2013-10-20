@@ -32,15 +32,15 @@ namespace WorldControllers
         #endregion
 
         /// <summary>
-        /// Adds new Rectange Body into World
+        /// Creates new Rectange Body
         /// </summary>
         /// <param name="height">Height of the Body</param>
         /// <param name="width">Width of the Body</param>
         /// <param name="mass">Mass of the Body</param>
         /// <param name="position">Initial Direction and Linear Position of the Body</param>
-        /// <returns>Return the actual value of the Body added into world.</returns>
+        /// <returns>Return the new value of the BasePolygonBody</returns>
         /// <remarks>The Guid of new Body will be stored in Body.Tags["Guid"]. The raw Colored Drawable of new Body will be stored in Body.Tags["Drawable"].</remarks>
-        public static BasePolygonBody AddRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
+        public static BasePolygonBody CreateRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
         {
             Vector2D[] vertexes = VertexHelper.CreateRectangle(width, height);
             vertexes = VertexHelper.Subdivide(vertexes, Math.Min(height, width) / 5);
@@ -57,8 +57,6 @@ namespace WorldControllers
 
             var rectBody = BasePolygonBody.Create(newBody);
 
-            Will.Instance.AddBody(newGuid, rectBody);            
-            
             return rectBody;
         }
 
@@ -102,7 +100,9 @@ namespace WorldControllers
             ChainMember last = null;
             for (Scalar x = 0; x < length; x += boxLength + spacing, position.X += boxLength + spacing)
             {
-                var current = ChainMember.Create(AddRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)));
+                var current = ChainMember.Create(CreateRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)));
+                Will.Instance.AddBody(current.Guid, current);
+
                 if (last != null)
                 {
                     Vector2D anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
