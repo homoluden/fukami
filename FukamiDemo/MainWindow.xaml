@@ -1,0 +1,22 @@
+﻿<Window x:Class="FukamiDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Fukami Demo" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>            
+        </Grid.RowDefinitions>
+        
+        <!--Rendering Pane goes here-->
+        <Viewbox x:Name="RenderingBox">
+            
+        </Viewbox>
+        
+        <!--Control Panel goes here-->
+        <WrapPanel Orientation="Horizontal" Grid.Row="1" Margin="5">
+            <Button Content="Run / Pause"/>            
+        </WrapPanel>
+        
+    </Grid>
+</Window>
