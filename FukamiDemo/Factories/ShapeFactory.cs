@@ -76,5 +76,15 @@ namespace Factories
             return shape;
         }
 
+        public static CircleShape CreateColoredCircle(Scalar radius, ushort vertexCount)
+        {
+            CircleShape shape = new CircleShape(radius, vertexCount);
+            var reduced = VertexHelper.Reduce(shape.Vertexes);
+            var polygon = new ColoredPolygon(reduced, CreateColor3Array(reduced.Length));
+
+            shape.Tag = DrawableFactory.GetOrCreateColoredPolygonDrawable(polygon, Drawables.ShapeType.Mesh);
+            return shape;
+        }
+
     }
 }

@@ -61,6 +61,28 @@ namespace WorldControllers
         }
 
         /// <summary>
+        /// Adds new Circle Body into World
+        /// </summary>
+        /// <param name="radius">Radius of the Circle Shape</param>
+        /// <param name="verticesCount">Count of vertices  of the Circle Shape</param>
+        /// <param name="mass">Mass of corresponding Body</param>
+        /// <param name="position">Position of the Circle Shape</param>
+        /// <returns>Newly created and added into world Body object.</returns>
+        public static Body AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
+        {
+            CircleShape shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
+            
+            var newBody = new Body(new PhysicsState(position), shape, mass, Coefficients.Duplicate(), new Lifespan());
+            var newGuid = Guid.NewGuid();
+            newBody.Tags["Guid"] = newGuid;
+
+            Will.Instance.AddOrReplaceBody(newGuid, newBody);
+
+            return newBody;
+        }
+
+
+        /// <summary>
         /// Builds the chain of Bodies with joints and add this chain into World.
         /// </summary>
         /// <param name="position">Direction and position of first chain member.</param>
