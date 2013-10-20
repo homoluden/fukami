@@ -34,6 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdvanceMath, Version=2.0.0.32369, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExtLibs\Physics2D.Net\AdvanceMath.dll</HintPath>
+    </Reference>
+    <Reference Include="Physics2DDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExtLibs\Physics2D.Net\Physics2DDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -53,6 +61,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\ChainDemoViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +105,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="CustomBodies\CustomBodies.csproj">
+      <Project>{d5dfd4a6-8425-4509-90e0-a35903a2988f}</Project>
+      <Name>CustomBodies</Name>
+    </ProjectReference>
     <ProjectReference Include="WorldControllers\WorldControllers.csproj">
       <Project>{ed568df4-ddf7-456d-8565-78bbe6395d5e}</Project>
       <Name>WorldControllers</Name>
