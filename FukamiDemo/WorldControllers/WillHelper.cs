@@ -29,7 +29,15 @@ namespace WorldControllers
 
         #endregion
 
-
+        /// <summary>
+        /// Adds new Rectange Body into World
+        /// </summary>
+        /// <param name="height">Height of the Body</param>
+        /// <param name="width">Width of the Body</param>
+        /// <param name="mass">Mass of the Body</param>
+        /// <param name="position">Initial Direction and Linear Position of the Body</param>
+        /// <returns>Return the actual value of the Body added into world.</returns>
+        /// <remarks>The Guid of new Body will be stored in Body.Tags["Guid"]. The raw Colored Drawable of new Body will be stored in Body.Tags["Drawable"].</remarks>
         public static Body AddRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
         {
             Vector2D[] vertexes = VertexHelper.CreateRectangle(width, height);
@@ -50,13 +58,23 @@ namespace WorldControllers
             return actualBody;
         }
 
-        public static List<Body> AddChain(Vector2D position, Scalar boxLenght, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
+        /// <summary>
+        /// Builds the chain of Bodies with joints and add this chain into World.
+        /// </summary>
+        /// <param name="position">Direction and position of first chain member.</param>
+        /// <param name="boxLength">Chain member (rectangle) length</param>
+        /// <param name="boxWidth">Chain member (rectangle) height</param>
+        /// <param name="boxMass">Chain member mass</param>
+        /// <param name="spacing">Distance between chain members</param>
+        /// <param name="length">The count of chain members</param>
+        /// <returns>The list of Bodies created</returns>
+        public static List<Body> AddChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
         {
             var bodies = new List<Body>();
             Body last = null;
-            for (Scalar x = 0; x < length; x += boxLenght + spacing, position.X += boxLenght + spacing)
+            for (Scalar x = 0; x < length; x += boxLength + spacing, position.X += boxLength + spacing)
             {
-                var current = AddRectangle(boxWidth, boxLenght, boxMass, new ALVector2D(0, position));
+                var current = AddRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position));
                 bodies.Add(current);
                 if (last != null)
                 {
