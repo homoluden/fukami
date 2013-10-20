@@ -68,7 +68,7 @@ namespace WorldControllers
         /// <param name="spacing">Distance between chain members</param>
         /// <param name="length">The chain length</param>
         /// <returns>The list of Bodies created</returns>
-        public static List<Body> AddChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
+        public static List<Body> BuildChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
         {
             var bodies = new List<Body>();
             Body last = null;
@@ -79,8 +79,12 @@ namespace WorldControllers
                 if (last != null)
                 {
                     Vector2D anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
+
                     var joint = new HingeJoint(last, current, anchor, new Lifespan());
                     joint.DistanceTolerance = 10;
+
+                    last.Tags["J2"] = current.Tags["J1"] = joint;
+
                     Will.Instance.AddJoint(joint);
                 }
                 last = current;
