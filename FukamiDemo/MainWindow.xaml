@@ -11,7 +11,7 @@
         
         <!--Rendering Pane goes here-->
         <Viewbox x:Name="RenderingBox">
-            <rdr:CanvasRenderer Width="1024" Height="768"/>
+            <rdr:CanvasRenderer Width="Auto" Height="Auto"/>
         </Viewbox>
         
         <!--Control Panel goes here-->
