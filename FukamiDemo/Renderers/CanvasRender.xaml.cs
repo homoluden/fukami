@@ -1,4 +1,5 @@
 ﻿using AdvanceMath;
+using AdvanceMath.Geometry2D;
 using CustomBodies;
 using Interfaces;
 using System;
@@ -26,17 +27,16 @@ namespace Renderers
     {
         private readonly DrawingVisual _drawing = new DrawingVisual();
         private WriteableBitmap _wbmp;
-        private readonly RenderTargetBitmap _rtbmp;
+        private Rect _fullscreenRect;
 
-        private readonly Brush _defaultBrush = new SolidColorBrush(Colors.WhiteSmoke);
+        private readonly SolidColorBrush _defaultBrush = new SolidColorBrush(Colors.WhiteSmoke);
 
         public CanvasRenderer()
         {
             InitializeComponent();
 
-            _rtbmp = new RenderTargetBitmap(1024, 768, 96, 96, PixelFormats.Pbgra32);
-            _wbmp = BitmapFactory.ConvertToPbgra32Format(_rtbmp);
-
+            _wbmp = BitmapFactory.New(1024, 768);
+            _fullscreenRect = new Rect(0, 0, _wbmp.PixelWidth, _wbmp.PixelHeight);
             RenderingImage.Source = _wbmp;
 
             Representation.Instance.RegisterRenderer(this, TaskScheduler.FromCurrentSynchronizationContext());
@@ -49,7 +49,7 @@ namespace Renderers
 
         private static StreamGeometry BuildPolygonGeometry(BasePolygonBody body)
         {
-            var geom = new StreamGeometry { FillRule = FillRule.EvenOdd };
+            var geom = new StreamGeometry { FillRule = FillRule.Nonzero };
 
             using (var figCtx = geom.Open())
             {
@@ -71,33 +71,62 @@ namespace Renderers
             return geom;
         }
 
+        private void DrawBodyPolygon(BitmapContext ctx, BasePolygonBody body)
+        {
+            var pts = new int[body.Shape.Vertexes.Count() * 2 + 2];
+            var mtx = Matrix2x3.Identity;
+            BoundingRectangle rect; // = body.Rectangle;
+            body.Shape.CalcBoundingRectangle(ref mtx, out rect);
+            var width = rect.Max.X - rect.Min.X;
+            var height = rect.Max.Y - rect.Min.Y;
+            var cx = width / 2;
+            var cy = height / 2;
+
+            var bodyBmp = BitmapFactory.New((int)width + 1, (int)height + 1);
+
+            var pos = body.State.Position;
+
+            using (var bodyCtx = bodyBmp.GetBitmapContext())
+            {
+
+                int i = 0;
+                foreach (var v in body.Drawable.Polygon.Vertices)
+                {
+                    pts[i] = (int)(v.X + cx); pts[i + 1] = (int)(v.Y + cy);
+                    i += 2;
+                }
+                pts[i] = pts[0]; pts[i + 1] = pts[1];
+
+                bodyBmp.FillPolygon(pts, new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f });
+
+                bodyBmp.RotateFree(pos.Angular, true);
+
+            }
+
+            width = bodyBmp.PixelWidth;
+            height = bodyBmp.PixelHeight;
+            cx = width / 2;
+            cy = height / 2;
+
+            ctx.WriteableBitmap.Blit(new Rect(pos.X - cx, pos.Y - cy, width, height), bodyBmp, new Rect(0, 0, width, height));
+        }
+
         public void RenderWorld(IWorldSnapshot snapshot)
         {
             var op = _drawing.Dispatcher.InvokeAsync(() => {
                 var polygonBodies = snapshot.Bodies.OfType<BasePolygonBody>();
 
-                //var centerTransform = new TranslateTransform(ActualWidth / 2, ActualHeight / 2);
-                //_drawing.Transform = centerTransform;
+                var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
 
-                // Retrieve the DrawingContext in order to create new drawing content.
-
-
-                using (var drawCtx = _drawing.RenderOpen())
+                using (var ctx = newFrame.GetBitmapContext())
                 {
-
-                    foreach (var geom in polygonBodies.Select(BuildPolygonGeometry))
+                    foreach (var body in polygonBodies)
                     {
-                        drawCtx.DrawGeometry(_defaultBrush, null, geom);
+                        DrawBodyPolygon(ctx, body);
                     }
-
                 }
 
-                _rtbmp.Clear();
-                _rtbmp.Render(_drawing);
-                var newFrame = BitmapFactory.ConvertToPbgra32Format(_rtbmp);
-                newFrame.Blit(new Point(0,0), _wbmp, new Rect(0,0,1024,768), Color.FromRgb(55,55,55), WriteableBitmapExtensions.BlendMode.Additive);
-                _wbmp = newFrame;
-
+                newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(99, 99, 99), WriteableBitmapExtensions.BlendMode.Additive);
                 RenderingImage.Source = newFrame;
             });
 
