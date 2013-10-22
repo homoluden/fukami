@@ -70,12 +70,12 @@ namespace FukamiDemo.ViewModels
             var chain = WillHelper.BuildChain(new Vector2D(150, 150), boxlength, 10, 200, spacing, 600);
             
             var point2 = new Vector2D(chain[chain.Count - 1].State.Position.Linear.X + anchorGap, 150);
-            var end2 = WillHelper.AddCircle(anchorLength / 2, 14, double.PositiveInfinity, new ALVector2D(0, point2));
+            var end2 = WillHelper.AddCircle(anchorLength / 2, 6, double.PositiveInfinity, new ALVector2D(0, point2));
             end2.IgnoresGravity = true;
             var joint2 = new HingeJoint(chain[chain.Count - 1], end2, point2, new Lifespan()) {DistanceTolerance = 10};
 
             var point1 = new Vector2D(chain[0].State.Position.Linear.X - anchorGap, 150);
-            Body end1 = WillHelper.AddCircle(anchorLength / 2, 14, double.PositiveInfinity, new ALVector2D(0, point1));
+            Body end1 = WillHelper.AddCircle(anchorLength / 2, 6, double.PositiveInfinity, new ALVector2D(0, point1));
             end1.IgnoresGravity = true;
             var joint1 = new HingeJoint(chain[0], end1, point1, new Lifespan()) {DistanceTolerance = 10};
 
