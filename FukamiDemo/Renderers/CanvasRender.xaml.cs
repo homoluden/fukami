@@ -130,7 +130,10 @@ namespace Renderers
                 RenderingImage.Source = newFrame;
             });
 
-            op.Wait();
+            if (!op.Task.IsCanceled)
+            {
+                op.Wait();
+            }
         }
     }
 }
