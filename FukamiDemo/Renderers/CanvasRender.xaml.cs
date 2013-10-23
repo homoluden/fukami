@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WorldControllers;
+using AdvanceMath.Geometry2D;
 
 namespace Renderers
 {
@@ -99,7 +100,7 @@ namespace Renderers
 
                 bodyBmp.FillPolygon(pts, new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f });
 
-                bodyBmp.RotateFree(pos.Angular, true);
+                bodyBmp = bodyBmp.RotateFree(MathHelper.ToDegrees(pos.Angular), false);
 
             }
 
