@@ -95,7 +95,7 @@ namespace WorldControllers
                 {
                     Vector2D anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
 
-                    var joint = new HingeJoint(last, current, anchor, new Lifespan()) {DistanceTolerance = 500};
+                    var joint = new HingeJoint(last, current, anchor, new Lifespan()) {DistanceTolerance = 500, Softness = 0.005f};
 
                     last.EndJoint = current.BegJoint = joint;
 
