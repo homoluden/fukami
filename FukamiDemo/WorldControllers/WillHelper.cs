@@ -40,24 +40,16 @@ namespace WorldControllers
         /// <param name="position">Initial Direction and Linear Position of the Body</param>
         /// <returns>Return the new value of the BasePolygonBody</returns>
         /// <remarks>The Guid of new Body will be stored in Body.Tags["Guid"]. The raw Colored Drawable of new Body will be stored in Body.Tags["Drawable"].</remarks>
-        public static BasePolygonBody CreateRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
+        public static Body CreateRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
         {
-            Vector2D[] vertexes = VertexHelper.CreateRectangle(width, height);
-            vertexes = VertexHelper.Subdivide(vertexes, Math.Min(height, width) / 5);
+            var vertices = VertexHelper.CreateRectangle(width, height);
+            vertices = VertexHelper.Subdivide(vertices, Math.Min(height, width) / 5);
 
-            var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertexes, Math.Min(height, width) / 5);
+            var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertices, Math.Min(height, width) / 5);
 
-            var boxDrawable = DrawableFactory.GetOrCreateColoredPolygonDrawable((ColoredPolygon)boxShape.Tag, ShapeType.Rectangle);
-            
             Body newBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
             
-            var newGuid = Guid.NewGuid();
-            newBody.Tags["Guid"] = newGuid;
-            newBody.Tags["Drawable"] = boxDrawable;
-
-            var rectBody = BasePolygonBody.Create(newBody);
-
-            return rectBody;
+            return newBody;
         }
 
         /// <summary>
@@ -68,21 +60,15 @@ namespace WorldControllers
         /// <param name="mass">Mass of corresponding Body</param>
         /// <param name="position">Position of the Circle Shape</param>
         /// <returns>Newly created and added into world Body object.</returns>
-        public static BasePolygonBody AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
+        public static Body AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
         {
             CircleShape shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
 
             var newBody = new Body(new PhysicsState(position), shape, mass, Coefficients.Duplicate(), new Lifespan());
+            
+            Will.Instance.AddBody(newBody);
 
-            var newGuid = Guid.NewGuid();
-            newBody.Tags["Guid"] = newGuid;
-            newBody.Tags["Drawable"] = shape.Tag;
-
-            var circleBody = BasePolygonBody.Create(newBody);
-
-            Will.Instance.AddBody(newGuid, circleBody);
-
-            return circleBody;
+            return newBody;
         }
 
 
@@ -103,7 +89,7 @@ namespace WorldControllers
             for (Scalar x = 0; x < length; x += boxLength + spacing, position.X += boxLength + spacing)
             {
                 var current = ChainMember.Create(CreateRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)));
-                Will.Instance.AddBody(current.Guid, current);
+                Will.Instance.AddBody(current);
 
                 if (last != null)
                 {

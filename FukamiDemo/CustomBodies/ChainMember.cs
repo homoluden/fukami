@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CustomBodies
 {
-    public class ChainMember : BasePolygonBody
+    public class ChainMember : Body
     {
         public Joint BegJoint 
         {
@@ -32,17 +32,13 @@ namespace CustomBodies
         public static ChainMember Create(Body body)
         {
             var result = new ChainMember(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime);
-            object j1, j2, guid, drawable;
+            object j1, j2;
 
             body.Tags.TryGetValue("J1", out j1);
             body.Tags.TryGetValue("J2", out j2);
-            body.Tags.TryGetValue("Guid", out guid);
-            body.Tags.TryGetValue("Drawable", out drawable);
 
             result.BegJoint = j1 as Joint;
             result.EndJoint = j2 as Joint;
-            result.Guid = guid is Guid ? (Guid)guid : Guid.Empty;
-            result.Drawable = drawable as ColoredPolygonDrawable;
 
             return result;
         }

@@ -18,7 +18,7 @@ namespace WorldControllers
         PhysicsEngine _engine;
         PhysicsTimer _timer;
 
-        private readonly ConcurrentDictionary<Guid, Body> _bodies = new ConcurrentDictionary<Guid, Body>();
+        //private readonly ConcurrentDictionary<Guid, Body> _bodies = new ConcurrentDictionary<Guid, Body>();
 
         #endregion // Fields
 
@@ -60,17 +60,9 @@ namespace WorldControllers
         /// <param name="newGuid">GUID of new Body</param>
         /// <param name="body">The Body which value will be copied</param>
         /// <returns>The actual value of added Body object.</returns>
-        public void AddBody(Guid newGuid, Body body)
+        public void AddBody(Body body)
         {
-            var actualAdded = _bodies.AddOrUpdate(newGuid, body, (g, b) =>
-            {
-                body.Lifetime.Age = b.Lifetime.Age;
-                b.Lifetime.IsExpired = true;
-
-                return body;
-            });
-
-            _engine.AddBody(actualAdded);
+            _engine.AddBody(body);
         }
 
         public void AddJoint(Joint joint)
@@ -104,7 +96,9 @@ namespace WorldControllers
         {
             _engine = new PhysicsEngine();
             _engine.BroadPhase = new Physics2DDotNet.Detectors.SelectiveSweepDetector();
-            _engine.Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver();
+            _engine.Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver { 
+                AllowedPenetration = 0.1f
+            };
             _engine.AddLogic(new GravityField(new Vector2D(0, 1000), new Lifespan()));
 
             _engine.Updated += OnEngineUpdated;

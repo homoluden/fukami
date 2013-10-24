@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WorldControllers;
-using AdvanceMath.Geometry2D;
+using Physics2DDotNet;
 
 namespace Renderers
 {
@@ -48,31 +48,7 @@ namespace Renderers
             Representation.Instance.UnregisterRenderer(this);
         }
 
-        private static StreamGeometry BuildPolygonGeometry(BasePolygonBody body)
-        {
-            var geom = new StreamGeometry { FillRule = FillRule.Nonzero };
-
-            using (var figCtx = geom.Open())
-            {
-                var start = body.Drawable.Polygon.Vertices[0];
-                figCtx.BeginFigure(new Point(start.X, start.Y), true, true);
-
-                foreach (var vertex in body.Drawable.Polygon.Vertices.Skip(1))
-                {
-                    figCtx.LineTo(new Point(vertex.X, vertex.Y), false, true);
-                }
-            }
-
-            var position = body.State.Position;
-            var mtx = body.Transformation;
-            geom.Transform = new MatrixTransform(mtx.m00, mtx.m01, mtx.m10, mtx.m11, position.X, position.Y);
-
-            geom.Freeze();
-
-            return geom;
-        }
-
-        private void DrawBodyPolygon(BitmapContext ctx, BasePolygonBody body)
+        private void DrawBodyPolygon(BitmapContext ctx, Body body)
         {
             var pts = new int[body.Shape.Vertexes.Count() * 2 + 2];
             var mtx = Matrix2x3.Identity;
@@ -91,7 +67,7 @@ namespace Renderers
             {
 
                 int i = 0;
-                foreach (var v in body.Drawable.Polygon.Vertices)
+                foreach (var v in body.Shape.Vertexes)
                 {
                     pts[i] = (int)(v.X + cx); pts[i + 1] = (int)(v.Y + cy);
                     i += 2;
@@ -115,7 +91,7 @@ namespace Renderers
         public void RenderWorld(IWorldSnapshot snapshot)
         {
             var op = _drawing.Dispatcher.InvokeAsync(() => {
-                var polygonBodies = snapshot.Bodies.OfType<BasePolygonBody>();
+                var polygonBodies = snapshot.Bodies;
 
                 var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
 
