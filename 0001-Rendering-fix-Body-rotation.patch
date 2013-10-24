@@ -1,0 +1,33 @@
+From de8f39562ea4047e9f9b930e113812581d6cb01d Mon Sep 17 00:00:00 2001
+From: homoluden <asm@metaphysics-it.net>
+Date: Wed, 23 Oct 2013 08:53:24 +0400
+Subject: [PATCH 1/3] Rendering fix - Body rotation
+
+---
+ FukamiDemo/Renderers/CanvasRender.xaml.cs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/FukamiDemo/Renderers/CanvasRender.xaml.cs b/FukamiDemo/Renderers/CanvasRender.xaml.cs
+index 5aa19db..4514891 100644
+--- a/FukamiDemo/Renderers/CanvasRender.xaml.cs
++++ b/FukamiDemo/Renderers/CanvasRender.xaml.cs
+@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
+ using System.Windows.Navigation;
+ using System.Windows.Shapes;
+ using WorldControllers;
++using AdvanceMath.Geometry2D;
+ 
+ namespace Renderers
+ {
+@@ -99,7 +100,7 @@ namespace Renderers
+ 
+                 bodyBmp.FillPolygon(pts, new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f });
+ 
+-                bodyBmp.RotateFree(pos.Angular, true);
++                bodyBmp = bodyBmp.RotateFree(MathHelper.ToDegrees(pos.Angular), false);
+ 
+             }
+ 
+-- 
+1.8.4.msysgit.0
+

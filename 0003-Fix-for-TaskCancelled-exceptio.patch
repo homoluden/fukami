@@ -1,0 +1,28 @@
+From 68d0b6bdd448a11b6c33db108209d6dc016efa77 Mon Sep 17 00:00:00 2001
+From: homoluden <asm@metaphysics-it.net>
+Date: Wed, 23 Oct 2013 09:09:40 +0400
+Subject: [PATCH 3/3] Fix for TaskCancelled exceptio
+
+---
+ FukamiDemo/Renderers/CanvasRender.xaml.cs | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/FukamiDemo/Renderers/CanvasRender.xaml.cs b/FukamiDemo/Renderers/CanvasRender.xaml.cs
+index 4514891..9fba23d 100644
+--- a/FukamiDemo/Renderers/CanvasRender.xaml.cs
++++ b/FukamiDemo/Renderers/CanvasRender.xaml.cs
+@@ -131,7 +131,10 @@ namespace Renderers
+                 RenderingImage.Source = newFrame;
+             });
+ 
+-            op.Wait();
++            if (!op.Task.IsCanceled)
++            {
++                op.Wait();
++            }
+         }
+     }
+ }
+-- 
+1.8.4.msysgit.0
+

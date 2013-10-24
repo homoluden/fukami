@@ -1,0 +1,339 @@
+From f7d7fe0fa0aa74aff9c392d4d5343572c92d3f36 Mon Sep 17 00:00:00 2001
+From: homoluden <asm@metaphysics-it.net>
+Date: Thu, 24 Oct 2013 11:01:32 +0400
+Subject: [PATCH] BasePolygonBody removed; ChainDemo reworked
+
+---
+ FukamiDemo/CustomBodies/BasePolygonBody.cs  | 56 -----------------------------
+ FukamiDemo/CustomBodies/ChainMember.cs      |  8 ++---
+ FukamiDemo/CustomBodies/CustomBodies.csproj |  1 -
+ FukamiDemo/Renderers/CanvasRender.xaml.cs   | 32 +++--------------
+ FukamiDemo/ViewModels/ChainDemoViewModel.cs | 11 +++---
+ FukamiDemo/WorldControllers/Will.cs         | 18 ++++------
+ FukamiDemo/WorldControllers/WillHelper.cs   | 34 ++++++------------
+ 7 files changed, 29 insertions(+), 131 deletions(-)
+ delete mode 100644 FukamiDemo/CustomBodies/BasePolygonBody.cs
+
+diff --git a/FukamiDemo/CustomBodies/BasePolygonBody.cs b/FukamiDemo/CustomBodies/BasePolygonBody.cs
+deleted file mode 100644
+index 229695d..0000000
+--- a/FukamiDemo/CustomBodies/BasePolygonBody.cs
++++ /dev/null
+@@ -1,56 +0,0 @@
+-﻿using Drawables;
+-using Physics2DDotNet;
+-using Physics2DDotNet.Shapes;
+-using System;
+-using System.Collections.Generic;
+-using System.Linq;
+-using System.Text;
+-using System.Threading.Tasks;
+-
+-namespace CustomBodies
+-{
+-    public class BasePolygonBody : Body
+-    {
+-        
+-        public ColoredPolygonDrawable Drawable 
+-        {
+-            get { return (ColoredPolygonDrawable)Tags["Drawable"]; }
+-            set { Tags["Drawable"] = value; } 
+-        }
+-
+-        public Guid Guid
+-        {
+-            get { return (Guid)Tags["Guid"]; }
+-            set { Tags["Guid"] = value; }
+-        }
+-
+-        /// <summary>
+-        /// Creates ChainMember wrap over the Body with additional properies from Tags
+-        /// </summary>
+-        /// <param name="body">Original Body</param>
+-        /// <returns>The copy of original Body</returns>
+-        public static BasePolygonBody Create(Body body)
+-        {
+-            var result = new BasePolygonBody(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime);
+-            object guid, drawable;
+-
+-            body.Tags.TryGetValue("Guid", out guid);
+-            body.Tags.TryGetValue("Drawable", out drawable);
+-
+-            result.Guid = guid is Guid ? (Guid)guid : Guid.Empty;
+-            result.Drawable = drawable as ColoredPolygonDrawable;
+-
+-            return result;
+-        }
+-
+-
+-        public BasePolygonBody(PhysicsState state, IShape shape, double mass, Coefficients coefficients, Lifespan lifetime)
+-            : base(state, shape, mass, coefficients, lifetime)
+-        {
+-        }
+-        public BasePolygonBody(PhysicsState state, IShape shape, MassInfo mass, Coefficients coefficients, Lifespan lifetime)
+-            : base(state, shape, mass, coefficients, lifetime)
+-        {
+-        }
+-    }
+-}
+diff --git a/FukamiDemo/CustomBodies/ChainMember.cs b/FukamiDemo/CustomBodies/ChainMember.cs
+index 4259967..fbe01de 100644
+--- a/FukamiDemo/CustomBodies/ChainMember.cs
++++ b/FukamiDemo/CustomBodies/ChainMember.cs
+@@ -10,7 +10,7 @@ using System.Threading.Tasks;
+ 
+ namespace CustomBodies
+ {
+-    public class ChainMember : BasePolygonBody
++    public class ChainMember : Body
+     {
+         public Joint BegJoint 
+         {
+@@ -32,17 +32,13 @@ namespace CustomBodies
+         public static ChainMember Create(Body body)
+         {
+             var result = new ChainMember(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime);
+-            object j1, j2, guid, drawable;
++            object j1, j2;
+ 
+             body.Tags.TryGetValue("J1", out j1);
+             body.Tags.TryGetValue("J2", out j2);
+-            body.Tags.TryGetValue("Guid", out guid);
+-            body.Tags.TryGetValue("Drawable", out drawable);
+ 
+             result.BegJoint = j1 as Joint;
+             result.EndJoint = j2 as Joint;
+-            result.Guid = guid is Guid ? (Guid)guid : Guid.Empty;
+-            result.Drawable = drawable as ColoredPolygonDrawable;
+ 
+             return result;
+         }
+diff --git a/FukamiDemo/CustomBodies/CustomBodies.csproj b/FukamiDemo/CustomBodies/CustomBodies.csproj
+index 7756193..88b026a 100644
+--- a/FukamiDemo/CustomBodies/CustomBodies.csproj
++++ b/FukamiDemo/CustomBodies/CustomBodies.csproj
+@@ -47,7 +47,6 @@
+   </ItemGroup>
+   <ItemGroup>
+     <Compile Include="ChainMember.cs" />
+-    <Compile Include="BasePolygonBody.cs" />
+     <Compile Include="Properties\AssemblyInfo.cs" />
+   </ItemGroup>
+   <ItemGroup>
+diff --git a/FukamiDemo/Renderers/CanvasRender.xaml.cs b/FukamiDemo/Renderers/CanvasRender.xaml.cs
+index 9fba23d..663b914 100644
+--- a/FukamiDemo/Renderers/CanvasRender.xaml.cs
++++ b/FukamiDemo/Renderers/CanvasRender.xaml.cs
+@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
+ using System.Windows.Navigation;
+ using System.Windows.Shapes;
+ using WorldControllers;
+-using AdvanceMath.Geometry2D;
++using Physics2DDotNet;
+ 
+ namespace Renderers
+ {
+@@ -48,31 +48,7 @@ namespace Renderers
+             Representation.Instance.UnregisterRenderer(this);
+         }
+ 
+-        private static StreamGeometry BuildPolygonGeometry(BasePolygonBody body)
+-        {
+-            var geom = new StreamGeometry { FillRule = FillRule.Nonzero };
+-
+-            using (var figCtx = geom.Open())
+-            {
+-                var start = body.Drawable.Polygon.Vertices[0];
+-                figCtx.BeginFigure(new Point(start.X, start.Y), true, true);
+-
+-                foreach (var vertex in body.Drawable.Polygon.Vertices.Skip(1))
+-                {
+-                    figCtx.LineTo(new Point(vertex.X, vertex.Y), false, true);
+-                }
+-            }
+-
+-            var position = body.State.Position;
+-            var mtx = body.Transformation;
+-            geom.Transform = new MatrixTransform(mtx.m00, mtx.m01, mtx.m10, mtx.m11, position.X, position.Y);
+-
+-            geom.Freeze();
+-
+-            return geom;
+-        }
+-
+-        private void DrawBodyPolygon(BitmapContext ctx, BasePolygonBody body)
++        private void DrawBodyPolygon(BitmapContext ctx, Body body)
+         {
+             var pts = new int[body.Shape.Vertexes.Count() * 2 + 2];
+             var mtx = Matrix2x3.Identity;
+@@ -91,7 +67,7 @@ namespace Renderers
+             {
+ 
+                 int i = 0;
+-                foreach (var v in body.Drawable.Polygon.Vertices)
++                foreach (var v in body.Shape.Vertexes)
+                 {
+                     pts[i] = (int)(v.X + cx); pts[i + 1] = (int)(v.Y + cy);
+                     i += 2;
+@@ -115,7 +91,7 @@ namespace Renderers
+         public void RenderWorld(IWorldSnapshot snapshot)
+         {
+             var op = _drawing.Dispatcher.InvokeAsync(() => {
+-                var polygonBodies = snapshot.Bodies.OfType<BasePolygonBody>();
++                var polygonBodies = snapshot.Bodies;
+ 
+                 var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
+ 
+diff --git a/FukamiDemo/ViewModels/ChainDemoViewModel.cs b/FukamiDemo/ViewModels/ChainDemoViewModel.cs
+index 5385ff9..bd0cdb6 100644
+--- a/FukamiDemo/ViewModels/ChainDemoViewModel.cs
++++ b/FukamiDemo/ViewModels/ChainDemoViewModel.cs
+@@ -62,25 +62,28 @@ namespace FukamiDemo.ViewModels
+         {
+             Will.Instance.RunPauseWilling(false);
+ 
++            double angle = MathHelper.ToRadians(-15.0f);
+             double boxlength = 50;
+-            double spacing = 4;
++            double spacing = 2;
+             double anchorLength = 30;
+             double anchorGap = (boxlength / 2) + spacing + (anchorLength / 2);
+ 
+-            var chain = WillHelper.BuildChain(new Vector2D(150, 150), boxlength, 10, 200, spacing, 600);
++            var chain = WillHelper.BuildChain(new Vector2D(150, 150), boxlength, 3, 200, spacing, 600);
+             
+             var point2 = new Vector2D(chain[chain.Count - 1].State.Position.Linear.X + anchorGap, 150);
+             var end2 = WillHelper.AddCircle(anchorLength / 2, 6, double.PositiveInfinity, new ALVector2D(0, point2));
+             end2.IgnoresGravity = true;
+             var joint2 = new HingeJoint(chain[chain.Count - 1], end2, point2, new Lifespan()) {DistanceTolerance = 10};
++            var joint21 = new AngleJoint(chain[chain.Count - 1], end2, new Lifespan()) { Angle = angle };
+ 
+             var point1 = new Vector2D(chain[0].State.Position.Linear.X - anchorGap, 150);
+             Body end1 = WillHelper.AddCircle(anchorLength / 2, 6, double.PositiveInfinity, new ALVector2D(0, point1));
+             end1.IgnoresGravity = true;
+             var joint1 = new HingeJoint(chain[0], end1, point1, new Lifespan()) {DistanceTolerance = 10};
++            var joint11 = new AngleJoint(end1, chain[0], new Lifespan()) { Angle = angle };
+ 
+-            Will.Instance.AddJoint(joint1);
+-            Will.Instance.AddJoint(joint2);
++            Will.Instance.AddJoint(joint1);Will.Instance.AddJoint(joint11);
++            Will.Instance.AddJoint(joint2);Will.Instance.AddJoint(joint21);
+ 
+             Will.Instance.RunPauseWilling(true);
+         }
+diff --git a/FukamiDemo/WorldControllers/Will.cs b/FukamiDemo/WorldControllers/Will.cs
+index bde1505..4734e15 100644
+--- a/FukamiDemo/WorldControllers/Will.cs
++++ b/FukamiDemo/WorldControllers/Will.cs
+@@ -18,7 +18,7 @@ namespace WorldControllers
+         PhysicsEngine _engine;
+         PhysicsTimer _timer;
+ 
+-        private readonly ConcurrentDictionary<Guid, Body> _bodies = new ConcurrentDictionary<Guid, Body>();
++        //private readonly ConcurrentDictionary<Guid, Body> _bodies = new ConcurrentDictionary<Guid, Body>();
+ 
+         #endregion // Fields
+ 
+@@ -60,17 +60,9 @@ namespace WorldControllers
+         /// <param name="newGuid">GUID of new Body</param>
+         /// <param name="body">The Body which value will be copied</param>
+         /// <returns>The actual value of added Body object.</returns>
+-        public void AddBody(Guid newGuid, Body body)
++        public void AddBody(Body body)
+         {
+-            var actualAdded = _bodies.AddOrUpdate(newGuid, body, (g, b) =>
+-            {
+-                body.Lifetime.Age = b.Lifetime.Age;
+-                b.Lifetime.IsExpired = true;
+-
+-                return body;
+-            });
+-
+-            _engine.AddBody(actualAdded);
++            _engine.AddBody(body);
+         }
+ 
+         public void AddJoint(Joint joint)
+@@ -104,7 +96,9 @@ namespace WorldControllers
+         {
+             _engine = new PhysicsEngine();
+             _engine.BroadPhase = new Physics2DDotNet.Detectors.SelectiveSweepDetector();
+-            _engine.Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver();
++            _engine.Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver { 
++                AllowedPenetration = 0.1f
++            };
+             _engine.AddLogic(new GravityField(new Vector2D(0, 1000), new Lifespan()));
+ 
+             _engine.Updated += OnEngineUpdated;
+diff --git a/FukamiDemo/WorldControllers/WillHelper.cs b/FukamiDemo/WorldControllers/WillHelper.cs
+index 6c6a9d0..c1f1cf4 100644
+--- a/FukamiDemo/WorldControllers/WillHelper.cs
++++ b/FukamiDemo/WorldControllers/WillHelper.cs
+@@ -40,24 +40,16 @@ namespace WorldControllers
+         /// <param name="position">Initial Direction and Linear Position of the Body</param>
+         /// <returns>Return the new value of the BasePolygonBody</returns>
+         /// <remarks>The Guid of new Body will be stored in Body.Tags["Guid"]. The raw Colored Drawable of new Body will be stored in Body.Tags["Drawable"].</remarks>
+-        public static BasePolygonBody CreateRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
++        public static Body CreateRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
+         {
+-            Vector2D[] vertexes = VertexHelper.CreateRectangle(width, height);
+-            vertexes = VertexHelper.Subdivide(vertexes, Math.Min(height, width) / 5);
++            var vertices = VertexHelper.CreateRectangle(width, height);
++            vertices = VertexHelper.Subdivide(vertices, Math.Min(height, width) / 5);
+ 
+-            var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertexes, Math.Min(height, width) / 5);
++            var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertices, Math.Min(height, width) / 5);
+ 
+-            var boxDrawable = DrawableFactory.GetOrCreateColoredPolygonDrawable((ColoredPolygon)boxShape.Tag, ShapeType.Rectangle);
+-            
+             Body newBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
+             
+-            var newGuid = Guid.NewGuid();
+-            newBody.Tags["Guid"] = newGuid;
+-            newBody.Tags["Drawable"] = boxDrawable;
+-
+-            var rectBody = BasePolygonBody.Create(newBody);
+-
+-            return rectBody;
++            return newBody;
+         }
+ 
+         /// <summary>
+@@ -68,21 +60,15 @@ namespace WorldControllers
+         /// <param name="mass">Mass of corresponding Body</param>
+         /// <param name="position">Position of the Circle Shape</param>
+         /// <returns>Newly created and added into world Body object.</returns>
+-        public static BasePolygonBody AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
++        public static Body AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
+         {
+             CircleShape shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
+ 
+             var newBody = new Body(new PhysicsState(position), shape, mass, Coefficients.Duplicate(), new Lifespan());
++            
++            Will.Instance.AddBody(newBody);
+ 
+-            var newGuid = Guid.NewGuid();
+-            newBody.Tags["Guid"] = newGuid;
+-            newBody.Tags["Drawable"] = shape.Tag;
+-
+-            var circleBody = BasePolygonBody.Create(newBody);
+-
+-            Will.Instance.AddBody(newGuid, circleBody);
+-
+-            return circleBody;
++            return newBody;
+         }
+ 
+ 
+@@ -103,7 +89,7 @@ namespace WorldControllers
+             for (Scalar x = 0; x < length; x += boxLength + spacing, position.X += boxLength + spacing)
+             {
+                 var current = ChainMember.Create(CreateRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)));
+-                Will.Instance.AddBody(current.Guid, current);
++                Will.Instance.AddBody(current);
+ 
+                 if (last != null)
+                 {
+-- 
+1.8.4.msysgit.0
+
