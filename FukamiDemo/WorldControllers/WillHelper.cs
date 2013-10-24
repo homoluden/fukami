@@ -60,11 +60,11 @@ namespace WorldControllers
         /// <param name="mass">Mass of corresponding Body</param>
         /// <param name="position">Position of the Circle Shape</param>
         /// <returns>Newly created and added into world Body object.</returns>
-        public static Body AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position)
+        public static BaseModelBody AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position, Guid modelId)
         {
             CircleShape shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
 
-            var newBody = new Body(new PhysicsState(position), shape, mass, Coefficients.Duplicate(), new Lifespan());
+            var newBody = new BaseModelBody(new PhysicsState(position), shape, mass, Coefficients.Duplicate(), new Lifespan(), modelId);
             
             Will.Instance.AddBody(newBody);
 
@@ -82,18 +82,18 @@ namespace WorldControllers
         /// <param name="spacing">Distance between chain members</param>
         /// <param name="length">The chain length</param>
         /// <returns>The list of Bodies created</returns>
-        public static IList<ChainMember> BuildChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length)
+        public static IList<BaseModelBody> BuildChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length, Guid modelId)
         {
-            var bodies = new List<ChainMember>();
+            var bodies = new List<BaseModelBody>();
             ChainMember last = null;
             for (Scalar x = 0; x < length; x += boxLength + spacing, position.X += boxLength + spacing)
             {
-                var current = ChainMember.Create(CreateRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)));
+                var current = ChainMember.Create(CreateRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)), modelId);
                 Will.Instance.AddBody(current);
 
                 if (last != null)
                 {
-                    Vector2D anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
+                    var anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
 
                     var joint = new HingeJoint(last, current, anchor, new Lifespan()) {DistanceTolerance = 500, Softness = 0.005f};
 
