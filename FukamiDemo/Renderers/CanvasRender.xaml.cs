@@ -103,7 +103,8 @@ namespace Renderers
                     }
                 }
 
-                newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(99, 99, 99), WriteableBitmapExtensions.BlendMode.Additive);
+                newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(75, 16, 45), WriteableBitmapExtensions.BlendMode.Additive);
+                _wbmp = newFrame;
                 RenderingImage.Source = newFrame;
             });
 

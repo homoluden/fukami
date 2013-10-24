@@ -42,6 +42,19 @@ namespace WorldControllers
 
         #region Public Methods
 
+        public void Purge()
+        {
+            foreach (var body in _engine.Bodies)
+            {
+                body.Lifetime.IsExpired = true;
+            }
+            
+            foreach (var joint in _engine.Joints)
+            {
+                joint.Lifetime.IsExpired = true;
+            }
+        }
+
         public void RunPauseWilling(bool? setToIsRunning = null)
         {
             if (setToIsRunning.HasValue)
@@ -90,15 +103,18 @@ namespace WorldControllers
 
         #region Singleton
         private static volatile Will _instance;
-        private static object syncRoot = new Object();
+        private static readonly object SyncRoot = new Object();
 
         private Will() 
         {
-            _engine = new PhysicsEngine();
-            _engine.BroadPhase = new Physics2DDotNet.Detectors.SelectiveSweepDetector();
-            _engine.Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver { 
-                AllowedPenetration = 0.1f
-            };
+            _engine = new PhysicsEngine
+                {
+                    BroadPhase = new Physics2DDotNet.Detectors.SelectiveSweepDetector(),
+                    Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver
+                        {
+                            AllowedPenetration = 0.01f
+                        }
+                };
             _engine.AddLogic(new GravityField(new Vector2D(0, 1000), new Lifespan()));
 
             _engine.Updated += OnEngineUpdated;
@@ -121,7 +137,7 @@ namespace WorldControllers
             {
                 if (_instance == null) 
                 {
-                lock (syncRoot) 
+                lock (SyncRoot) 
                 {
                     if (_instance == null)
                         _instance = new Will();
