@@ -15,11 +15,11 @@ using Physics2DDotNet.Shapes;
 
 namespace CustomBodies
 {
-    public class BaseBodyModel : Body
+    public class BaseModelBody : Body
     {
         #region Properties
 
-        public Guid Guid { get; set; }
+        public Guid ModelId { get; set; }
         public Scalar Age { get { return Lifetime.Age; } }
 
         #endregion
@@ -27,20 +27,20 @@ namespace CustomBodies
 
         #region Ctors
 
-        public BaseBodyModel(PhysicsState state, IShape shape, double mass, Coefficients coefficients, Lifespan lifetime, Guid guid)
-            : this(state, shape, new MassInfo { Mass = mass }, coefficients, lifetime, guid)
+        public BaseModelBody(PhysicsState state, IShape shape, double mass, Coefficients coefficients, Lifespan lifetime, Guid modelId)
+            : this(state, shape, new MassInfo { Mass = mass }, coefficients, lifetime, modelId)
         {
         }
 
-        public BaseBodyModel(PhysicsState state, IShape shape, MassInfo massInfo, Coefficients coefficients, Lifespan lifetime, Guid guid) 
+        public BaseModelBody(PhysicsState state, IShape shape, MassInfo massInfo, Coefficients coefficients, Lifespan lifetime, Guid modelId) 
             : base(state, shape, massInfo, coefficients, lifetime)
         {
-            if (guid == Guid.Empty)
+            if (modelId == Guid.Empty)
             {
                 throw new ArgumentException("'guid' cannot be empty!");
             }
 
-            Guid = guid;
+            ModelId = modelId;
         }
 
         #endregion

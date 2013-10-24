@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseBodyModel.cs" />
+    <Compile Include="BaseModelBody.cs" />
     <Compile Include="ChainMember.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
