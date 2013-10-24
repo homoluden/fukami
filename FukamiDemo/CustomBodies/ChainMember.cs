@@ -1,16 +1,18 @@
-﻿using Drawables;
+﻿
+#if UseDouble
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
 using Physics2DDotNet;
 using Physics2DDotNet.Joints;
 using Physics2DDotNet.Shapes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CustomBodies
 {
-    public class ChainMember : Body
+    public class ChainMember : BaseBodyModel
     {
         public Joint BegJoint 
         {
@@ -29,9 +31,11 @@ namespace CustomBodies
         /// </summary>
         /// <param name="body">Original Body</param>
         /// <returns>The copy of original Body</returns>
+        /// <remarks>This method will generate new Guid internally</remarks>
         public static ChainMember Create(Body body)
         {
-            var result = new ChainMember(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime);
+            var newGuid = Guid.NewGuid();
+            var result = new ChainMember(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime, newGuid);
             object j1, j2;
 
             body.Tags.TryGetValue("J1", out j1);
@@ -44,12 +48,12 @@ namespace CustomBodies
         }
 
 
-        public ChainMember(PhysicsState state, IShape shape, double mass, Coefficients coefficients, Lifespan lifetime)
-            : base(state, shape, mass, coefficients, lifetime)
+        public ChainMember(PhysicsState state, IShape shape, double mass, Coefficients coefficients, Lifespan lifetime, Guid guid)
+            : base(state, shape, mass, coefficients, lifetime, guid)
         {
         }
-        public ChainMember(PhysicsState state, IShape shape, MassInfo mass, Coefficients coefficients, Lifespan lifetime)
-            : base(state, shape, mass, coefficients, lifetime)
+        public ChainMember(PhysicsState state, IShape shape, MassInfo mass, Coefficients coefficients, Lifespan lifetime, Guid guid)
+            : base(state, shape, mass, coefficients, lifetime, guid)
         {
         }
     }

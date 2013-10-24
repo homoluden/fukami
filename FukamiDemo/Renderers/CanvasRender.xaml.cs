@@ -91,13 +91,13 @@ namespace Renderers
         public void RenderWorld(IWorldSnapshot snapshot)
         {
             var op = _drawing.Dispatcher.InvokeAsync(() => {
-                var polygonBodies = snapshot.Bodies;
+                var bodies = snapshot.Bodies;
 
                 var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
 
                 using (var ctx = newFrame.GetBitmapContext())
                 {
-                    foreach (var body in polygonBodies)
+                    foreach (var body in bodies)
                     {
                         DrawBodyPolygon(ctx, body);
                     }

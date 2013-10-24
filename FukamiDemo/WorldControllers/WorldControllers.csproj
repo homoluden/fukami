@@ -34,6 +34,9 @@
     <Reference Include="AdvanceMath">
       <HintPath>..\..\ExtLibs\Physics2D.Net\AdvanceMath.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Physics2DDotNet">
       <HintPath>..\..\ExtLibs\Physics2D.Net\Physics2DDotNet.dll</HintPath>
     </Reference>
@@ -74,6 +77,9 @@
       <Project>{b1894b50-9f8d-4ce9-8f7a-13d3dd9f28b3}</Project>
       <Name>Shapes</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
