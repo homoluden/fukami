@@ -70,7 +70,6 @@ namespace WorldControllers
         /// <summary>
         /// Adds the body into internal dictionary and underlying physical engine
         /// </summary>
-        /// <param name="newGuid">GUID of new Body</param>
         /// <param name="body">The Body which value will be copied</param>
         /// <returns>The actual value of added Body object.</returns>
         public void AddBody(Body body)
