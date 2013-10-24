@@ -1,4 +1,5 @@
-﻿using Drawables;
+﻿using CustomBodies;
+using Drawables;
 using Interfaces;
 using Physics2DDotNet;
 using System;
@@ -23,9 +24,9 @@ namespace WorldControllers
 
         #region Fields
 
-        private readonly ConcurrentDictionary<Guid, ColoredPolygonDrawable> _colPolygons = new ConcurrentDictionary<Guid, ColoredPolygonDrawable>();
+        private readonly ConcurrentDictionary<Guid, IList<BaseModelBody>> _gameModels = new ConcurrentDictionary<Guid, IList<BaseModelBody>>();
 
-        private WeakReference<IRenderer> _renderer = new WeakReference<IRenderer>(null);
+        private readonly WeakReference<IRenderer> _renderer = new WeakReference<IRenderer>(null);
         private TaskScheduler _renderingContext;
         private bool _isRenderingCompleted = true;
 
@@ -35,6 +36,27 @@ namespace WorldControllers
 
 
         #region Public Methods
+
+        public void RegisterModel(Guid modelId, IList<BaseModelBody> modelBodies)
+        {
+            if (modelId == Guid.Empty)
+            {
+                throw new ArgumentException("'modelId cannot be empty!'");
+            }
+            if (modelBodies == null || modelBodies.Count == 0)
+            {
+                throw new ArgumentException("'modelBodies' cannot be empty!");
+            }
+
+            _gameModels.AddOrUpdate(modelId, modelBodies, (id, list) =>
+                {
+                    foreach (var body in list.Where(body => !modelBodies.Contains(body)))
+                    {
+                        body.Lifetime.IsExpired = true;
+                    }
+                    return modelBodies;
+                });
+        }
 
         public void RegisterRenderer(IRenderer renderer, TaskScheduler scheduler)
         {
