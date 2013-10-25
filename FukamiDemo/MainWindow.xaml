@@ -31,26 +31,39 @@
         </WrapPanel>
         
         <!--Genes Panel goes here-->
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Column="1">
-            <ListBox x:Name="GenesListBox" ItemsSource="{Binding FukamiGenes}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" MinWidth="50" MaxWidth="300"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type vm:GeneViewModel}">
-                        <Button Command="{Binding AddGeneToWorldCommand}" ToolTip="{Binding Description}">
-                            <StackPanel>
-                                <TextBlock Text="{Binding Category}"/>
-                                <TextBlock Text="{Binding Id}"/>
-                            </StackPanel>
-                        </Button>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             
-        </ScrollViewer>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Grid.Column="1">
+                <ListBox x:Name="GenesListBox" ItemsSource="{Binding FukamiGenes}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" MinWidth="50" MaxWidth="300"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:BaseGeneViewModel}">
+                            <Button Command="{Binding AddGeneToWorldCommand}" ToolTip="{Binding Description}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Category}"/>
+                                    <TextBlock Text="{Binding Id}"/>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+            
+                <ContentControl Grid.Row="1" >
+                    <ContentControl.Resources>
+                        
+                    </ContentControl.Resources>
+                </ContentControl>
+        </Grid>
+        
         
     </Grid>
 </Window>

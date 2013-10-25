@@ -16,7 +16,7 @@ namespace FukamiDemo.ViewModels
     public class FukamiDemoViewModel : BaseViewModel
     {
         #region Properties
-        public IList<GeneViewModel> FukamiGenes { get; private set; }
+        public IList<BaseGeneViewModel> FukamiGenes { get; private set; }
         #endregion
 
 
@@ -147,9 +147,9 @@ namespace FukamiDemo.ViewModels
 
         #region Private Methods
         
-        private IList<GeneViewModel> GenerateRandomGenes()
+        private IList<BaseGeneViewModel> GenerateRandomGenes()
         {
-            return new List<GeneViewModel>();
+            return new List<BaseGeneViewModel>();
         }
 
         #endregion

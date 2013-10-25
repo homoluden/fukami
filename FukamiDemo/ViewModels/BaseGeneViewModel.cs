@@ -12,13 +12,45 @@ using WorldControllers;
 
 namespace FukamiDemo.ViewModels
 {
-    public class GeneViewModel : BaseViewModel
+    public class BaseGeneViewModel : BaseViewModel
     {
         #region Properties
 
-        public ulong Id { get; private set; }
-        public string Category { get; private set; }
-        public string Description { get; private set; }
+        private ulong _id;
+
+        public ulong Id
+        {
+            get { return _id; }
+            set
+            {
+                _id = value;
+                RaisePropertyChanged("Id");
+            }
+        }
+
+        private string _category;
+
+        public string Category
+        {
+            get { return _category; }
+            set
+            {
+                _category = value;
+                RaisePropertyChanged("Category");
+            }
+        }
+
+        private string _description;
+
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                _description = value;
+                RaisePropertyChanged("Description");
+            }
+        }
         
         #endregion
 
@@ -50,7 +82,11 @@ namespace FukamiDemo.ViewModels
 
         #region Ctors
 
-        public GeneViewModel(ulong id, string category, string description)
+        public BaseGeneViewModel()
+        {
+        }
+
+        public BaseGeneViewModel(ulong id, string category, string description)
         {
             if (string.IsNullOrWhiteSpace(category))
             {

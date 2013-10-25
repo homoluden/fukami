@@ -64,8 +64,12 @@
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BoneGeneViewModel.cs" />
+    <Compile Include="ViewModels\ConnectorGeneViewModel.cs" />
+    <Compile Include="ViewModels\CoreGeneViewModel.cs" />
     <Compile Include="ViewModels\FukamiDemoViewModel.cs" />
-    <Compile Include="ViewModels\GeneViewModel.cs" />
+    <Compile Include="ViewModels\BaseGeneViewModel.cs" />
+    <Compile Include="ViewModels\NodeGeneViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
