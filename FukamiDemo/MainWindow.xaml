@@ -2,12 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:rdr="clr-namespace:Renderers;assembly=Renderers"
+        xmlns:vm="clr-namespace:FukamiDemo.ViewModels"
         Title="Fukami Demo" Height="700" Width="Auto" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto"/>            
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
         
         <!--Rendering Pane goes here-->
         <Viewbox x:Name="RenderingBox" Stretch="UniformToFill">
@@ -24,6 +29,28 @@
             <Button Content="Add Chain" Command="{Binding AddChainCommand}" Margin="0 0 5 0"/>
             <Button Content="Add Core" Command="{Binding AddCoreCommand}" Margin="0 0 5 0"/>
         </WrapPanel>
+        
+        <!--Genes Panel goes here-->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+            <ListBox x:Name="GenesListBox" ItemsSource="{Binding FukamiGenes}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" MinWidth="50" MaxWidth="300"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:GeneViewModel}">
+                        <Button Command="{Binding AddGeneToWorldCommand}" ToolTip="{Binding Description}">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Category}"/>
+                                <TextBlock Text="{Binding Id}"/>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+        </ScrollViewer>
         
     </Grid>
 </Window>

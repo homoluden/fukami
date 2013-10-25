@@ -15,6 +15,10 @@ namespace FukamiDemo.ViewModels
 {
     public class FukamiDemoViewModel : BaseViewModel
     {
+        #region Properties
+        public IList<GeneViewModel> FukamiGenes { get; private set; }
+        #endregion
+
 
         #region RunPauseCommand
 
@@ -38,8 +42,7 @@ namespace FukamiDemo.ViewModels
         }
 
         #endregion // RunPauseCommand    
-
-
+        
         #region AddChainCommand
 
         ICommand _addChainCommand;
@@ -142,5 +145,23 @@ namespace FukamiDemo.ViewModels
         #endregion // AddCoreCommand
 
 
+        #region Private Methods
+        
+        private IList<GeneViewModel> GenerateRandomGenes()
+        {
+            return new List<GeneViewModel>();
+        }
+
+        #endregion
+
+
+        #region Ctors
+
+        public FukamiDemoViewModel()
+        {
+            FukamiGenes = GenerateRandomGenes();
+        }
+
+        #endregion
     }
 }
