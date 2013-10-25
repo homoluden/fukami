@@ -47,7 +47,7 @@ namespace WorldControllers
 
             var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertices, Math.Min(height, width) / 5);
 
-            Body newBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
+            var newBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
             
             return newBody;
         }
@@ -109,6 +109,15 @@ namespace WorldControllers
             }
             return bodies;
         }
+
+        #region Extensions
+
+        public static BaseModelBody AsModelBody(this Body body, Guid modelId)
+        {
+            return new BaseModelBody(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime, modelId);
+        }
+
+        #endregion
 
     }
 }
