@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid>
-        <Canvas x:Name="RenderingCanvas" Background="Black" Width="1600" Height="1200">
+        <Canvas x:Name="RenderingCanvas" Background="Black" Width="1280" Height="1024">
             <Image x:Name="RenderingImage"></Image>
         </Canvas>
     </Grid>

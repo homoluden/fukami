@@ -28,7 +28,7 @@ namespace Renderers
     {
         private readonly DrawingVisual _drawing = new DrawingVisual();
         private WriteableBitmap _wbmp;
-        private Rect _fullscreenRect;
+        private readonly Rect _fullscreenRect;
 
         private readonly SolidColorBrush _defaultBrush = new SolidColorBrush(Colors.WhiteSmoke);
 
@@ -36,7 +36,7 @@ namespace Renderers
         {
             InitializeComponent();
 
-            _wbmp = BitmapFactory.New(1024, 768);
+            _wbmp = BitmapFactory.New(1280, 1024);
             _fullscreenRect = new Rect(0, 0, _wbmp.PixelWidth, _wbmp.PixelHeight);
             RenderingImage.Source = _wbmp;
 
@@ -93,19 +93,21 @@ namespace Renderers
             var op = _drawing.Dispatcher.InvokeAsync(() => {
                 var bodies = snapshot.Bodies;
 
-                var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
+                //var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
 
-                using (var ctx = newFrame.GetBitmapContext())
+                //using (var ctx = newFrame.GetBitmapContext())
+                using (var ctx = _wbmp.GetBitmapContext())
                 {
+                    ctx.Clear();
                     foreach (var body in bodies)
                     {
                         DrawBodyPolygon(ctx, body);
                     }
                 }
 
-                newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(75, 16, 45), WriteableBitmapExtensions.BlendMode.Additive);
-                _wbmp = newFrame;
-                RenderingImage.Source = newFrame;
+                //newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(75, 16, 45), WriteableBitmapExtensions.BlendMode.Additive);
+                //_wbmp = newFrame;
+                //RenderingImage.Source = newFrame;
             });
 
             if (!op.Task.IsCanceled)

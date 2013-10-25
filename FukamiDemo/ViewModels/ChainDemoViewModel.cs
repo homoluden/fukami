@@ -64,7 +64,8 @@ namespace FukamiDemo.ViewModels
             Will.Instance.Purge();
             Will.Instance.RunPauseWilling(false);
 
-            double angle = MathHelper.ToRadians(-15.0f);
+            var startPoint = new Vector2D(300, 800);
+            double angle = MathHelper.ToRadians(15.0f);
             double boxlength = 50;
             double spacing = 2;
             double anchorLength = 30;
@@ -72,23 +73,23 @@ namespace FukamiDemo.ViewModels
 
             var chainId = Guid.NewGuid();
 
-            var chain = WillHelper.BuildChain(new Vector2D(150, 150), boxlength, 3, 5000, spacing, 600, chainId);
+            var chain = WillHelper.BuildChain(startPoint, boxlength, 3, 1200, spacing, 600, chainId);
             
-            var point2 = new Vector2D(chain[chain.Count - 1].State.Position.Linear.X + anchorGap, 150);
+            var point2 = new Vector2D(chain[chain.Count - 1].State.Position.Linear.X + anchorGap, startPoint.Y);
             var end2 = WillHelper.AddCircle(anchorLength / 2, 6, double.PositiveInfinity, new ALVector2D(0, point2), chainId);
             end2.IgnoresGravity = true;
 
-            var joint2 = new HingeJoint(chain[chain.Count - 1], end2, point2, new Lifespan()) {DistanceTolerance = 50};
+            var joint2 = new HingeJoint(chain[chain.Count - 1], end2, point2, new Lifespan()) {DistanceTolerance = 20};
             var joint21 = new AngleJoint(chain[chain.Count - 1], end2, new Lifespan()) { Angle = angle };
 
-            var point1 = new Vector2D(chain[0].State.Position.Linear.X - anchorGap, 150);
+            var point1 = new Vector2D(chain[0].State.Position.Linear.X - anchorGap, startPoint.Y);
             var end1 = WillHelper.AddCircle(anchorLength / 2, 6, double.PositiveInfinity, new ALVector2D(0, point1), chainId);
             
             chain.Add(end1);
             chain.Add(end2);
 
             end1.IgnoresGravity = true;
-            var joint1 = new HingeJoint(chain[0], end1, point1, new Lifespan()) {DistanceTolerance = 50};
+            var joint1 = new HingeJoint(chain[0], end1, point1, new Lifespan()) {DistanceTolerance = 20};
             var joint11 = new AngleJoint(end1, chain[0], new Lifespan()) { Angle = angle };
 
             Will.Instance.AddJoint(joint1);Will.Instance.AddJoint(joint11);

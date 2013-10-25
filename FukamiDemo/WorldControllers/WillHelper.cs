@@ -81,6 +81,7 @@ namespace WorldControllers
         /// <param name="boxMass">Chain member mass</param>
         /// <param name="spacing">Distance between chain members</param>
         /// <param name="length">The chain length</param>
+        /// <param name="modelId">Id of the parent Model entity</param>
         /// <returns>The list of Bodies created</returns>
         public static IList<BaseModelBody> BuildChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length, Guid modelId)
         {
@@ -95,7 +96,7 @@ namespace WorldControllers
                 {
                     var anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
 
-                    var joint = new HingeJoint(last, current, anchor, new Lifespan()) {DistanceTolerance = 500, Softness = 0.005f};
+                    var joint = new HingeJoint(last, current, anchor, new Lifespan()) {DistanceTolerance = 50, Softness = 0.005f};
 
                     last.EndJoint = current.BegJoint = joint;
 
