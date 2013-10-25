@@ -25,7 +25,7 @@ namespace FukamiDemo
         {
             InitializeComponent();
 
-            DataContext = new ChainDemoViewModel();
+            DataContext = new FukamiDemoViewModel();
         }
     }
 }

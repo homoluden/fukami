@@ -13,7 +13,7 @@ using WorldControllers;
 
 namespace FukamiDemo.ViewModels
 {
-    public class ChainDemoViewModel : BaseViewModel
+    public class FukamiDemoViewModel : BaseViewModel
     {
 
         #region RunPauseCommand
@@ -21,13 +21,9 @@ namespace FukamiDemo.ViewModels
         ICommand _runPauseCommand;
         public ICommand RunPauseCommand
         {
-            get
-            {
-                if (_runPauseCommand == null)
-                {
-                    _runPauseCommand = new RelayCommand(RunPauseCommandExecute, RunPauseCommandCanExecute);
-                }
-                return _runPauseCommand;
+            get {
+                return _runPauseCommand ??
+                       (_runPauseCommand = new RelayCommand(RunPauseCommandExecute, RunPauseCommandCanExecute));
             }
         }
 
@@ -49,13 +45,9 @@ namespace FukamiDemo.ViewModels
         ICommand _addChainCommand;
         public ICommand AddChainCommand
         {
-            get
-            {
-                if (_addChainCommand == null)
-                {
-                    _addChainCommand = new RelayCommand(AddChainCommandExecute, AddChainCommandCanExecute);
-                }
-                return _addChainCommand;
+            get {
+                return _addChainCommand ??
+                       (_addChainCommand = new RelayCommand(AddChainCommandExecute, AddChainCommandCanExecute));
             }
         }
 
@@ -105,7 +97,49 @@ namespace FukamiDemo.ViewModels
             return true;
         }
 
-        #endregion // RunPauseCommand    
+        #endregion // AddChainCommand    
+
+        #region AddCoreCommand
+
+        ICommand _addCoreCommand;
+        public ICommand AddCoreCommand
+        {
+            get {
+                return _addCoreCommand ??
+                       (_addCoreCommand = new RelayCommand(AddCoreCommandExecute, AddCoreCommandCanExecute));
+            }
+        }
+
+        private void AddCoreCommandExecute(object parameter)
+        {
+            Will.Instance.Purge();
+            Will.Instance.RunPauseWilling(false);
+
+            var startPoint = new Vector2D(100, 300);
+            double angle = MathHelper.ToRadians(15.0f);
+            const double boxlength = 50;
+            const double spacing = 2;
+            const double anchorLength = 30;
+            const double anchorGap = (boxlength / 2) + spacing + (anchorLength / 2);
+
+            var modelId = Guid.NewGuid();
+
+            var floor = WillHelper.CreateRectangle(10, 1024, 5000, new ALVector2D(0, startPoint.X + 512, startPoint.Y)).AsModelBody(modelId);
+            floor.IgnoresGravity = true;
+
+            Will.Instance.AddBody(floor);
+
+            Representation.Instance.RegisterModel(modelId, new List<BaseModelBody>{floor});
+
+            Will.Instance.RunPauseWilling(true);
+        }
+
+        private bool AddCoreCommandCanExecute(object parameter)
+        {
+            return true;
+        }
+
+        #endregion // AddCoreCommand
 
 
     }
