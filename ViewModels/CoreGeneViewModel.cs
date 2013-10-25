@@ -44,6 +44,10 @@ namespace Fukami.ViewModels
 
         #endregion
 
+        public CoreGeneViewModel()
+        {
+        }
+
         public CoreGeneViewModel(ulong id, string category, string description)
             : base(id, category, description)
         {
