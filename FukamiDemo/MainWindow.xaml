@@ -24,7 +24,7 @@
         </Viewbox>
         
         <!--Control Panel goes here-->
-        <WrapPanel Orientation="Horizontal" Grid.Row="1" Margin="5">
+        <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
             <Button Content="Run / Pause" Command="{Binding RunPauseCommand}" Margin="0 0 5 0"/>
             <Button Content="Add Chain" Command="{Binding AddChainCommand}" Margin="0 0 5 0"/>
             <Button Content="Add Core" Command="{Binding AddCoreCommand}" Margin="0 0 5 0"/>
@@ -41,12 +41,12 @@
                 <ListBox x:Name="GenesListBox" ItemsSource="{Binding FukamiGenes}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" MinWidth="50" MaxWidth="300"/>
+                            <WrapPanel Orientation="Horizontal" MinWidth="50" MaxWidth="150"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:BaseGeneViewModel}">
-                            <Button Command="{Binding AddGeneToWorldCommand}" ToolTip="{Binding Description}">
+                            <Button Command="{Binding AddGeneToWorldCommand}" ToolTip="{Binding Description}" Width="40">
                                 <StackPanel>
                                     <TextBlock Text="{Binding Category}"/>
                                     <TextBlock Text="{Binding Id}"/>
