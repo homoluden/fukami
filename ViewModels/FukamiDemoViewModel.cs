@@ -13,7 +13,9 @@ namespace Fukami.ViewModels
     public class FukamiDemoViewModel : BaseViewModel
     {
         #region Properties
+
         public IList<BaseGeneViewModel> FukamiGenes { get; private set; }
+        
         #endregion
 
 
@@ -144,9 +146,18 @@ namespace Fukami.ViewModels
 
         #region Private Methods
         
-        private IList<BaseGeneViewModel> GenerateRandomGenes()
+        private IList<BaseGeneViewModel> GenerateGenes()
         {
-            return new List<BaseGeneViewModel>();
+            return new List<BaseGeneViewModel>
+                {
+                    new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots."},
+                    new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15},
+                    new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10},
+                    new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20},
+                    new BoneGeneViewModel{Id = 5, Category = "Bone", Description = "Bone gene with Size: {50 x 2}", Length = 50, Thickness = 2},
+                    new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {30 x 4}", Length = 30, Thickness = 4},
+                    new BoneGeneViewModel{Id = 7, Category = "Bone", Description = "Bone gene with Size: {40 x 1}", Length = 40, Thickness = 1}
+                };
         }
 
         #endregion
@@ -156,7 +167,7 @@ namespace Fukami.ViewModels
 
         public FukamiDemoViewModel()
         {
-            FukamiGenes = GenerateRandomGenes();
+            FukamiGenes = GenerateGenes();
         }
 
         #endregion
