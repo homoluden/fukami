@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:rdr="clr-namespace:Renderers;assembly=Renderers"
-        xmlns:vm="clr-namespace:FukamiDemo.ViewModels"
+        xmlns:vm="clr-namespace:Fukami.ViewModels;assembly=Fukami.ViewModels"
         Title="Fukami Demo" Height="700" Width="Auto" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
@@ -31,13 +31,13 @@
         </WrapPanel>
         
         <!--Genes Panel goes here-->
-        <Grid>
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Grid.Column="1">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                 <ListBox x:Name="GenesListBox" ItemsSource="{Binding FukamiGenes}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -57,11 +57,11 @@
                 </ListBox>
             </ScrollViewer>
             
-                <ContentControl Grid.Row="1" >
-                    <ContentControl.Resources>
+            <ContentControl Grid.Row="1" >
+                <ContentControl.Resources>
                         
-                    </ContentControl.Resources>
-                </ContentControl>
+                </ContentControl.Resources>
+            </ContentControl>
         </Grid>
         
         

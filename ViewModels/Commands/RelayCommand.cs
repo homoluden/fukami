@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FukamiDemo.Commands
+namespace Fukami.ViewModels.Commands
 {
-    public class RelayCommand : ICommand
+    public class RelayCommand : System.Windows.Input.ICommand
     {
         #region Fields
 
@@ -39,7 +35,7 @@ namespace FukamiDemo.Commands
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            return _canExecute == null || _canExecute(parameter);
         }
 
         public event EventHandler CanExecuteChanged

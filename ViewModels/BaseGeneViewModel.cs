@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using AdvanceMath;
-using FukamiDemo.Commands;
-using Physics2DDotNet;
-using Physics2DDotNet.Joints;
-using WorldControllers;
+using Fukami.ViewModels.Commands;
 
-namespace FukamiDemo.ViewModels
+namespace Fukami.ViewModels
 {
     public class BaseGeneViewModel : BaseViewModel
     {

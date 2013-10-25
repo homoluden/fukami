@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Physics2DDotNet.Joints;
+﻿using Physics2DDotNet.Joints;
 
-namespace FukamiDemo.ViewModels
+namespace Fukami.ViewModels
 {
     public class ConnectorGeneViewModel : BaseGeneViewModel
     {

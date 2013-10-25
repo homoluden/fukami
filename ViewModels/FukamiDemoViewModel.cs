@@ -1,17 +1,14 @@
 ﻿using AdvanceMath;
 using CustomBodies;
-using FukamiDemo.Commands;
+using Fukami.ViewModels.Commands;
 using Physics2DDotNet;
 using Physics2DDotNet.Joints;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using WorldControllers;
 
-namespace FukamiDemo.ViewModels
+namespace Fukami.ViewModels
 {
     public class FukamiDemoViewModel : BaseViewModel
     {
