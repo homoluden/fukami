@@ -143,6 +143,50 @@ namespace Fukami.ViewModels
 
         #endregion // AddCoreCommand
 
+        #region ApplyGeneCommand
+
+        ICommand _applyGeneCommand;
+        public ICommand ApplyGeneCommand
+        {
+            get
+            {
+                return _applyGeneCommand ??
+                       (_applyGeneCommand = new RelayCommand(ApplyGeneCommandExecute, ApplyGeneCommandCanExecute));
+            }
+        }
+
+        private void ApplyGeneCommandExecute(object parameter)
+        {
+            var gene = parameter as BaseGeneViewModel;
+            if (gene == null)
+            {
+                throw new ArgumentException("Parameter is not a gene!");
+            }
+            var category = gene.Category;
+            switch (category)
+            {
+                case "Core":
+                    //Add Core object to scene
+                    break;
+                case "Node":
+                    //Add Node object to scene
+                    break;
+                case "Bone":
+                    //Add Bone object to scene
+                    break;
+                default:
+                    //Nothing here yet
+                    break;
+            }
+        }
+
+        private bool ApplyGeneCommandCanExecute(object parameter)
+        {
+            return true;
+        }
+
+        #endregion // ApplyGeneCommand
+
 
         #region Private Methods
         
