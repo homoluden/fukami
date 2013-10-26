@@ -4,7 +4,33 @@ using Fukami.ViewModels.Commands;
 
 namespace Fukami.ViewModels
 {
-    public class BaseGeneViewModel : BaseViewModel
+    public abstract class BaseGeneViewModel<T> : BaseGeneViewModel
+    {
+
+
+        #region Public Methods
+
+        public abstract T GetModel();
+
+        #endregion
+
+
+        #region Ctors
+
+        protected BaseGeneViewModel()
+        {
+            
+        }
+
+        protected BaseGeneViewModel(ulong id, string category, string description)
+            : base(id, category, description)
+        {
+        }
+
+        #endregion
+    }
+
+    public abstract class BaseGeneViewModel : BaseViewModel
     {
         #region Properties
 
@@ -47,38 +73,13 @@ namespace Fukami.ViewModels
         #endregion
 
 
-        #region AddGeneToWorldCommand
-
-        ICommand _addGeneToWorldCommand;
-        public ICommand AddGeneToWorldCommand
-        {
-            get
-            {
-                return _addGeneToWorldCommand ??
-                       (_addGeneToWorldCommand = new RelayCommand(AddGeneToWorldCommandExecute, AddGeneToWorldCommandCanExecute));
-            }
-        }
-
-        private void AddGeneToWorldCommandExecute(object parameter)
-        {
-            
-        }
-
-        private bool AddGeneToWorldCommandCanExecute(object parameter)
-        {
-            return true;
-        }
-
-        #endregion // AddGeneToWorldCommand
-
-
         #region Ctors
 
-        public BaseGeneViewModel()
+        protected BaseGeneViewModel()
         {
         }
 
-        public BaseGeneViewModel(ulong id, string category, string description)
+        protected BaseGeneViewModel(ulong id, string category, string description)
         {
             if (string.IsNullOrWhiteSpace(category))
             {

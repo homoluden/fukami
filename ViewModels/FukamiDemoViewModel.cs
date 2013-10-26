@@ -117,7 +117,7 @@ namespace Fukami.ViewModels
             Will.Instance.Purge();
             Will.Instance.RunPauseWilling(false);
 
-            var startPoint = new Vector2D(100, 300);
+            var startPoint = new Vector2D(101, 300);
             double angle = MathHelper.ToRadians(15.0f);
             const double boxlength = 50;
             const double spacing = 2;
@@ -126,7 +126,7 @@ namespace Fukami.ViewModels
 
             var modelId = Guid.NewGuid();
 
-            var floor = WillHelper.CreateRectangle(10, 1024, 5000, new ALVector2D(0, startPoint.X + 512, startPoint.Y)).AsModelBody(modelId);
+            var floor = WillHelper.CreateRectangle(10, 1024, double.PositiveInfinity, new ALVector2D(0, startPoint.X + 512, startPoint.Y)).AsModelBody(modelId);
             floor.IgnoresGravity = true;
 
             Will.Instance.AddBody(floor);
@@ -163,10 +163,15 @@ namespace Fukami.ViewModels
                 throw new ArgumentException("Parameter is not a gene!");
             }
             var category = gene.Category;
+            var geneApplicationId = Guid.NewGuid();
             switch (category)
             {
                 case "Core":
                     //Add Core object to scene
+                    var core = (CoreGeneViewModel)gene;
+                    var model = core.GetModel();
+                    var bodies = WillHelper.BuildCoreBody(model, geneApplicationId);
+                    Will.Instance.AddModelBodies(bodies);
                     break;
                 case "Node":
                     //Add Node object to scene
@@ -194,13 +199,14 @@ namespace Fukami.ViewModels
         {
             return new List<BaseGeneViewModel>
                 {
-                    new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots."},
-                    new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15},
-                    new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10},
-                    new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20},
-                    new BoneGeneViewModel{Id = 5, Category = "Bone", Description = "Bone gene with Size: {50 x 2}", Length = 50, Thickness = 2},
-                    new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {30 x 4}", Length = 30, Thickness = 4},
-                    new BoneGeneViewModel{Id = 7, Category = "Bone", Description = "Bone gene with Size: {40 x 1}", Length = 40, Thickness = 1}
+                    new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots.", ParentViewModel = this,
+                                            Size = 15, SpawningPosition = new ALVector2D(Math.PI/2+0.1f, 500, 600)},
+                    new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
+                    new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
+                    new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},
+                    new BoneGeneViewModel{Id = 5, Category = "Bone", Description = "Bone gene with Size: {50 x 2}", Length = 50, Thickness = 2, ParentViewModel = this},
+                    new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {30 x 4}", Length = 30, Thickness = 4, ParentViewModel = this},
+                    new BoneGeneViewModel{Id = 7, Category = "Bone", Description = "Bone gene with Size: {40 x 1}", Length = 40, Thickness = 1, ParentViewModel = this}
                 };
         }
 

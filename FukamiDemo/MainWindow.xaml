@@ -46,7 +46,7 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type vm:BaseGeneViewModel}">
-                            <Button Command="{Binding AddGeneToWorldCommand}" ToolTip="{Binding Description}" Width="40">
+                            <Button Command="{Binding ParentViewModel.ApplyGeneCommand}" CommandParameter="{Binding}" ToolTip="{Binding Description}" Width="40">
                                 <StackPanel>
                                     <TextBlock Text="{Binding Category}"/>
                                     <TextBlock Text="{Binding Id}"/>

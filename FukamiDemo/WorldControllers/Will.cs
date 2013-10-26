@@ -1,4 +1,5 @@
 ﻿using AdvanceMath;
+using CustomBodies;
 using Physics2DDotNet;
 using Physics2DDotNet.Joints;
 using Physics2DDotNet.PhysicsLogics;
@@ -71,10 +72,21 @@ namespace WorldControllers
         /// Adds the body into internal dictionary and underlying physical engine
         /// </summary>
         /// <param name="body">The Body which value will be copied</param>
-        /// <returns>The actual value of added Body object.</returns>
         public void AddBody(Body body)
         {
             _engine.AddBody(body);
+        }
+
+        /// <summary>
+        /// Adds the body into internal dictionary and underlying physical engine
+        /// </summary>
+        /// <param name="bodies">The list of bodies to add</param>
+        public void AddModelBodies(IList<BaseModelBody> bodies)
+        {
+            foreach (var body in bodies)
+            {
+                AddBody(body);
+            }
         }
 
         public void AddJoint(Joint joint)

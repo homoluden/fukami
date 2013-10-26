@@ -2,7 +2,7 @@
 
 namespace Fukami.ViewModels
 {
-    public class ConnectorGeneViewModel : BaseGeneViewModel
+    public class ConnectorGeneViewModel : BaseGeneViewModel<object>
     {
         private HingeJoint _parHinge;
 
@@ -51,6 +51,11 @@ namespace Fukami.ViewModels
                 RaisePropertyChanged("ChildAngleJoint");
             }
         }
-        
+
+
+        public override object GetModel()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

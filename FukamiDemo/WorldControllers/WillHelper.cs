@@ -20,6 +20,7 @@ using Physics2DDotNet.Joints;
 using Drawables;
 using Shapes.Abstract;
 using CustomBodies;
+using CustomBodies.Models;
 
 namespace WorldControllers
 {
@@ -59,14 +60,26 @@ namespace WorldControllers
         /// <param name="verticesCount">Count of vertices  of the Circle Shape</param>
         /// <param name="mass">Mass of corresponding Body</param>
         /// <param name="position">Position of the Circle Shape</param>
+        /// <param name="modelId">Id of the parent Model</param>
         /// <returns>Newly created and added into world Body object.</returns>
         public static BaseModelBody AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position, Guid modelId)
         {
-            CircleShape shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
+            var newBody = CreateCircle(radius, verticesCount, mass, modelId);
 
-            var newBody = new BaseModelBody(new PhysicsState(position), shape, mass, Coefficients.Duplicate(), new Lifespan(), modelId);
-            
+            newBody.State.Position = position;
+            newBody.ApplyPosition();
+
             Will.Instance.AddBody(newBody);
+
+            return newBody;
+        }
+
+        public static BaseModelBody CreateCircle(Scalar radius, ushort verticesCount, Scalar mass,
+                                                 Guid modelId)
+        {
+            var shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
+
+            var newBody = new BaseModelBody(new PhysicsState(), shape, mass, Coefficients.Duplicate(), new Lifespan(), modelId);
 
             return newBody;
         }
@@ -110,10 +123,25 @@ namespace WorldControllers
             return bodies;
         }
 
+        public static IList<BaseModelBody> BuildCoreBody(CoreModel core, Guid modelId)
+        {
+            var newCoreBody = CreateCircle(core.Size, 5, core.Mass, modelId);
+
+            newCoreBody.State.Position = core.StartPosition;
+            newCoreBody.ApplyPosition();
+
+            return new [] { newCoreBody };
+        }
+
+
         #region Extensions
 
         public static BaseModelBody AsModelBody(this Body body, Guid modelId)
         {
+            if (body is BaseModelBody)
+            {
+                return (BaseModelBody) body;
+            }
             return new BaseModelBody(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime, modelId);
         }
 
