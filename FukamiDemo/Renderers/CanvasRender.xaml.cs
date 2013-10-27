@@ -51,64 +51,54 @@ namespace Renderers
         private void DrawBodyPolygon(BitmapContext ctx, Body body)
         {
             var pts = new int[body.Shape.Vertexes.Count() * 2 + 2];
-            var mtx = Matrix2x3.Identity;
-            BoundingRectangle rect; // = body.Rectangle;
-            body.Shape.CalcBoundingRectangle(ref mtx, out rect);
-            var width = rect.Max.X - rect.Min.X;
-            var height = rect.Max.Y - rect.Min.Y;
-            var cx = width / 2;
-            var cy = height / 2;
+            
+            //BoundingRectangle rect = body.Rectangle;
+            //var width = rect.Max.X - rect.Min.X;
+            //var height = rect.Max.Y - rect.Min.Y;
+            //var cx = width / 2;
+            //var cy = height / 2;
 
-            var bodyBmp = BitmapFactory.New((int)width + 1, (int)height + 1);
+            //var bodyBmp = BitmapFactory.New((int)width + 1, (int)height + 1);
 
             var pos = body.State.Position;
 
-            using (var bodyCtx = bodyBmp.GetBitmapContext())
+            int i = 0;
+
+            foreach (var v in body.Shape.Vertexes)
             {
+                var vr = Vector2D.Rotate(pos.Angular, v);
+                pts[i] = (int)(vr.X + pos.X); pts[i + 1] = (int)(vr.Y + pos.Y);
+                i += 2;
+            }
+            pts[i] = pts[0]; pts[i + 1] = pts[1];
 
-                int i = 0;
-                foreach (var v in body.Shape.Vertexes)
+            ctx.WriteableBitmap.FillPolygon(pts, new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f });            
+        }
+
+        private void RenderWorldInternal(IWorldSnapshot snapshot)
+        {
+            var bodies = snapshot.Bodies;
+
+            //var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
+
+            //using (var ctx = newFrame.GetBitmapContext())
+            using (var ctx = _wbmp.GetBitmapContext())
+            {
+                ctx.Clear();
+                foreach (var body in bodies)
                 {
-                    pts[i] = (int)(v.X + cx); pts[i + 1] = (int)(v.Y + cy);
-                    i += 2;
+                    DrawBodyPolygon(ctx, body);
                 }
-                pts[i] = pts[0]; pts[i + 1] = pts[1];
-
-                bodyBmp.FillPolygon(pts, new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f });
-
-                bodyBmp = bodyBmp.RotateFree(MathHelper.ToDegrees(pos.Angular), false);
-
             }
 
-            width = bodyBmp.PixelWidth;
-            height = bodyBmp.PixelHeight;
-            cx = width / 2;
-            cy = height / 2;
-
-            ctx.WriteableBitmap.Blit(new Rect(pos.X - cx, pos.Y - cy, width, height), bodyBmp, new Rect(0, 0, width, height));
+            //newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(75, 16, 45), WriteableBitmapExtensions.BlendMode.Additive);
+            //_wbmp = newFrame;
+            //RenderingImage.Source = newFrame;
         }
 
         public void RenderWorld(IWorldSnapshot snapshot)
         {
-            var op = _drawing.Dispatcher.InvokeAsync(() => {
-                var bodies = snapshot.Bodies;
-
-                //var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
-
-                //using (var ctx = newFrame.GetBitmapContext())
-                using (var ctx = _wbmp.GetBitmapContext())
-                {
-                    ctx.Clear();
-                    foreach (var body in bodies)
-                    {
-                        DrawBodyPolygon(ctx, body);
-                    }
-                }
-
-                //newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(75, 16, 45), WriteableBitmapExtensions.BlendMode.Additive);
-                //_wbmp = newFrame;
-                //RenderingImage.Source = newFrame;
-            });
+            var op = _drawing.Dispatcher.InvokeAsync(() => RenderWorldInternal(snapshot));
 
             if (!op.Task.IsCanceled)
             {

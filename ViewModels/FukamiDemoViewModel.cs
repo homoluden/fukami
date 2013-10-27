@@ -220,7 +220,7 @@ namespace Fukami.ViewModels
             return new List<BaseGeneViewModel>
                 {
                     new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots.", ParentViewModel = this,
-                                            Size = 15, SpawningPosition = new ALVector2D(MathHelper.PiOver2, 700, 900)},
+                                            Size = 15, SpawningPosition = new ALVector2D(MathHelper.PiOver2, 700, 400)},
                     new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
                     new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
                     new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},
