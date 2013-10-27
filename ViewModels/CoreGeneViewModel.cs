@@ -71,7 +71,7 @@ namespace Fukami.ViewModels
                 {
                     StartPosition = this.SpawningPosition + new ALVector2D(_rnd.Next(-100, 100) * 0.001, _rnd.Next(-100, 100) * 0.01, _rnd.Next(-100, 100) * 0.01),
                     Size = this.Size,
-                    Mass = 100,
+                    Mass = 200,
                     ConnectionSlots = new []
                         {
                             new ConnectionSlotModel

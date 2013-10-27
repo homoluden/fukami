@@ -203,9 +203,9 @@ namespace WorldControllers
             var hinge = new HingeJoint(coreBody, newBone, (2 * bonePos.Linear + 8 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
             {
                 DistanceTolerance = 50,
-                Softness = 0.005f
+                Softness = 0.0025f
             };
-            var angle = new AngleJoint(coreBody, newBone, new Lifespan()) { Softness = 0.01f };
+            var angle = new AngleJoint(coreBody, newBone, new Lifespan()) { Softness = 0.005f };
 
             Will.Instance.AddBody(newBone);
             Will.Instance.AddJoint(hinge);
