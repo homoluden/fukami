@@ -153,7 +153,7 @@ namespace WorldControllers
         private static BaseModelBody CreateConnectionSlotBody(ConnectionSlotModel slot, Guid modelId)
         {
             var rectBody = CreateRectangle(10, 10, 10, slot.RelativePosition);
-            rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.2);
+            rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
             var newSlot = new BaseModelBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId);
 

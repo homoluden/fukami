@@ -123,7 +123,7 @@ namespace Fukami.ViewModels
 
             var modelId = Guid.NewGuid();
 
-            var floor = WillHelper.CreateRectangle(10, 1024, double.PositiveInfinity, new ALVector2D(0, startPoint.X + 512, startPoint.Y)).AsModelBody(modelId);
+            var floor = WillHelper.CreateRectangle(50, 1024, double.PositiveInfinity, new ALVector2D(0, startPoint.X + 512, startPoint.Y)).AsModelBody(modelId);
             floor.IgnoresGravity = true;
 
             Will.Instance.AddBody(floor);
@@ -174,16 +174,16 @@ namespace Fukami.ViewModels
                     var joints = new List<Joint>();
                     foreach (var node in nodes)
                     {
-                        
-                        node.State.Position = new ALVector2D(node.State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
+                        var jointAngle = node.State.Position.Angular;
+                        node.State.Position = new ALVector2D(bodies[0].State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
                         node.ApplyPosition();
 
-                        var hinge = new HingeJoint(bodies[0], node, (node.State.Position.Linear + bodies[0].State.Position.Linear)*0.5f, new Lifespan()) 
+                        var hinge = new HingeJoint(bodies[0], node, (2 * node.State.Position.Linear + 8 * bodies[0].State.Position.Linear) * 0.1f, new Lifespan()) 
                         { 
-                            DistanceTolerance = 20, 
-                            Softness = 0.005f 
+                            DistanceTolerance = 50, 
+                            Softness = 0.05f 
                         };
-                        var angle = new AngleJoint(bodies[0], node, new Lifespan()) { Angle = MathHelper.ToRadians(-10), Softness = 0.01f};
+                        var angle = new AngleJoint(bodies[0], node, new Lifespan()) { Angle = jointAngle, Softness = 0.1f };
 
                         joints.Add(hinge);
                         joints.Add(angle);
@@ -220,7 +220,7 @@ namespace Fukami.ViewModels
             return new List<BaseGeneViewModel>
                 {
                     new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots.", ParentViewModel = this,
-                                            Size = 15, SpawningPosition = new ALVector2D(Math.PI/2+0.1f, 500, 600)},
+                                            Size = 15, SpawningPosition = new ALVector2D(MathHelper.PiOver2, 700, 900)},
                     new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
                     new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
                     new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},

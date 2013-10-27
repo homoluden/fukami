@@ -2,6 +2,7 @@
 using CustomBodies.Models;
 using System.Collections.Generic;
 using Physics2DDotNet;
+using AdvanceMath;
 
 namespace Fukami.ViewModels
 {
@@ -77,19 +78,19 @@ namespace Fukami.ViewModels
                                 {
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = -this.Size - 30, Y = -this.Size}
+                                    RelativePosition = new ALVector2D{Angular = 0.0f, X = -this.Size - 30, Y = 0.0f}
                                 },
                             new ConnectionSlotModel
                                 {
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = 0, Y = this.Size + 30}
+                                    RelativePosition = new ALVector2D{Angular = 0.0f, X = 0.0f, Y = this.Size + 30}
                                 }, 
                             new ConnectionSlotModel
                                 {
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = this.Size + 30, Y = -this.Size}
+                                    RelativePosition = new ALVector2D{Angular = 0.0f, X = this.Size + 30, Y = 0.0f}
                                 }
                         }
                 };
