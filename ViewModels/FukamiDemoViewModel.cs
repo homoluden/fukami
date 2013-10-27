@@ -119,10 +119,6 @@ namespace Fukami.ViewModels
 
             var startPoint = new Vector2D(101, 300);
             double angle = MathHelper.ToRadians(15.0f);
-            const double boxlength = 50;
-            const double spacing = 2;
-            const double anchorLength = 30;
-            const double anchorGap = (boxlength / 2) + spacing + (anchorLength / 2);
 
             var modelId = Guid.NewGuid();
 
