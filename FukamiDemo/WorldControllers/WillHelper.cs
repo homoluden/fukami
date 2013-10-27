@@ -126,7 +126,7 @@ namespace WorldControllers
         public static IList<BaseModelBody> BuildCoreBody(CoreModel core, Guid modelId)
         {
             var newCoreBody = CreateCircle(core.Size, 5, core.Mass, modelId);
-            newCoreBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.2);
+            newCoreBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.1);
             newCoreBody.State.Position = core.StartPosition;
             newCoreBody.ApplyPosition();
 

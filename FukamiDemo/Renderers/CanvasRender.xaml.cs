@@ -52,14 +52,6 @@ namespace Renderers
         {
             var pts = new int[body.Shape.Vertexes.Count() * 2 + 2];
             
-            //BoundingRectangle rect = body.Rectangle;
-            //var width = rect.Max.X - rect.Min.X;
-            //var height = rect.Max.Y - rect.Min.Y;
-            //var cx = width / 2;
-            //var cy = height / 2;
-
-            //var bodyBmp = BitmapFactory.New((int)width + 1, (int)height + 1);
-
             var pos = body.State.Position;
 
             int i = 0;
@@ -79,9 +71,6 @@ namespace Renderers
         {
             var bodies = snapshot.Bodies;
 
-            //var newFrame = BitmapFactory.New(_wbmp.PixelWidth, _wbmp.PixelHeight);
-
-            //using (var ctx = newFrame.GetBitmapContext())
             using (var ctx = _wbmp.GetBitmapContext())
             {
                 ctx.Clear();
@@ -90,10 +79,6 @@ namespace Renderers
                     DrawBodyPolygon(ctx, body);
                 }
             }
-
-            //newFrame.Blit(_fullscreenRect, _wbmp, _fullscreenRect, Color.FromRgb(75, 16, 45), WriteableBitmapExtensions.BlendMode.Additive);
-            //_wbmp = newFrame;
-            //RenderingImage.Source = newFrame;
         }
 
         public void RenderWorld(IWorldSnapshot snapshot)

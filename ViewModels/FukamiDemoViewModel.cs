@@ -13,6 +13,12 @@ namespace Fukami.ViewModels
 {
     public class FukamiDemoViewModel : BaseViewModel
     {
+        #region Fields
+
+        private Guid _lastCoreAddedId;
+
+        #endregion
+
         #region Properties
 
         public IList<BaseGeneViewModel> FukamiGenes { get; private set; }
@@ -165,33 +171,7 @@ namespace Fukami.ViewModels
             {
                 case "Core":
                     //Add Core object to scene
-                    var core = (CoreGeneViewModel)gene;
-                    var model = core.GetModel();
-
-                    var bodies = WillHelper.BuildCoreBody(model, geneApplicationId);
-                    var nodes = WillHelper.BuildNodeSlots(model.ConnectionSlots, geneApplicationId);
-
-                    var joints = new List<Joint>();
-                    foreach (var node in nodes)
-                    {
-                        var jointAngle = node.State.Position.Angular;
-                        node.State.Position = new ALVector2D(bodies[0].State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
-                        node.ApplyPosition();
-
-                        var hinge = new HingeJoint(bodies[0], node, (2 * node.State.Position.Linear + 8 * bodies[0].State.Position.Linear) * 0.1f, new Lifespan()) 
-                        { 
-                            DistanceTolerance = 50, 
-                            Softness = 0.05f 
-                        };
-                        var angle = new AngleJoint(bodies[0], node, new Lifespan()) { Angle = jointAngle, Softness = 0.1f };
-
-                        joints.Add(hinge);
-                        joints.Add(angle);
-                    }
-
-
-                    Will.Instance.AddModelBodies(bodies.Concat(nodes).ToList());
-                    Will.Instance.AddJoints(joints);
+                    AddCore(geneApplicationId, gene);
                     break;
                 case "Node":
                     //Add Node object to scene
@@ -214,7 +194,40 @@ namespace Fukami.ViewModels
 
 
         #region Private Methods
-        
+
+        private void AddCore(Guid geneApplicationId, BaseGeneViewModel gene)
+        {
+            _lastCoreAddedId = geneApplicationId;
+
+            var core = (CoreGeneViewModel)gene;
+            var model = core.GetModel();
+
+            var bodies = WillHelper.BuildCoreBody(model, geneApplicationId);
+            var nodes = WillHelper.BuildNodeSlots(model.ConnectionSlots, geneApplicationId);
+
+            var joints = new List<Joint>();
+            foreach (var node in nodes)
+            {
+                var jointAngle = node.State.Position.Angular;
+                node.State.Position = new ALVector2D(bodies[0].State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
+                node.ApplyPosition();
+
+                var hinge = new HingeJoint(bodies[0], node, (2 * node.State.Position.Linear + 8 * bodies[0].State.Position.Linear) * 0.1f, new Lifespan())
+                {
+                    DistanceTolerance = 50,
+                    Softness = 0.005f
+                };
+                var angle = new AngleJoint(bodies[0], node, new Lifespan()) { Angle = jointAngle, Softness = 0.01f };
+
+                joints.Add(hinge);
+                joints.Add(angle);
+            }
+
+
+            Will.Instance.AddModelBodies(bodies.Concat(nodes).ToList());
+            Will.Instance.AddJoints(joints);
+        }
+
         private IList<BaseGeneViewModel> GenerateGenes()
         {
             return new List<BaseGeneViewModel>
