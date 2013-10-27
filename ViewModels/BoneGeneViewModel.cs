@@ -1,6 +1,7 @@
-﻿namespace Fukami.ViewModels
+﻿using CustomBodies.Models;
+namespace Fukami.ViewModels
 {
-    public class BoneGeneViewModel : ConnectorGeneViewModel
+    public class BoneGeneViewModel : BaseGeneViewModel<BoneModel>
     {
         private double _thick;
 
@@ -27,5 +28,14 @@
         }
 
 
+
+        public override BoneModel GetModel()
+        {
+            return new BoneModel
+            {
+                Length = this.Length,
+                Thickness = this.Thickness
+            };
+        }
     }
 }

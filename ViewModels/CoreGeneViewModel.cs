@@ -76,21 +76,23 @@ namespace Fukami.ViewModels
                         {
                             new ConnectionSlotModel
                                 {
+                                    IsOccupied = false,
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = 0.0f, X = -this.Size - 30, Y = 0.0f}
+                                    RelativePosition = new ALVector2D{Angular = MathHelper.PiOver2, X = -this.Size - 10, Y = -this.Size}
                                 },
                             new ConnectionSlotModel
                                 {
+                                    IsOccupied = false,
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = 0.0f, X = 0.0f, Y = this.Size + 30}
+                                    RelativePosition = new ALVector2D{Angular = 0.0f, X = 0.0f, Y = this.Size + 10}
                                 }, 
                             new ConnectionSlotModel
                                 {
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = 0.0f, X = this.Size + 30, Y = 0.0f}
+                                    RelativePosition = new ALVector2D{Angular = -MathHelper.PiOver2, X = this.Size + 10, Y = -this.Size}
                                 }
                         }
                 };

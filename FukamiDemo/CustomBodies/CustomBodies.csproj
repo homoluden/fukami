@@ -47,7 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModelBody.cs" />
+    <Compile Include="BoneBody.cs" />
     <Compile Include="ChainMember.cs" />
+    <Compile Include="ConnectionSlotBody.cs" />
+    <Compile Include="CoreBody.cs" />
+    <Compile Include="Models\BoneModel.cs" />
     <Compile Include="Models\ConnectionSlotModel.cs" />
     <Compile Include="Models\CoreModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

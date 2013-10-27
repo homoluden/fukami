@@ -123,23 +123,32 @@ namespace WorldControllers
             return bodies;
         }
 
-        public static IList<BaseModelBody> BuildCoreBody(CoreModel core, Guid modelId)
+        public static CoreBody CreateCoreBody(CoreModel core, Guid modelId)
         {
-            var newCoreBody = CreateCircle(core.Size, 5, core.Mass, modelId);
-            newCoreBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.1);
-            newCoreBody.State.Position = core.StartPosition;
-            newCoreBody.ApplyPosition();
+            var newCircleBody = CreateCircle(core.Size, 5, core.Mass, modelId);
+            newCircleBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.1);
+            newCircleBody.State.Position = core.StartPosition;
+            newCircleBody.ApplyPosition();
 
-            return new [] { newCoreBody };
+            var newCore = new CoreBody(newCircleBody.State, newCircleBody.Shape, newCircleBody.Mass, newCircleBody.Coefficients, newCircleBody.Lifetime, modelId) 
+            { 
+                Model = core
+            };
+
+            return newCore;
         }
 
-        public static IList<BaseModelBody> BuildNodeSlots(IList<ConnectionSlotModel> slots, Guid modelId)
+        public static IList<BaseModelBody> BuildNodeSlots(CoreBody coreBody, Guid modelId)
         {
+            var slots = coreBody.Model.ConnectionSlots.Where(s => !s.IsOccupied);
+
             var result = new List<BaseModelBody>();
 
             foreach (var slot in slots)
             {
+                slot.IsOccupied = false;
                 var nodeSlot = CreateConnectionSlotBody(slot, modelId);
+                nodeSlot.Parent = coreBody;
                 //nodeSlot.IsCollidable = false;
                 //nodeBody.State.Position += parentCenter;
                 //nodeBody.ApplyPosition();
@@ -150,14 +159,59 @@ namespace WorldControllers
             return result;
         }
 
-        private static BaseModelBody CreateConnectionSlotBody(ConnectionSlotModel slot, Guid modelId)
+        private static ConnectionSlotBody CreateConnectionSlotBody(ConnectionSlotModel slot, Guid modelId)
         {
             var rectBody = CreateRectangle(10, 10, 10, slot.RelativePosition);
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
-            var newSlot = new BaseModelBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId);
+            var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId) 
+            { 
+                Model = slot
+            };
 
             return newSlot;
+        }
+
+        public static BoneBody AddCoreBoneBody(BoneModel boneModel, CoreBody coreBody)
+        {
+            var slotBody = coreBody.ConnectedChildren.OfType<ConnectionSlotBody>().FirstOrDefault(b => !b.Model.IsOccupied);
+            if (slotBody == null)
+	        {
+                throw new NotImplementedException();
+	        }
+
+            var slot = slotBody.Model;
+            slot.IsOccupied = true;
+            slotBody.Lifetime.IsExpired = true;
+            foreach (var joint in slotBody.Joints)
+            {
+                joint.Lifetime.IsExpired = true;
+            }
+
+            var startLoc = slot.RelativePosition;
+            var centerLoc = Vector2D.Normalize(startLoc.Linear) * boneModel.Length * 0.5;
+
+            var bonePos = new ALVector2D(startLoc.Angular + coreBody.State.Position.Angular, coreBody.State.Position.Linear + startLoc.Linear + centerLoc);
+
+            var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 2, bonePos);
+
+            var newBone = new BoneBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, coreBody.Model.Id)
+            {
+                Model = boneModel
+            };
+
+            var hinge = new HingeJoint(coreBody, newBone, (2 * bonePos.Linear + 8 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
+            {
+                DistanceTolerance = 50,
+                Softness = 0.005f
+            };
+            var angle = new AngleJoint(coreBody, newBone, new Lifespan()) { Softness = 0.01f };
+
+            Will.Instance.AddBody(newBone);
+            Will.Instance.AddJoint(hinge);
+            Will.Instance.AddJoint(angle);
+
+            return newBone;
         }
 
         #region Extensions

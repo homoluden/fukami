@@ -20,5 +20,6 @@ namespace CustomBodies.Models
         public ALVector2D RelativePosition { get; set; }
         public Scalar MaxSize { get; set; }
         public Scalar MaxMass { get; set; }
+        public bool IsOccupied { get; set; }
     }
 }

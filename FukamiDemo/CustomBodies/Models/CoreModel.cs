@@ -16,6 +16,7 @@ namespace CustomBodies.Models
 {
     public class CoreModel
     {
+        public Guid Id { get; set; }
         public Scalar Size { get; set; }
         public Scalar Mass { get; set; }
         public ALVector2D StartPosition { get; set; }

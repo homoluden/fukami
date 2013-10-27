@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using WorldControllers;
 using System.Linq;
+using CustomBodies.Models;
 
 namespace Fukami.ViewModels
 {
@@ -15,7 +16,7 @@ namespace Fukami.ViewModels
     {
         #region Fields
 
-        private Guid _lastCoreAddedId;
+        private CoreBody _lastCore;
 
         #endregion
 
@@ -178,6 +179,7 @@ namespace Fukami.ViewModels
                     break;
                 case "Bone":
                     //Add Bone object to scene
+                    AddBone(_lastCore, gene);
                     break;
                 default:
                     //Nothing here yet
@@ -197,35 +199,51 @@ namespace Fukami.ViewModels
 
         private void AddCore(Guid geneApplicationId, BaseGeneViewModel gene)
         {
-            _lastCoreAddedId = geneApplicationId;
-
             var core = (CoreGeneViewModel)gene;
             var model = core.GetModel();
+            model.Id = geneApplicationId;
+            
+            var coreBody = WillHelper.CreateCoreBody(model, geneApplicationId);
+            _lastCore = coreBody;
 
-            var bodies = WillHelper.BuildCoreBody(model, geneApplicationId);
-            var nodes = WillHelper.BuildNodeSlots(model.ConnectionSlots, geneApplicationId);
+            var nodes = WillHelper.BuildNodeSlots(coreBody, geneApplicationId);
+            coreBody.ConnectedChildren = nodes;
 
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
                 var jointAngle = node.State.Position.Angular;
-                node.State.Position = new ALVector2D(bodies[0].State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
+                node.State.Position = new ALVector2D(coreBody.State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
                 node.ApplyPosition();
 
-                var hinge = new HingeJoint(bodies[0], node, (2 * node.State.Position.Linear + 8 * bodies[0].State.Position.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(coreBody, node, (2 * node.State.Position.Linear + 8 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = 50,
                     Softness = 0.005f
                 };
-                var angle = new AngleJoint(bodies[0], node, new Lifespan()) { Angle = jointAngle, Softness = 0.01f };
+                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Angle = 0.0f, Softness = 0.01f };
 
                 joints.Add(hinge);
                 joints.Add(angle);
             }
 
 
-            Will.Instance.AddModelBodies(bodies.Concat(nodes).ToList());
+            Will.Instance.AddModelBodies(new List<BaseModelBody>{ coreBody }.Concat(nodes).ToList());
             Will.Instance.AddJoints(joints);
+        }
+
+        private void AddBone(CoreBody core, BaseGeneViewModel gene)
+        {
+            Will.Instance.RunPauseWilling(false);
+
+            var boneGene = (BoneGeneViewModel)gene;
+
+            var coreModel = core.Model;
+            var boneModel = boneGene.GetModel();
+
+            var boneBody = WillHelper.AddCoreBoneBody(boneModel, core);
+
+            Will.Instance.RunPauseWilling(true);
         }
 
         private IList<BaseGeneViewModel> GenerateGenes()
@@ -234,9 +252,9 @@ namespace Fukami.ViewModels
                 {
                     new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots.", ParentViewModel = this,
                                             Size = 15, SpawningPosition = new ALVector2D(MathHelper.PiOver2, 700, 400)},
-                    new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
-                    new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
-                    new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},
+                    //new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
+                    //new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
+                    //new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},
                     new BoneGeneViewModel{Id = 5, Category = "Bone", Description = "Bone gene with Size: {50 x 2}", Length = 50, Thickness = 2, ParentViewModel = this},
                     new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {30 x 4}", Length = 30, Thickness = 4, ParentViewModel = this},
                     new BoneGeneViewModel{Id = 7, Category = "Bone", Description = "Bone gene with Size: {40 x 1}", Length = 40, Thickness = 1, ParentViewModel = this}
