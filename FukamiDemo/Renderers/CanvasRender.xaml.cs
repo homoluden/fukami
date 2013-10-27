@@ -26,11 +26,14 @@ namespace Renderers
     /// </summary>
     public partial class CanvasRenderer : UserControl, IDisposable, IRenderer
     {
-        private readonly DrawingVisual _drawing = new DrawingVisual();
+private readonly DrawingVisual _drawing = new DrawingVisual();
         private WriteableBitmap _wbmp;
         private readonly Rect _fullscreenRect;
 
         private readonly SolidColorBrush _defaultBrush = new SolidColorBrush(Colors.WhiteSmoke);
+
+        private readonly Color _dynBodyColor = new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f };
+        private readonly Color _statBodyColor = new Color { ScA = 1.0f, ScR = 0.5f, ScG = 0.5f, ScB = 0.5f };
 
         public CanvasRenderer()
         {
@@ -50,6 +53,8 @@ namespace Renderers
 
         private void DrawBodyPolygon(BitmapContext ctx, Body body)
         {
+            var isStatic = body.IgnoresGravity;
+
             var pts = new int[body.Shape.Vertexes.Count() * 2 + 2];
             
             var pos = body.State.Position;
@@ -64,7 +69,7 @@ namespace Renderers
             }
             pts[i] = pts[0]; pts[i + 1] = pts[1];
 
-            ctx.WriteableBitmap.FillPolygon(pts, new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f });            
+            ctx.WriteableBitmap.FillPolygon(pts, isStatic ? _statBodyColor : _dynBodyColor);            
         }
 
         private void RenderWorldInternal(IWorldSnapshot snapshot)
