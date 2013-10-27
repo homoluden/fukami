@@ -126,13 +126,39 @@ namespace WorldControllers
         public static IList<BaseModelBody> BuildCoreBody(CoreModel core, Guid modelId)
         {
             var newCoreBody = CreateCircle(core.Size, 5, core.Mass, modelId);
-
+            newCoreBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.2);
             newCoreBody.State.Position = core.StartPosition;
             newCoreBody.ApplyPosition();
 
             return new [] { newCoreBody };
         }
 
+        public static IList<BaseModelBody> BuildNodeSlots(IList<ConnectionSlotModel> slots, Guid modelId)
+        {
+            var result = new List<BaseModelBody>();
+
+            foreach (var slot in slots)
+            {
+                var nodeSlot = CreateConnectionSlotBody(slot, modelId);
+                //nodeSlot.IsCollidable = false;
+                //nodeBody.State.Position += parentCenter;
+                //nodeBody.ApplyPosition();
+
+                result.Add(nodeSlot);
+            }
+
+            return result;
+        }
+
+        private static BaseModelBody CreateConnectionSlotBody(ConnectionSlotModel slot, Guid modelId)
+        {
+            var rectBody = CreateRectangle(10, 10, 10, slot.RelativePosition);
+            rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.2);
+
+            var newSlot = new BaseModelBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId);
+
+            return newSlot;
+        }
 
         #region Extensions
 
@@ -146,6 +172,7 @@ namespace WorldControllers
         }
 
         #endregion
+
 
     }
 }

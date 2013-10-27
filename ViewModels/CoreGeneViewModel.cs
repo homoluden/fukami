@@ -70,26 +70,26 @@ namespace Fukami.ViewModels
                 {
                     StartPosition = this.SpawningPosition + new ALVector2D(_rnd.Next(-100, 100) * 0.001, _rnd.Next(-100, 100) * 0.01, _rnd.Next(-100, 100) * 0.01),
                     Size = this.Size,
-                    Mass = 1000,
+                    Mass = 100,
                     ConnectionSlots = new []
                         {
                             new ConnectionSlotModel
                                 {
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = -20, Y = 0}
+                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = -this.Size - 30, Y = -this.Size}
                                 },
                             new ConnectionSlotModel
                                 {
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = 0, Y = 20}
+                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = 0, Y = this.Size + 30}
                                 }, 
                             new ConnectionSlotModel
                                 {
                                     MaxMass = 15,
                                     MaxSize = 15,
-                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = 20, Y = 0}
+                                    RelativePosition = new ALVector2D{Angular = Math.PI, X = this.Size + 30, Y = -this.Size}
                                 }
                         }
                 };

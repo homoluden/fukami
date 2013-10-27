@@ -95,6 +95,19 @@ namespace WorldControllers
         }
 
         /// <summary>
+        /// Adds the joints into internal dictionary and underlying physical engine
+        /// </summary>
+        /// <param name="joints">The list of joints to add</param>
+        /// <remarks>Warning: adding joints before adding bodies will generate exception!</remarks>
+        public void AddJoints(IList<Joint> joints)
+        {
+            foreach (var joint in joints)
+            {
+                AddJoint(joint);
+            }
+        }
+
+        /// <summary>
         /// Creates the copy of current World State
         /// </summary>
         /// <returns></returns>

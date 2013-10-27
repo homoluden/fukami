@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using WorldControllers;
+using System.Linq;
 
 namespace Fukami.ViewModels
 {
@@ -166,8 +167,31 @@ namespace Fukami.ViewModels
                     //Add Core object to scene
                     var core = (CoreGeneViewModel)gene;
                     var model = core.GetModel();
+
                     var bodies = WillHelper.BuildCoreBody(model, geneApplicationId);
-                    Will.Instance.AddModelBodies(bodies);
+                    var nodes = WillHelper.BuildNodeSlots(model.ConnectionSlots, geneApplicationId);
+
+                    var joints = new List<Joint>();
+                    foreach (var node in nodes)
+                    {
+                        
+                        node.State.Position = new ALVector2D(node.State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
+                        node.ApplyPosition();
+
+                        var hinge = new HingeJoint(bodies[0], node, (node.State.Position.Linear + bodies[0].State.Position.Linear)*0.5f, new Lifespan()) 
+                        { 
+                            DistanceTolerance = 20, 
+                            Softness = 0.005f 
+                        };
+                        var angle = new AngleJoint(bodies[0], node, new Lifespan()) { Angle = MathHelper.ToRadians(-10), Softness = 0.01f};
+
+                        joints.Add(hinge);
+                        joints.Add(angle);
+                    }
+
+
+                    Will.Instance.AddModelBodies(bodies.Concat(nodes).ToList());
+                    Will.Instance.AddJoints(joints);
                     break;
                 case "Node":
                     //Add Node object to scene
