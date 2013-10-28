@@ -30,6 +30,8 @@ namespace WorldControllers
 
         public static readonly Coefficients Coefficients = new Coefficients(.5f, 1);
 
+        public static readonly Random Noise = new Random(Environment.TickCount);
+
         #endregion
 
         /// <summary>
@@ -74,8 +76,7 @@ namespace WorldControllers
             return newBody;
         }
 
-        public static BaseModelBody CreateCircle(Scalar radius, ushort verticesCount, Scalar mass,
-                                                 Guid modelId)
+        public static BaseModelBody CreateCircle(Scalar radius, ushort verticesCount, Scalar mass, Guid modelId)
         {
             var shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
 
@@ -150,8 +151,8 @@ namespace WorldControllers
                 var nodeSlot = CreateConnectionSlotBody(slot, modelId);
                 nodeSlot.Parent = coreBody;
                 //nodeSlot.IsCollidable = false;
-                //nodeBody.State.Position += parentCenter;
-                //nodeBody.ApplyPosition();
+                //nodeSlot.State.Position += coreBody.State.Position;
+                //nodeSlot.ApplyPosition();
 
                 result.Add(nodeSlot);
             }
@@ -172,9 +173,9 @@ namespace WorldControllers
             return newSlot;
         }
 
-        public static BoneBody AddCoreBoneBody(BoneModel boneModel, CoreBody coreBody)
+        public static BoneBody AddCoreBoneBody(BoneModel boneModel)
         {
-            var slotBody = coreBody.ConnectedChildren.OfType<ConnectionSlotBody>().FirstOrDefault(b => !b.Model.IsOccupied);
+            var slotBody = Will.Instance.Bodies.RandomOrDefault<ConnectionSlotBody>(b => !b.Model.IsOccupied);
             if (slotBody == null)
 	        {
                 throw new NotImplementedException();
@@ -182,30 +183,31 @@ namespace WorldControllers
 
             var slot = slotBody.Model;
             slot.IsOccupied = true;
-            slotBody.Lifetime.IsExpired = true;
-            foreach (var joint in slotBody.Joints)
-            {
-                joint.Lifetime.IsExpired = true;
-            }
+            
+            //foreach (var joint in slotBody.Joints)
+            //{
+            //    joint.Lifetime.IsExpired = true;
+            //}
 
-            var startLoc = slot.RelativePosition;
-            var centerLoc = Vector2D.Normalize(startLoc.Linear) * boneModel.Length * 0.5;
+            var slotPos = slotBody.State.Position;
+            var relPos = slot.RelativePosition;
+            var centerLoc = Vector2D.FromLengthAndAngle(boneModel.Length * 0.6, slotPos.Angular); // +0.1 as gap
 
-            var bonePos = new ALVector2D(startLoc.Angular + coreBody.State.Position.Angular, coreBody.State.Position.Linear + startLoc.Linear + centerLoc);
+            var bonePos = new ALVector2D(slotPos.Angular, slotPos.Linear + centerLoc);
 
             var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 2, bonePos);
 
-            var newBone = new BoneBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, coreBody.Model.Id)
+            var newBone = new BoneBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, slotBody.ModelId)
             {
                 Model = boneModel
             };
 
-            var hinge = new HingeJoint(coreBody, newBone, (2 * bonePos.Linear + 8 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
+            var hinge = new HingeJoint(slotBody, newBone, (2 * bonePos.Linear + 8 * slotBody.State.Position.Linear) * 0.1f, new Lifespan())
             {
                 DistanceTolerance = 50,
                 Softness = 0.0025f
             };
-            var angle = new AngleJoint(coreBody, newBone, new Lifespan()) { Softness = 0.005f };
+            var angle = new AngleJoint(slotBody, newBone, new Lifespan()) { Softness = 0.005f };
 
             Will.Instance.AddBody(newBone);
             Will.Instance.AddJoint(hinge);
@@ -223,6 +225,20 @@ namespace WorldControllers
                 return (BaseModelBody) body;
             }
             return new BaseModelBody(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime, modelId);
+        }
+
+        public static T RandomOrDefault<T>(this IEnumerable<Body> items, Func<T, bool> predicate) where T : Body
+        {
+            var itemsArray = items.AsParallel().OfType<T>().Where(predicate).ToArray();
+
+            var n = itemsArray.Length;
+
+            if (n == 0)
+            {
+                return null;
+            }
+
+            return itemsArray[Noise.Next(n)];
         }
 
         #endregion

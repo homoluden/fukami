@@ -26,6 +26,11 @@ namespace WorldControllers
 
         #region Properties
 
+        public IEnumerable<Body> Bodies 
+        {
+            get { return _engine.Bodies.AsEnumerable(); }
+        }
+
         #endregion // Properties
 
 

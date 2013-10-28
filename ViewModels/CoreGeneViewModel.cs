@@ -69,7 +69,7 @@ namespace Fukami.ViewModels
         {
             return new CoreModel
                 {
-                    StartPosition = this.SpawningPosition + new ALVector2D(_rnd.Next(-100, 100) * 0.001, _rnd.Next(-100, 100) * 0.01, _rnd.Next(-100, 100) * 0.01),
+                    StartPosition = this.SpawningPosition + new ALVector2D(_rnd.Next(-100, 100) * 0.003, _rnd.Next(-100, 100) * 0.1, _rnd.Next(-100, 100) * 0.1),
                     Size = this.Size,
                     Mass = 200,
                     ConnectionSlots = new []

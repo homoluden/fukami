@@ -179,7 +179,7 @@ namespace Fukami.ViewModels
                     break;
                 case "Bone":
                     //Add Bone object to scene
-                    AddBone(_lastCore, gene);
+                    AddBone(gene);
                     break;
                 default:
                     //Nothing here yet
@@ -213,7 +213,7 @@ namespace Fukami.ViewModels
             foreach (var node in nodes)
             {
                 var jointAngle = node.State.Position.Angular;
-                node.State.Position = new ALVector2D(coreBody.State.Position.Angular, node.State.Position.Linear + model.StartPosition.Linear);
+                node.State.Position = new ALVector2D(coreBody.State.Position.Angular + jointAngle, node.State.Position.Linear + model.StartPosition.Linear);
                 node.ApplyPosition();
 
                 var hinge = new HingeJoint(coreBody, node, (2 * node.State.Position.Linear + 8 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
@@ -221,7 +221,7 @@ namespace Fukami.ViewModels
                     DistanceTolerance = 50,
                     Softness = 0.005f
                 };
-                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Angle = 0.0f, Softness = 0.01f };
+                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 0.01f };
 
                 joints.Add(hinge);
                 joints.Add(angle);
@@ -232,16 +232,15 @@ namespace Fukami.ViewModels
             Will.Instance.AddJoints(joints);
         }
 
-        private void AddBone(CoreBody core, BaseGeneViewModel gene)
+        private void AddBone(BaseGeneViewModel gene)
         {
             Will.Instance.RunPauseWilling(false);
 
             var boneGene = (BoneGeneViewModel)gene;
 
-            var coreModel = core.Model;
             var boneModel = boneGene.GetModel();
 
-            var boneBody = WillHelper.AddCoreBoneBody(boneModel, core);
+            var boneBody = WillHelper.AddCoreBoneBody(boneModel);
 
             Will.Instance.RunPauseWilling(true);
         }
@@ -251,7 +250,7 @@ namespace Fukami.ViewModels
             return new List<BaseGeneViewModel>
                 {
                     new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots.", ParentViewModel = this,
-                                            Size = 30, SpawningPosition = new ALVector2D(MathHelper.PiOver2, 700, 400)},
+                                            Size = 30, SpawningPosition = new ALVector2D(MathHelper.PiOver2, 700, 600)},
                     //new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
                     //new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
                     //new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},
