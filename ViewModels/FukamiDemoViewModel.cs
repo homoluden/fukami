@@ -212,12 +212,12 @@ namespace Fukami.ViewModels
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
-                var hinge = new HingeJoint(coreBody, node, (8 * node.State.Position.Linear + 2 * corePos.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(coreBody, node, (6 * node.State.Position.Linear + 4 * corePos.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = 50,
-                    Softness = 0.005f
+                    Softness = 0.001f
                 };
-                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 0.01f };
+                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 0.000001f, BiasFactor = 0.9f };
 
                 joints.Add(hinge);
                 joints.Add(angle);
@@ -251,12 +251,12 @@ namespace Fukami.ViewModels
                 //node.State.Position = new ALVector2D(jointAngle, nodePos.Linear + bonePos.Linear);
                 //node.ApplyPosition();
 
-                var hinge = new HingeJoint(boneBody, node, (8 * nodePos.Linear + 2 * bonePos.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(boneBody, node, (7 * nodePos.Linear + 3 * bonePos.Linear) * 0.1f, new Lifespan())
                 {
-                    DistanceTolerance = 50,
-                    Softness = 0.005f
+                    DistanceTolerance = 20,
+                    Softness = 0.1f
                 };
-                var angle = new AngleJoint(boneBody, node, new Lifespan()) { Softness = 0.01f };
+                var angle = new AngleJoint(boneBody, node, new Lifespan()) { Softness = 0.000001f, BiasFactor = 0.9f };
 
                 joints.Add(hinge);
                 joints.Add(angle);
@@ -323,12 +323,12 @@ namespace Fukami.ViewModels
                     {
                         Id = 5, 
                         Category = "Bone", 
-                        Description = "Bone gene with Size: {50 x 2}", 
-                        Length = 50, 
+                        Description = "Bone gene with Size: {75 x 2}", 
+                        Length = 75, 
                         Thickness = 2, 
                         ParentViewModel = this
                     },
-                    new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {30 x 4}", Length = 30, Thickness = 4, ParentViewModel = this},
+                    new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {60 x 4}", Length = 60, Thickness = 4, ParentViewModel = this},
                     new BoneGeneViewModel{Id = 7, Category = "Bone", Description = "Bone gene with Size: {40 x 1}", Length = 40, Thickness = 1, ParentViewModel = this}
                 };
         }
