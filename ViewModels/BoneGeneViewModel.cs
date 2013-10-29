@@ -53,7 +53,9 @@ namespace Fukami.ViewModels
                             IsOccupied = false,
                             MaxMass = 15,
                             MaxSize = 15,
-                            RelativePosition = new ALVector2D{Angular = 0.0f, X = 0.0f, Y = mid + 10}
+                            DistanceFromCenter = mid + 10.0f,
+                            Direction = 0.0f,
+                            Orientation = 0.0f
                         }, 
                     //new ConnectionSlotModel
                     //    {
