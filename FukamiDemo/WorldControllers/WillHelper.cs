@@ -142,6 +142,8 @@ namespace WorldControllers
 
         public static IList<BaseModelBody> BuildNodeSlots(IHaveConnectionSlots parent, Guid modelId)
         {
+            var parPos = parent.Position;
+
             var slots = parent.Slots.Where(s => !s.IsOccupied);
 
             var result = new List<BaseModelBody>();
@@ -150,6 +152,11 @@ namespace WorldControllers
             {
                 slot.IsOccupied = false;
                 var nodeSlot = CreateConnectionSlotBody(slot, modelId);
+
+                var slotPos = slot.RelativePosition;
+
+                nodeSlot.State.Position = new ALVector2D(slotPos.Angular, Vector2D.Rotate(parPos.Angular + slotPos.Angular, new Vector2D(45.0f, 0.0f)));
+
                 nodeSlot.Parent = parent as BaseModelBody;
 
                 result.Add(nodeSlot);

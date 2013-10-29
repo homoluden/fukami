@@ -18,6 +18,7 @@ namespace CustomBodies
         {
             get { return Model.ConnectionSlots; }
         }
+        public ALVector2D Position { get { return State.Position; } }
 
         public CoreBody(PhysicsState state, IShape shape, MassInfo massInfo, Coefficients coefficients, Lifespan lifetime, Guid modelId)
             :base(state, shape, massInfo, coefficients, lifetime, modelId)

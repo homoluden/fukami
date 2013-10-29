@@ -14,6 +14,7 @@ namespace CustomBodies
     {
         public BoneModel Model { get; set; }
         public IEnumerable<IConnectionSlot> Slots { get { return Model.ChildSlots; } }
+        public ALVector2D Position { get { return State.Position; } }
 
         public BaseModelBody Parent { get; set; }
 
