@@ -207,15 +207,16 @@ namespace Fukami.ViewModels
 
             var nodes = WillHelper.BuildNodeSlots(coreBody, geneApplicationId);
             coreBody.Children = nodes;
+            var corePos = coreBody.State.Position;
 
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
-                var jointAngle = node.State.Position.Angular;
-                node.State.Position = new ALVector2D(jointAngle, node.State.Position.Linear + model.StartPosition.Linear);
+                var jointAngle = node.State.Position.Angular + corePos.Angular;
+                node.State.Position = new ALVector2D(jointAngle, node.State.Position.Linear + corePos.Linear);
                 node.ApplyPosition();
 
-                var hinge = new HingeJoint(coreBody, node, (8 * node.State.Position.Linear + 2 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(coreBody, node, (8 * node.State.Position.Linear + 2 * corePos.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = 50,
                     Softness = 0.005f
@@ -245,15 +246,16 @@ namespace Fukami.ViewModels
             var nodes = WillHelper.BuildNodeSlots(boneBody, boneBody.ModelId);
             boneBody.Children = nodes;
             var bonePos = boneBody.State.Position;
-
+            
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
-                var jointAngle = node.State.Position.Angular + bonePos.Angular;
-                node.State.Position = new ALVector2D(jointAngle, node.State.Position.Linear + bonePos.Linear);
+                var nodePos = node.State.Position;
+                var jointAngle = nodePos.Angular + bonePos.Angular;
+                node.State.Position = new ALVector2D(jointAngle, nodePos.Linear + bonePos.Linear);
                 node.ApplyPosition();
 
-                var hinge = new HingeJoint(boneBody, node, (8 * node.State.Position.Linear + 2 * bonePos.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(boneBody, node, (8 * nodePos.Linear + 2 * bonePos.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = 50,
                     Softness = 0.005f
