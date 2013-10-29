@@ -12,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Physics2DDotNet.Shapes;
+using Physics2DDotNet.Joints;
+using AdvanceMath;
 
 namespace CustomBodies
 {
@@ -45,5 +47,21 @@ namespace CustomBodies
 
         #endregion
 
+    }
+
+    public static class BaseModelBodyExtensions
+    {
+        public static Tuple<HingeJoint, AngleJoint> ConnectWith(this BaseModelBody parentBody, BaseModelBody childBody, Vector2D hingeLocation)
+        {
+
+            var hinge = new HingeJoint(parentBody, childBody, hingeLocation, new Lifespan())
+            {
+                DistanceTolerance = 50,
+                Softness = 0.0025f
+            };
+            var angle = new AngleJoint(parentBody, childBody, new Lifespan()) { Softness = 0.005f };
+
+            return new Tuple<HingeJoint, AngleJoint>(hinge, angle);
+        }
     }
 }

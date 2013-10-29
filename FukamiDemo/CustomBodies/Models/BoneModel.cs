@@ -1,4 +1,12 @@
-﻿using System;
+﻿
+#if UseDouble
+using Scalar = System.Double;
+#else
+using Scalar = System.Single;
+#endif
+
+using Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +18,6 @@ namespace CustomBodies.Models
     {
         public double Thickness { get; set; }
         public double Length { get; set; }
+        public IEnumerable<IConnectionSlot> ChildSlots { get; set; }
     }
 }

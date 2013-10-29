@@ -1,4 +1,5 @@
 ﻿using CustomBodies.Models;
+using Interfaces;
 using Physics2DDotNet;
 using Physics2DDotNet.Shapes;
 using System;
@@ -12,7 +13,7 @@ namespace CustomBodies
     public class ConnectionSlotBody : BaseModelBody
     {
         public BaseModelBody Parent { get; set; }
-        public ConnectionSlotModel Model { get; set; }
+        public IConnectionSlot Model { get; set; }
 
         public ConnectionSlotBody(PhysicsState state, IShape shape, MassInfo massInfo, Coefficients coefficients, Lifespan lifetime, Guid modelId)
             : base(state, shape, massInfo, coefficients, lifetime, modelId)

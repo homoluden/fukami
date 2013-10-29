@@ -21,6 +21,7 @@ using Drawables;
 using Shapes.Abstract;
 using CustomBodies;
 using CustomBodies.Models;
+using Interfaces;
 
 namespace WorldControllers
 {
@@ -139,9 +140,9 @@ namespace WorldControllers
             return newCore;
         }
 
-        public static IList<BaseModelBody> BuildNodeSlots(CoreBody coreBody, Guid modelId)
+        public static IList<BaseModelBody> BuildNodeSlots(IHaveConnectionSlots parent, Guid modelId)
         {
-            var slots = coreBody.Model.ConnectionSlots.Where(s => !s.IsOccupied);
+            var slots = parent.Slots.Where(s => !s.IsOccupied);
 
             var result = new List<BaseModelBody>();
 
@@ -149,10 +150,7 @@ namespace WorldControllers
             {
                 slot.IsOccupied = false;
                 var nodeSlot = CreateConnectionSlotBody(slot, modelId);
-                nodeSlot.Parent = coreBody;
-                //nodeSlot.IsCollidable = false;
-                //nodeSlot.State.Position += coreBody.State.Position;
-                //nodeSlot.ApplyPosition();
+                nodeSlot.Parent = parent as BaseModelBody;
 
                 result.Add(nodeSlot);
             }
@@ -160,9 +158,9 @@ namespace WorldControllers
             return result;
         }
 
-        private static ConnectionSlotBody CreateConnectionSlotBody(ConnectionSlotModel slot, Guid modelId)
+        private static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
         {
-            var rectBody = CreateRectangle(10, 10, 10, slot.RelativePosition);
+            var rectBody = CreateRectangle(10, 10, 1, slot.RelativePosition);
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
             var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId) 
@@ -173,21 +171,25 @@ namespace WorldControllers
             return newSlot;
         }
 
-        public static BoneBody AddCoreBoneBody(BoneModel boneModel)
+        public static BoneBody AddBoneBody(BoneModel boneModel)
         {
             var slotBody = Will.Instance.Bodies.RandomOrDefault<ConnectionSlotBody>(b => !b.Model.IsOccupied);
             if (slotBody == null)
 	        {
-                throw new NotImplementedException();
+                return null; // TODO: replace with unconnected bone
 	        }
 
+            var newBone = slotBody.AddBone(boneModel);
+
+            return newBone;
+        }
+
+        #region Extensions
+
+        public static BoneBody AddBone(this ConnectionSlotBody slotBody, BoneModel boneModel)
+        {
             var slot = slotBody.Model;
             slot.IsOccupied = true;
-            
-            //foreach (var joint in slotBody.Joints)
-            //{
-            //    joint.Lifetime.IsExpired = true;
-            //}
 
             var slotPos = slotBody.State.Position;
             var relPos = slot.RelativePosition;
@@ -197,26 +199,18 @@ namespace WorldControllers
 
             var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 2, bonePos);
 
-            var newBone = new BoneBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, slotBody.ModelId)
-            {
-                Model = boneModel
-            };
+            var newBone = rectBody.CopyAsBone(slotBody.ModelId);
+            newBone.Model = boneModel;
+            newBone.Parent = slotBody;
 
-            var hinge = new HingeJoint(slotBody, newBone, (2 * bonePos.Linear + 8 * slotBody.State.Position.Linear) * 0.1f, new Lifespan())
-            {
-                DistanceTolerance = 50,
-                Softness = 0.0025f
-            };
-            var angle = new AngleJoint(slotBody, newBone, new Lifespan()) { Softness = 0.005f };
+            var joints = slotBody.ConnectWith(newBone, (2 * bonePos.Linear + 8 * slotBody.State.Position.Linear) * 0.1f);
 
             Will.Instance.AddBody(newBone);
-            Will.Instance.AddJoint(hinge);
-            Will.Instance.AddJoint(angle);
+            Will.Instance.AddJoint(joints.Item1);
+            Will.Instance.AddJoint(joints.Item2);
 
             return newBone;
         }
-
-        #region Extensions
 
         public static BaseModelBody AsModelBody(this Body body, Guid modelId)
         {

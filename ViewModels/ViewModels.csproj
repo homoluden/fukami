@@ -64,6 +64,10 @@
       <Project>{d5dfd4a6-8425-4509-90e0-a35903a2988f}</Project>
       <Name>CustomBodies</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FukamiDemo\Interfaces\Interfaces.csproj">
+      <Project>{bcd13db9-cac9-4c7a-a70e-fa5c7bc45ed5}</Project>
+      <Name>Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FukamiDemo\WorldControllers\WorldControllers.csproj">
       <Project>{ed568df4-ddf7-456d-8565-78bbe6395d5e}</Project>
       <Name>WorldControllers</Name>

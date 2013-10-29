@@ -61,11 +61,16 @@
       <Project>{84ed97ef-5f4c-4b29-a3e2-fb959d5fc81d}</Project>
       <Name>Drawables</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Interfaces\Interfaces.csproj">
+      <Project>{bcd13db9-cac9-4c7a-a70e-fa5c7bc45ed5}</Project>
+      <Name>Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shapes\Shapes.csproj">
       <Project>{b1894b50-9f8d-4ce9-8f7a-13d3dd9f28b3}</Project>
       <Name>Shapes</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

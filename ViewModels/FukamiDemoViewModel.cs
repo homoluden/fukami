@@ -16,7 +16,7 @@ namespace Fukami.ViewModels
     {
         #region Fields
 
-        private CoreBody _lastCore;
+        private Random _rnd = new Random(Environment.TickCount);
 
         #endregion
 
@@ -204,19 +204,18 @@ namespace Fukami.ViewModels
             model.Id = geneApplicationId;
             
             var coreBody = WillHelper.CreateCoreBody(model, geneApplicationId);
-            _lastCore = coreBody;
 
             var nodes = WillHelper.BuildNodeSlots(coreBody, geneApplicationId);
-            coreBody.ConnectedChildren = nodes;
+            coreBody.Children = nodes;
 
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
                 var jointAngle = node.State.Position.Angular;
-                node.State.Position = new ALVector2D(coreBody.State.Position.Angular + jointAngle, node.State.Position.Linear + model.StartPosition.Linear);
+                node.State.Position = new ALVector2D(jointAngle, node.State.Position.Linear + model.StartPosition.Linear);
                 node.ApplyPosition();
 
-                var hinge = new HingeJoint(coreBody, node, (2 * node.State.Position.Linear + 8 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(coreBody, node, (8 * node.State.Position.Linear + 2 * coreBody.State.Position.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = 50,
                     Softness = 0.005f
@@ -240,21 +239,91 @@ namespace Fukami.ViewModels
 
             var boneModel = boneGene.GetModel();
 
-            var boneBody = WillHelper.AddCoreBoneBody(boneModel);
+            var boneBody = WillHelper.AddBoneBody(boneModel);
+
+
+            var nodes = WillHelper.BuildNodeSlots(boneBody, boneBody.ModelId);
+            boneBody.Children = nodes;
+            var bonePos = boneBody.State.Position;
+
+            var joints = new List<Joint>();
+            foreach (var node in nodes)
+            {
+                var jointAngle = node.State.Position.Angular + bonePos.Angular;
+                node.State.Position = new ALVector2D(jointAngle, node.State.Position.Linear + bonePos.Linear);
+                node.ApplyPosition();
+
+                var hinge = new HingeJoint(boneBody, node, (8 * node.State.Position.Linear + 2 * bonePos.Linear) * 0.1f, new Lifespan())
+                {
+                    DistanceTolerance = 50,
+                    Softness = 0.005f
+                };
+                var angle = new AngleJoint(boneBody, node, new Lifespan()) { Softness = 0.01f };
+
+                joints.Add(hinge);
+                joints.Add(angle);
+            }
+
+
+            Will.Instance.AddModelBodies(nodes);
+            Will.Instance.AddJoints(joints);
 
             Will.Instance.RunPauseWilling(true);
         }
 
         private IList<BaseGeneViewModel> GenerateGenes()
         {
+            var coreSize = 30;
             return new List<BaseGeneViewModel>
                 {
-                    new CoreGeneViewModel{Id = 1, Category = "Core", Description = "Gene of Core with three connector slots.", ParentViewModel = this,
-                                            Size = 30, SpawningPosition = new ALVector2D(MathHelper.PiOver2, 700, 600)},
+                    new CoreGeneViewModel
+                    {
+                        Id = 1, 
+                        Category = "Core", 
+                        Description = "Gene of Core with three connector slots.", 
+                        ParentViewModel = this,
+                        Model = new CoreModel
+                            {
+                                StartPosition = new ALVector2D(MathHelper.PiOver2, 700 + _rnd.Next(-100, 100) * 0.1, 600 + _rnd.Next(-100, 100) * 0.1),
+                                Size = coreSize,
+                                Mass = 100,
+                                ConnectionSlots = new []
+                                    {
+                                        new ConnectionSlotModel
+                                            {
+                                                IsOccupied = false,
+                                                MaxMass = 15,
+                                                MaxSize = 15,
+                                                RelativePosition = new ALVector2D{Angular = MathHelper.PiOver2 + 0.3, X = -coreSize - 10, Y = -coreSize}
+                                            },
+                                        new ConnectionSlotModel
+                                            {
+                                                IsOccupied = false,
+                                                MaxMass = 15,
+                                                MaxSize = 15,
+                                                RelativePosition = new ALVector2D{Angular = 0.0f, X = 0.0f, Y = coreSize + 10}
+                                            }, 
+                                        new ConnectionSlotModel
+                                            {
+                                                MaxMass = 15,
+                                                MaxSize = 15,
+                                                RelativePosition = new ALVector2D{Angular = -MathHelper.PiOver2 - 0.3, X = coreSize + 10, Y = -coreSize}
+                                            }
+                                    }
+                            }
+                    },
                     //new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
                     //new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
                     //new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},
-                    new BoneGeneViewModel{Id = 5, Category = "Bone", Description = "Bone gene with Size: {50 x 2}", Length = 50, Thickness = 2, ParentViewModel = this},
+                    new BoneGeneViewModel
+                    {
+                        Id = 5, 
+                        Category = "Bone", 
+                        Description = "Bone gene with Size: {50 x 2}", 
+                        Length = 50, 
+                        Thickness = 2, 
+                        ParentViewModel = this
+                    },
                     new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {30 x 4}", Length = 30, Thickness = 4, ParentViewModel = this},
                     new BoneGeneViewModel{Id = 7, Category = "Bone", Description = "Bone gene with Size: {40 x 1}", Length = 40, Thickness = 1, ParentViewModel = this}
                 };

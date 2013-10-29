@@ -3,62 +3,70 @@ using CustomBodies.Models;
 using System.Collections.Generic;
 using Physics2DDotNet;
 using AdvanceMath;
+using Interfaces;
 
 namespace Fukami.ViewModels
 {
     public class CoreGeneViewModel : BaseGeneViewModel<CoreModel>
     {
         #region Fields
+
         Random _rnd = new Random(1133);
+        
         #endregion
 
+
         #region Properties
+        private CoreModel _model;
 
-        private int _maxHealth;
-
-        public int MaxHealth
+        public CoreModel Model
         {
-            get { return _maxHealth; }
-            set
-            {
-                _maxHealth = value;
-                RaisePropertyChanged("MaxHealth");
+            get { return _model; }
+            set 
+            { 
+                _model = value;
+                RaisePropertyChanged("");
             }
         }
 
-        private double _size;
+        public ulong MaxHealth
+        {
+            get { return Model.MaxHealth; }
+            //set
+            //{
+            //    Model.MaxHealth = value;
+            //    RaisePropertyChanged("MaxHealth");
+            //}
+        }
 
         public double Size
         {
-            get { return _size; }
-            set
-            {
-                _size = value;
-                RaisePropertyChanged("Size");
-            }
+            get { return Model.Size; }
+            //set
+            //{
+            //    Model.Size = value;
+            //    RaisePropertyChanged("Size");
+            //}
         }
-        private ALVector2D _spawnsAt;
 
         public ALVector2D SpawningPosition
         {
-            get { return _spawnsAt; }
-            set
-            {
-                _spawnsAt = value;
-                RaisePropertyChanged("SpawningPosition");
-            }
+            get { return Model.StartPosition; }
+            //set
+            //{
+            //    Model.StartPosition = value;
+            //    RaisePropertyChanged("SpawningPosition");
+            //}
         }
 
-        private IList<object> _connSlots;
-
-        public IList<object> ConnectionSlots
+        public IEnumerable<IConnectionSlot> ConnectionSlots
         {
-            get { return _connSlots; }
-            set
-            {
-                _connSlots = value;
-                RaisePropertyChanged("ConnectionSlots");
-            }
+            get { return Model.ConnectionSlots; }
+            //set
+            //{
+            //    Model.ConnectionSlots = value;
+            //    RaisePropertyChanged("ConnectionSlots");
+            //}
         }
 
         #endregion
@@ -67,7 +75,9 @@ namespace Fukami.ViewModels
 
         public override CoreModel GetModel()
         {
-            return new CoreModel
+            if (Model == null)
+            {
+                Model = new CoreModel
                 {
                     StartPosition = this.SpawningPosition + new ALVector2D(_rnd.Next(-100, 100) * 0.003, _rnd.Next(-100, 100) * 0.1, _rnd.Next(-100, 100) * 0.1),
                     Size = this.Size,
@@ -96,6 +106,8 @@ namespace Fukami.ViewModels
                                 }
                         }
                 };
+            }
+            return (CoreModel)Model.Clone();
         }
 
         #endregion
