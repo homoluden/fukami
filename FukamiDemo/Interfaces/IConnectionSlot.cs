@@ -12,7 +12,9 @@ namespace Interfaces
 {
     public interface IConnectionSlot : ICloneable
     {
-        ALVector2D RelativePosition { get; set; }
+        Scalar DistanceFromCenter { get; set; }
+        Scalar Direction { get; set; }
+        Scalar Orientation { get; set; }
         Scalar MaxSize { get; set; }
         Scalar MaxMass { get; set; }
         bool IsOccupied { get; set; }

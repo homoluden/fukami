@@ -153,9 +153,12 @@ namespace WorldControllers
                 slot.IsOccupied = false;
                 var nodeSlot = CreateConnectionSlotBody(slot, modelId);
 
-                var slotPos = slot.RelativePosition;
+                var slotXAngle = slot.Direction + parPos.Angular;
+                var slotCenter = Vector2D.Rotate(slotXAngle, new Vector2D(slot.DistanceFromCenter, 0.0f));
+                var slotPos = new ALVector2D(slot.Orientation + slotXAngle, slotCenter + parPos.Linear);
 
-                nodeSlot.State.Position = new ALVector2D(slotPos.Angular, Vector2D.Rotate(parPos.Angular + slotPos.Angular, new Vector2D(45.0f, 0.0f)));
+                nodeSlot.State.Position = slotPos;
+                nodeSlot.ApplyPosition();
 
                 nodeSlot.Parent = parent as BaseModelBody;
 
@@ -167,7 +170,7 @@ namespace WorldControllers
 
         private static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
         {
-            var rectBody = CreateRectangle(10, 10, 1, slot.RelativePosition);
+            var rectBody = CreateRectangle(10, 10, 1, ALVector2D.Zero);
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
             var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId) 
@@ -199,7 +202,6 @@ namespace WorldControllers
             slot.IsOccupied = true;
 
             var slotPos = slotBody.State.Position;
-            var relPos = slot.RelativePosition;
             var centerLoc = Vector2D.FromLengthAndAngle(boneModel.Length * 0.6, slotPos.Angular); // +0.1 as gap
 
             var bonePos = new ALVector2D(slotPos.Angular, slotPos.Linear + centerLoc);

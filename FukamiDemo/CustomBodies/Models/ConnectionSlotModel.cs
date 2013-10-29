@@ -18,7 +18,21 @@ namespace CustomBodies.Models
 {
     public class ConnectionSlotModel : IConnectionSlot
     {
-        public ALVector2D RelativePosition { get; set; }
+        /// <summary>
+        /// The distance between slot and its owner
+        /// </summary>
+        public Scalar DistanceFromCenter { get; set; }
+
+        /// <summary>
+        /// The angle between X axes of slot and its owner
+        /// </summary>
+        public Scalar Direction { get; set; }
+
+        /// <summary>
+        /// The angle between slot's X axis and its angle of view
+        /// </summary>
+        public Scalar Orientation { get; set; }
+
         public Scalar MaxSize { get; set; }
         public Scalar MaxMass { get; set; }
         public bool IsOccupied { get; set; }
@@ -27,7 +41,9 @@ namespace CustomBodies.Models
         {
             return new ConnectionSlotModel
             {
-                RelativePosition = this.RelativePosition,
+                DistanceFromCenter = this.DistanceFromCenter,
+                Direction = this.Direction,
+                Orientation = this.Orientation,
                 MaxSize = this.MaxSize,
                 MaxMass = this.MaxMass,
                 IsOccupied = false
