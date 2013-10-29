@@ -170,7 +170,7 @@ namespace WorldControllers
 
         private static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
         {
-            var rectBody = CreateRectangle(10, 10, 1, ALVector2D.Zero);
+            var rectBody = CreateRectangle(6, 6, 0.05f, ALVector2D.Zero);
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
             var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId) 
@@ -206,7 +206,7 @@ namespace WorldControllers
 
             var bonePos = new ALVector2D(slotPos.Angular, slotPos.Linear + centerLoc);
 
-            var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 2, bonePos);
+            var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 0.1f, bonePos);
 
             var newBone = rectBody.CopyAsBone(slotBody.ModelId);
             newBone.Model = boneModel;

@@ -247,9 +247,9 @@ namespace Fukami.ViewModels
             foreach (var node in nodes)
             {
                 var nodePos = node.State.Position;
-                var jointAngle = nodePos.Angular + bonePos.Angular;
-                node.State.Position = new ALVector2D(jointAngle, nodePos.Linear + bonePos.Linear);
-                node.ApplyPosition();
+                //var jointAngle = nodePos.Angular + bonePos.Angular;
+                //node.State.Position = new ALVector2D(jointAngle, nodePos.Linear + bonePos.Linear);
+                //node.ApplyPosition();
 
                 var hinge = new HingeJoint(boneBody, node, (8 * nodePos.Linear + 2 * bonePos.Linear) * 0.1f, new Lifespan())
                 {
