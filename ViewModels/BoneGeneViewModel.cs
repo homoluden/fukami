@@ -41,28 +41,32 @@ namespace Fukami.ViewModels
                 Length = this.Length,
                 Thickness = this.Thickness,
                 ChildSlots = new List<ConnectionSlotModel> { 
-                    //new ConnectionSlotModel
-                    //    {
-                    //        IsOccupied = false,
-                    //        MaxMass = 15,
-                    //        MaxSize = 15,
-                    //        RelativePosition = new ALVector2D{Angular = MathHelper.PiOver2, X = -10.0f, Y = mid - 10}
-                    //    },
                     new ConnectionSlotModel
                         {
                             IsOccupied = false,
                             MaxMass = 15,
                             MaxSize = 15,
-                            DistanceFromCenter = mid + 10.0f,
+                            DistanceFromCenter = mid + 5.0f,
+                            Direction = 0.3,
+                            Orientation = 1.15
+                        },
+                    new ConnectionSlotModel
+                        {
+                            IsOccupied = false,
+                            MaxMass = 15,
+                            MaxSize = 15,
+                            DistanceFromCenter = mid + 5.0f,
                             Direction = 0.0f,
                             Orientation = 0.0f
                         }, 
-                    //new ConnectionSlotModel
-                    //    {
-                    //        MaxMass = 15,
-                    //        MaxSize = 15,
-                    //        RelativePosition = new ALVector2D{Angular = -MathHelper.PiOver2 - 0.3, X = 10.0f, Y = mid - 10}
-                    //    }
+                    new ConnectionSlotModel
+                        {
+                            MaxMass = 15,
+                            MaxSize = 15,
+                            DistanceFromCenter = mid + 5.0f,
+                            Direction = -0.3,
+                            Orientation = -1.15
+                        }
                 }
             };
         }

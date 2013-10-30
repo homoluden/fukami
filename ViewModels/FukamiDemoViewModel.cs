@@ -212,12 +212,12 @@ namespace Fukami.ViewModels
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
-                var hinge = new HingeJoint(coreBody, node, (8 * node.State.Position.Linear + 2 * corePos.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(coreBody, node, (1* node.State.Position.Linear + 9 * corePos.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = 10,
-                    Softness = 1e-30
+                    Softness = 100.0
                 };
-                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 1e-20, BiasFactor = 0.2f };
+                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 0.0001, BiasFactor = 0.2f };
 
                 joints.Add(hinge);
                 joints.Add(angle);
@@ -284,7 +284,7 @@ namespace Fukami.ViewModels
                             {
                                 StartPosition = new ALVector2D(MathHelper.PiOver2, 700 + _rnd.Next(-100, 100) * 0.1, 600 + _rnd.Next(-100, 100) * 0.1),
                                 Size = coreSize,
-                                Mass = 100,
+                                Mass = 30,
                                 ConnectionSlots = new []
                                     {
                                         new ConnectionSlotModel

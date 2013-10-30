@@ -131,8 +131,8 @@ namespace WorldControllers
 
         public static CoreBody CreateCoreBody(CoreModel core, Guid modelId)
         {
-            var newCircleBody = CreateCircle(core.Size, 50, core.Mass, modelId);
-            newCircleBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.1);
+            var newCircleBody = CreateCircle(core.Size, 10, core.Mass, modelId);
+            newCircleBody.Coefficients = new Physics2DDotNet.Coefficients(0.4, 0.2);
             newCircleBody.State.Position = core.StartPosition;
             newCircleBody.ApplyPosition();
 
