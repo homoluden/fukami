@@ -57,9 +57,9 @@ namespace CustomBodies
             var hinge = new HingeJoint(parentBody, childBody, hingeLocation, new Lifespan())
             {
                 DistanceTolerance = 50,
-                Softness = 0.0025f
+                Softness = 10000.1
             };
-            var angle = new AngleJoint(parentBody, childBody, new Lifespan()) { Softness = 0.005f };
+            var angle = new AngleJoint(parentBody, childBody, new Lifespan()) { Softness = -0.00000001, BiasFactor = 0.3};
 
             return new Tuple<HingeJoint, AngleJoint>(hinge, angle);
         }

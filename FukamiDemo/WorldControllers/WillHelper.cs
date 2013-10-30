@@ -29,6 +29,10 @@ namespace WorldControllers
     {
         #region Constants
 
+        public static readonly Scalar DefaultAngleSoftness = 0.00001;
+
+        public static readonly Scalar DefaultHingeSoftness = 1.0;
+
         public static readonly Coefficients Coefficients = new Coefficients(.5f, 1);
 
         public static readonly Random Noise = new Random(Environment.TickCount);
@@ -127,7 +131,7 @@ namespace WorldControllers
 
         public static CoreBody CreateCoreBody(CoreModel core, Guid modelId)
         {
-            var newCircleBody = CreateCircle(core.Size, 5, core.Mass, modelId);
+            var newCircleBody = CreateCircle(core.Size, 50, core.Mass, modelId);
             newCircleBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.1);
             newCircleBody.State.Position = core.StartPosition;
             newCircleBody.ApplyPosition();
@@ -170,7 +174,7 @@ namespace WorldControllers
 
         private static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
         {
-            var rectBody = CreateRectangle(6, 6, 0.05f, ALVector2D.Zero);
+            var rectBody = CreateRectangle(6, 6, 0.0005, ALVector2D.Zero);
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
             var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId) 
@@ -206,7 +210,7 @@ namespace WorldControllers
 
             var bonePos = new ALVector2D(slotPos.Angular, slotPos.Linear + centerLoc);
 
-            var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 0.1f, bonePos);
+            var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 0.00001, bonePos);
 
             var newBone = rectBody.CopyAsBone(slotBody.ModelId);
             newBone.Model = boneModel;

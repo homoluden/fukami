@@ -212,12 +212,12 @@ namespace Fukami.ViewModels
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
-                var hinge = new HingeJoint(coreBody, node, (6 * node.State.Position.Linear + 4 * corePos.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(coreBody, node, (8 * node.State.Position.Linear + 2 * corePos.Linear) * 0.1f, new Lifespan())
                 {
-                    DistanceTolerance = 50,
-                    Softness = 0.001f
+                    DistanceTolerance = 10,
+                    Softness = 1e-30
                 };
-                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 0.000001f, BiasFactor = 0.9f };
+                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 1e-20, BiasFactor = 0.2f };
 
                 joints.Add(hinge);
                 joints.Add(angle);
@@ -251,12 +251,12 @@ namespace Fukami.ViewModels
                 //node.State.Position = new ALVector2D(jointAngle, nodePos.Linear + bonePos.Linear);
                 //node.ApplyPosition();
 
-                var hinge = new HingeJoint(boneBody, node, (7 * nodePos.Linear + 3 * bonePos.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(boneBody, node, (1 * nodePos.Linear + 9 * bonePos.Linear) * 0.1f, new Lifespan())
                 {
-                    DistanceTolerance = 20,
-                    Softness = 0.1f
+                    DistanceTolerance = 50,
+                    Softness = 100.1
                 };
-                var angle = new AngleJoint(boneBody, node, new Lifespan()) { Softness = 0.000001f, BiasFactor = 0.9f };
+                var angle = new AngleJoint(boneBody, node, new Lifespan()) { Softness = 0.0000001, BiasFactor = 0.3f };
 
                 joints.Add(hinge);
                 joints.Add(angle);

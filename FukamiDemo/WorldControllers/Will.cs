@@ -141,14 +141,14 @@ namespace WorldControllers
                     BroadPhase = new Physics2DDotNet.Detectors.SelectiveSweepDetector(),
                     Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver
                         {
-                            AllowedPenetration = 0.01f
+                            AllowedPenetration = 0.0001f
                         }
                 };
-            _engine.AddLogic(new GravityField(new Vector2D(0, -1000), new Lifespan()));
+            _engine.AddLogic(new GravityField(new Vector2D(0, -100), new Lifespan()));
 
             _engine.Updated += OnEngineUpdated;
 
-            _timer = new PhysicsTimer(_engine.Update, .01f);
+            _timer = new PhysicsTimer(_engine.Update, .005f);
 
         }
 
