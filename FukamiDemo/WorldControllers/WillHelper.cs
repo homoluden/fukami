@@ -257,9 +257,10 @@ namespace WorldControllers
 
         public static InterconnectionBody TryAddInterconnectionBody(this InterconnectionModel model, int maxTryCount)
         {
-            while (--maxTryCount > 0)
-            {
-                var allSlots = Will.Instance.Bodies.OfType<ConnectionSlotBody>().Where(s => s.Model.IsOccupied == false).ToList();
+            var allSlots = Will.Instance.Bodies.OfType<ConnectionSlotBody>().Where(s => s.Model.IsOccupied == false).ToList();
+            
+            while (allSlots.Count > 0 && --maxTryCount > 0)
+            {                
                 var randSlot = allSlots.RandomOrDefault<ConnectionSlotBody>();
                 var begPos = randSlot.State.Position;
 
