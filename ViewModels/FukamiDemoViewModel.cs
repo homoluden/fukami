@@ -289,9 +289,9 @@ namespace Fukami.ViewModels
             var hinge = new HingeJoint(boneBody, slotBody, (slot.Size * nodePos.Linear + boneBody.Model.Length * parPos.Linear) * (1/(slot.Size + boneBody.Model.Length)), new Lifespan())
             {
                 DistanceTolerance = 50,
-                Softness = 100.1
+                Softness = 10.1
             };
-            var angle = new AngleJoint(boneBody, slotBody, new Lifespan()) { Softness = 0.0000001, BiasFactor = 0.3f };
+            var angle = new AngleJoint(boneBody, slotBody, new Lifespan()) { Softness = 0.00001 };
 
             joints.Add(hinge);
             joints.Add(angle);
