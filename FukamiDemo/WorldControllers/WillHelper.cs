@@ -154,7 +154,6 @@ namespace WorldControllers
 
             foreach (var slot in slots)
             {
-                slot.IsOccupied = false;
                 var nodeSlot = CreateConnectionSlotBody(slot, modelId);
 
                 var slotXAngle = slot.Direction + parPos.Angular;
@@ -172,13 +171,13 @@ namespace WorldControllers
             return result;
         }
 
-        private static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
+        public static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
         {
-            var rectBody = CreateRectangle(6, 6, 0.0005, ALVector2D.Zero);
+            var rectBody = CreateRectangle(slot.MaxSize, slot.MaxSize, 0.0005, ALVector2D.Zero);
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
-            var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId) 
-            { 
+            var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId)
+            {
                 Model = slot
             };
 
@@ -236,7 +235,14 @@ namespace WorldControllers
 
         public static T RandomOrDefault<T>(this IEnumerable<Body> items, Func<T, bool> predicate) where T : Body
         {
-            var itemsArray = items.AsParallel().OfType<T>().Where(predicate).ToArray();
+            var randomItem = items.AsParallel().OfType<T>().Where(predicate).RandomOrDefault();
+
+            return randomItem;
+        }
+
+        public static T RandomOrDefault<T>(this IEnumerable<T> items) where T : class
+        {
+            var itemsArray = items.ToArray();
 
             var n = itemsArray.Length;
 

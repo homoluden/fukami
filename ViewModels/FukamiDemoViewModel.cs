@@ -9,6 +9,7 @@ using System.Windows.Input;
 using WorldControllers;
 using System.Linq;
 using CustomBodies.Models;
+using Interfaces;
 
 namespace Fukami.ViewModels
 {
@@ -175,14 +176,15 @@ namespace Fukami.ViewModels
                     AddCore(geneApplicationId, gene);
                     break;
                 case "Node":
-                    //Add Node object to scene
+                    //Add Bone Slot Body
+                    AddSlot(gene);
                     break;
                 case "Bone":
                     //Add Bone object to scene
                     AddBone(gene);
                     break;
                 default:
-                    //Nothing here yet
+                    // Nothing there yet
                     break;
             }
         }
@@ -212,7 +214,7 @@ namespace Fukami.ViewModels
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
-                var hinge = new HingeJoint(coreBody, node, (1* node.State.Position.Linear + 9 * corePos.Linear) * 0.1f, new Lifespan())
+                var hinge = new HingeJoint(coreBody, node, (2* node.State.Position.Linear + 8 * corePos.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = 10,
                     Softness = 100.0
@@ -238,32 +240,59 @@ namespace Fukami.ViewModels
 
             var boneBody = WillHelper.AddBoneBody(boneModel);
 
+            Will.Instance.RunPauseWilling(true);
+        }
 
-            var nodes = WillHelper.BuildNodeSlots(boneBody, boneBody.ModelId);
-            boneBody.Children = nodes;
-            var bonePos = boneBody.State.Position;
-            
-            var joints = new List<Joint>();
-            foreach (var node in nodes)
+        private void AddSlot(BaseGeneViewModel gene)
+        {
+            Will.Instance.RunPauseWilling(false);
+
+            var slotGene = (NodeGeneViewModel)gene;
+
+            var boneBody = Will.Instance.Bodies.RandomOrDefault<BoneBody>(b => b.Model.ChildSlots.Any(s => s.IsOccupied == false));
+
+            if (boneBody == null)
             {
-                var nodePos = node.State.Position;
-                //var jointAngle = nodePos.Angular + bonePos.Angular;
-                //node.State.Position = new ALVector2D(jointAngle, nodePos.Linear + bonePos.Linear);
-                //node.ApplyPosition();
-
-                var hinge = new HingeJoint(boneBody, node, (1 * nodePos.Linear + 9 * bonePos.Linear) * 0.1f, new Lifespan())
-                {
-                    DistanceTolerance = 50,
-                    Softness = 100.1
-                };
-                var angle = new AngleJoint(boneBody, node, new Lifespan()) { Softness = 0.0000001, BiasFactor = 0.3f };
-
-                joints.Add(hinge);
-                joints.Add(angle);
+                return;
             }
 
+            var parPos = boneBody.State.Position;
 
-            Will.Instance.AddModelBodies(nodes);
+            var randSlot = boneBody.Model.ChildSlots.Where(s => s.IsOccupied == false).RandomOrDefault();
+            randSlot.IsOccupied = true;
+
+            var slot = (ConnectionSlotModel)randSlot.Clone();
+            slot.MaxSize = slotGene.Size;
+
+            var slotBody = WillHelper.CreateConnectionSlotBody(slot, boneBody.ModelId);
+            
+
+            var slotXAngle = slot.Direction + parPos.Angular;
+            var slotCenter = Vector2D.Rotate(slotXAngle, new Vector2D(slot.DistanceFromCenter, 0.0f));
+            var slotPos = new ALVector2D(slot.Orientation + slotXAngle, slotCenter + parPos.Linear);
+
+            slotBody.State.Position = slotPos;
+            slotBody.ApplyPosition();
+
+            slotBody.Parent = boneBody;
+
+            boneBody.Children.Add(slotBody);
+
+            var joints = new List<Joint>();
+
+            var nodePos = slotBody.State.Position;
+
+            var hinge = new HingeJoint(boneBody, slotBody, (slot.MaxSize * nodePos.Linear + boneBody.Model.Length * parPos.Linear) * (1/(slot.MaxSize + boneBody.Model.Length)), new Lifespan())
+            {
+                DistanceTolerance = 50,
+                Softness = 100.1
+            };
+            var angle = new AngleJoint(boneBody, slotBody, new Lifespan()) { Softness = 0.0000001, BiasFactor = 0.3f };
+
+            joints.Add(hinge);
+            joints.Add(angle);
+
+            Will.Instance.AddBody(slotBody);
             Will.Instance.AddJoints(joints);
 
             Will.Instance.RunPauseWilling(true);
@@ -316,9 +345,9 @@ namespace Fukami.ViewModels
                                     }
                             }
                     },
-                    //new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 15", Size = 15, ParentViewModel = this},
-                    //new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
-                    //new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 20", Size = 20, ParentViewModel = this},
+                    new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 6", Size = 6, ParentViewModel = this},
+                    new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 7", Size = 7, ParentViewModel = this},
+                    new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
                     new BoneGeneViewModel
                     {
                         Id = 5, 
@@ -328,8 +357,24 @@ namespace Fukami.ViewModels
                         Thickness = 2, 
                         ParentViewModel = this
                     },
-                    new BoneGeneViewModel{Id = 6, Category = "Bone", Description = "Bone gene with Size: {60 x 4}", Length = 60, Thickness = 4, ParentViewModel = this},
-                    new BoneGeneViewModel{Id = 7, Category = "Bone", Description = "Bone gene with Size: {40 x 1}", Length = 40, Thickness = 1, ParentViewModel = this}
+                    new BoneGeneViewModel
+                    {
+                        Id = 6, 
+                        Category = "Bone", 
+                        Description = "Bone gene with Size: {60 x 4}", 
+                        Length = 60, 
+                        Thickness = 4, 
+                        ParentViewModel = this
+                    },
+                    new BoneGeneViewModel
+                    {
+                        Id = 7, 
+                        Category = "Bone",
+                        Description = "Bone gene with Size: {40 x 1}",
+                        Length = 40, 
+                        Thickness = 1, 
+                        ParentViewModel = this
+                    }
                 };
         }
 

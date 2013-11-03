@@ -144,7 +144,7 @@ namespace WorldControllers
                             AllowedPenetration = 0.0001f
                         }
                 };
-            _engine.AddLogic(new GravityField(new Vector2D(0, -100), new Lifespan()));
+            _engine.AddLogic(new GravityField(new Vector2D(0, -300), new Lifespan()));
 
             _engine.Updated += OnEngineUpdated;
 
