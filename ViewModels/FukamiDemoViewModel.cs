@@ -183,6 +183,10 @@ namespace Fukami.ViewModels
                     //Add Bone object to scene
                     AddBone(gene);
                     break;
+                case "InterCon":
+                    //Add Interconnection object to scene
+                    AddInterconnection(gene);
+                    break;
                 default:
                     // Nothing there yet
                     break;
@@ -202,7 +206,7 @@ namespace Fukami.ViewModels
         private void AddCore(Guid geneApplicationId, BaseGeneViewModel gene)
         {
             var core = (CoreGeneViewModel)gene;
-            var model = core.GetModel();
+            var model = core.GetModelDuplicate();
             model.Id = geneApplicationId;
             
             var coreBody = WillHelper.CreateCoreBody(model, geneApplicationId);
@@ -236,7 +240,7 @@ namespace Fukami.ViewModels
 
             var boneGene = (BoneGeneViewModel)gene;
 
-            var boneModel = boneGene.GetModel();
+            var boneModel = boneGene.GetModelDuplicate();
 
             var boneBody = WillHelper.AddBoneBody(boneModel);
 
@@ -261,7 +265,7 @@ namespace Fukami.ViewModels
 
             var randSlot = boneBody.Model.ChildSlots.Where(s => s.IsOccupied == false).RandomOrDefault();
 
-            var slot = slotGene.GetModel();
+            var slot = slotGene.GetModelDuplicate();
             slot.Direction = randSlot.Direction;
             slot.DistanceFromCenter = randSlot.DistanceFromCenter;
             slot.Orientation = randSlot.Orientation;
@@ -301,6 +305,16 @@ namespace Fukami.ViewModels
 
             Will.Instance.RunPauseWilling(true);
         }
+
+
+        private void AddInterconnection(BaseGeneViewModel gene)
+        {
+            var interConnGene = (InterconnectionViewModel)gene;
+            var model = interConnGene.GetModelDuplicate();
+
+            var body = WillHelper.TryAddInterconnectionBody(model, 5);
+        }
+
 
         private IList<BaseGeneViewModel> GenerateGenes()
         {
@@ -415,6 +429,19 @@ namespace Fukami.ViewModels
                         Length = 40, 
                         Thickness = 1, 
                         ParentViewModel = this
+                    },
+                    new InterconnectionViewModel
+                    {
+                        Id = 8,
+                        Category = "InterCon",
+                        Description = "",
+                        ParentViewModel = this,
+                        Model = new InterconnectionModel
+                        {
+                            Length = 100,
+                            MaxMissAlign = MathHelper.ToRadians(30),
+                            MaxDistance = 300
+                        }
                     }
                 };
             return result;

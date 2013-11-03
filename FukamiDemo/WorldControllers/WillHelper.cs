@@ -197,6 +197,7 @@ namespace WorldControllers
             return newBone;
         }
 
+
         #region Extensions
 
         public static BoneBody AddBone(this ConnectionSlotBody slotBody, BoneModel boneModel)
@@ -252,6 +253,73 @@ namespace WorldControllers
             }
 
             return itemsArray[Noise.Next(n)];
+        }
+
+        public static InterconnectionBody TryAddInterconnectionBody(this InterconnectionModel model, int maxTryCount)
+        {
+            while (--maxTryCount > 0)
+            {
+                var allSlots = Will.Instance.Bodies.OfType<ConnectionSlotBody>().Where(s => s.Model.IsOccupied == false).ToList();
+                var randSlot = allSlots.RandomOrDefault<ConnectionSlotBody>();
+                var begPos = randSlot.State.Position;
+
+                var alignedSlot = allSlots.Where(s => !s.Parent.Equals(randSlot.Parent)).FirstOrDefault(s =>
+                {
+                    var angle = MathHelper.WrapClamp(s.State.Position.Angular + MathHelper.Pi, 0.0f, MathHelper.TwoPi);
+
+                    var diff = Math.Abs(angle - begPos.Angular);
+
+                    var dist = (begPos.Linear - s.State.Position.Linear).Magnitude;
+                    
+                    return diff <= model.MaxMissAlign && dist <= model.MaxDistance;
+                });
+
+                if (alignedSlot == null)
+                {
+                    continue;
+                }
+
+                //Aligned slots pair found. Let's build a connection between
+
+                randSlot.Model.IsOccupied = true;
+                alignedSlot.Model.IsOccupied = true;
+
+                var endPos = alignedSlot.State.Position;
+                var centerPos = (begPos.Linear + endPos.Linear) * 0.5;
+                var begToCenter = centerPos - begPos.Linear;
+                var connPos = new ALVector2D(begToCenter.Angle, centerPos);
+
+                var rectBody = CreateRectangle(1, begToCenter.Magnitude * 1.8, 0.00001, connPos);
+                var connBody = rectBody.CopyAsInterconnection(randSlot.ModelId);
+                connBody.BegSlot = randSlot;
+                connBody.EndSlot = alignedSlot;
+
+                Will.Instance.RunPauseWilling(false);
+
+                Will.Instance.AddBody(connBody);
+
+                var begJoint = new HingeJoint(randSlot, connBody, (2 * centerPos + 8 * begPos.Linear) * 0.1f, new Lifespan())
+                {
+                    DistanceTolerance = model.MaxDistance * 0.5,
+                    Softness = 10
+                };
+
+                var endJoint = new HingeJoint(connBody, alignedSlot, (2 * centerPos + 8 * endPos.Linear) * 0.1f, new Lifespan())
+                {
+                    DistanceTolerance = model.MaxDistance * 0.5,
+                    Softness = 10
+                };
+
+                Will.Instance.AddJoint(begJoint);
+                Will.Instance.AddJoint(endJoint);
+
+                Will.Instance.RunPauseWilling(true);
+
+                return connBody;
+            }
+
+            // Sorry :( Aligned pair not found. Please, try again later.
+            return null;
         }
 
         #endregion

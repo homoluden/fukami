@@ -23,7 +23,7 @@ namespace Fukami.ViewModels
 
         #region Public Methods
 
-        public abstract T GetModel();
+        public abstract T GetModelDuplicate();
 
         #endregion
 

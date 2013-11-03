@@ -42,7 +42,7 @@ namespace Fukami.ViewModels
 
         #region Public Methods
 
-        public override CoreModel GetModel()
+        public override CoreModel GetModelDuplicate()
         {
             if (Model == null)
             {

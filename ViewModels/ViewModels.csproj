@@ -56,6 +56,7 @@
     <Compile Include="ConnectorGeneViewModel.cs" />
     <Compile Include="CoreGeneViewModel.cs" />
     <Compile Include="FukamiDemoViewModel.cs" />
+    <Compile Include="InterconnectionViewModel.cs" />
     <Compile Include="NodeGeneViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -14,7 +14,7 @@ namespace Fukami.ViewModels
         }
 
 
-        public override IConnectionSlot GetModel()
+        public override IConnectionSlot GetModelDuplicate()
         {
             return Model.Duplicate();
         }

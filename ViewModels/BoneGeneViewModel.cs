@@ -31,7 +31,7 @@ namespace Fukami.ViewModels
             }
         }
 
-        public override BoneModel GetModel()
+        public override BoneModel GetModelDuplicate()
         {
             if (Model == null)
             {

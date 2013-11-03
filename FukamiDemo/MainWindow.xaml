@@ -26,8 +26,8 @@
         <!--Control Panel goes here-->
         <WrapPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
             <Button Content="Run / Pause" Command="{Binding RunPauseCommand}" Margin="0 0 5 0"/>
-            <Button Content="Add Chain" Command="{Binding AddChainCommand}" Margin="0 0 5 0"/>
-            <Button Content="Add Core" Command="{Binding AddCoreCommand}" Margin="0 0 5 0"/>
+            <!--<Button Content="Add Chain" Command="{Binding AddChainCommand}" Margin="0 0 5 0"/>-->
+            <Button Content="Add Floor" Command="{Binding AddCoreCommand}" Margin="0 0 5 0"/>
         </WrapPanel>
         
         <!--Genes Panel goes here-->

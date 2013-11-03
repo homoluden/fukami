@@ -53,7 +53,7 @@ namespace Fukami.ViewModels
         }
 
 
-        public override object GetModel()
+        public override object GetModelDuplicate()
         {
             throw new System.NotImplementedException();
         }

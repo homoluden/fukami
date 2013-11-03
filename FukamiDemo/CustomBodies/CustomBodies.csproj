@@ -51,9 +51,11 @@
     <Compile Include="ChainMember.cs" />
     <Compile Include="ConnectionSlotBody.cs" />
     <Compile Include="CoreBody.cs" />
+    <Compile Include="InterconnectionBody.cs" />
     <Compile Include="Models\BoneModel.cs" />
     <Compile Include="Models\ConnectionSlotModel.cs" />
     <Compile Include="Models\CoreModel.cs" />
+    <Compile Include="Models\InterconnectionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
