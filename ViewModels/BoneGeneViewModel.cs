@@ -46,8 +46,9 @@ namespace Fukami.ViewModels
                         new ConnectionSlotModel
                             {
                                 IsOccupied = false,
-                                MaxMass = 15,
-                                MaxSize = 15,
+                                Size = 15,
+                                MaxChildMass = 15,
+                                MaxChildSize = 100,
                                 DistanceFromCenter = mid + 4.0f,
                                 Direction = 0.4,
                                 Orientation = 1.15
@@ -55,16 +56,19 @@ namespace Fukami.ViewModels
                         new ConnectionSlotModel
                             {
                                 IsOccupied = false,
-                                MaxMass = 15,
-                                MaxSize = 15,
+                                Size = 10,
+                                MaxChildMass = 15,
+                                MaxChildSize = 100,
                                 DistanceFromCenter = mid + 6.0f,
                                 Direction = 0.0f,
                                 Orientation = 0.0f
                             }, 
                         new ConnectionSlotModel
                             {
-                                MaxMass = 15,
-                                MaxSize = 15,
+                                IsOccupied = false,
+                                Size = 15,
+                                MaxChildMass = 15,
+                                MaxChildSize = 100,
                                 DistanceFromCenter = mid + 4.0f,
                                 Direction = -0.4,
                                 Orientation = -1.15

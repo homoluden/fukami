@@ -260,9 +260,11 @@ namespace Fukami.ViewModels
             var parPos = boneBody.State.Position;
 
             var randSlot = boneBody.Model.ChildSlots.Where(s => s.IsOccupied == false).RandomOrDefault();
-            
-            var slot = (ConnectionSlotModel)randSlot.Duplicate();
-            slot.MaxSize = slotGene.Size;
+
+            var slot = slotGene.GetModel();
+            slot.Direction = randSlot.Direction;
+            slot.DistanceFromCenter = randSlot.DistanceFromCenter;
+            slot.Orientation = randSlot.Orientation;
 
             randSlot.IsOccupied = true;
 
@@ -284,7 +286,7 @@ namespace Fukami.ViewModels
 
             var nodePos = slotBody.State.Position;
 
-            var hinge = new HingeJoint(boneBody, slotBody, (slot.MaxSize * nodePos.Linear + boneBody.Model.Length * parPos.Linear) * (1/(slot.MaxSize + boneBody.Model.Length)), new Lifespan())
+            var hinge = new HingeJoint(boneBody, slotBody, (slot.Size * nodePos.Linear + boneBody.Model.Length * parPos.Linear) * (1/(slot.Size + boneBody.Model.Length)), new Lifespan())
             {
                 DistanceTolerance = 50,
                 Softness = 100.1
@@ -303,7 +305,7 @@ namespace Fukami.ViewModels
         private IList<BaseGeneViewModel> GenerateGenes()
         {
             var coreSize = 30;
-            return new List<BaseGeneViewModel>
+            var result = new List<BaseGeneViewModel>
                 {
                     new CoreGeneViewModel
                     {
@@ -321,8 +323,9 @@ namespace Fukami.ViewModels
                                         new ConnectionSlotModel
                                             {
                                                 IsOccupied = false,
-                                                MaxMass = 15,
-                                                MaxSize = 15,
+                                                Size = 15,
+                                                MaxChildMass = 15,
+                                                MaxChildSize = 100,
                                                 DistanceFromCenter = coreSize + 10.0f,
                                                 Direction = MathHelper.PiOver2 + 0.3f,
                                                 Orientation = -0.8f
@@ -330,16 +333,19 @@ namespace Fukami.ViewModels
                                         new ConnectionSlotModel
                                             {
                                                 IsOccupied = false,
-                                                MaxMass = 15,
-                                                MaxSize = 15,
+                                                Size = 15,
+                                                MaxChildMass = 15,
+                                                MaxChildSize = 100,
                                                 DistanceFromCenter = coreSize + 10.0f,
                                                 Direction = 0.0f,
                                                 Orientation = 0.0f
                                             }, 
                                         new ConnectionSlotModel
                                             {
-                                                MaxMass = 15,
-                                                MaxSize = 15,
+                                                IsOccupied = false,
+                                                Size = 15,
+                                                MaxChildMass = 15,
+                                                MaxChildSize = 100,
                                                 DistanceFromCenter = coreSize + 10.0f,
                                                 Direction = -MathHelper.PiOver2 - 0.3f,
                                                 Orientation = 0.8f
@@ -347,9 +353,42 @@ namespace Fukami.ViewModels
                                     }
                             }
                     },
-                    new NodeGeneViewModel{Id = 2, Category = "Node", Description = "Node gene with Size: 6", Size = 6, ParentViewModel = this},
-                    new NodeGeneViewModel{Id = 3, Category = "Node", Description = "Node gene with Size: 7", Size = 7, ParentViewModel = this},
-                    new NodeGeneViewModel{Id = 4, Category = "Node", Description = "Node gene with Size: 10", Size = 10, ParentViewModel = this},
+                    new NodeGeneViewModel
+                    {
+                        Id = 2, 
+                        Category = "Node", 
+                        Description = "Node gene with Size: 6", 
+                        ParentViewModel = this,
+                        Model = new ConnectionSlotModel{
+                            Size = 6,
+                            MaxChildMass = 15,
+                            MaxChildSize = 100,
+                        }
+                    },
+                    new NodeGeneViewModel
+                    {
+                        Id = 3, 
+                        Category = "Node", 
+                        Description = "Node gene with Size: 7", 
+                        ParentViewModel = this,
+                        Model = new ConnectionSlotModel{
+                            Size = 7,
+                            MaxChildMass = 15,
+                            MaxChildSize = 100,
+                        }
+                    },
+                    new NodeGeneViewModel
+                    {
+                        Id = 4, 
+                        Category = "Node", 
+                        Description = "Node gene with Size: 10", 
+                        ParentViewModel = this,
+                        Model = new ConnectionSlotModel{
+                            Size = 10,
+                            MaxChildMass = 15,
+                            MaxChildSize = 100,
+                        }
+                    },
                     new BoneGeneViewModel
                     {
                         Id = 5, 
@@ -378,6 +417,7 @@ namespace Fukami.ViewModels
                         ParentViewModel = this
                     }
                 };
+            return result;
         }
 
         #endregion

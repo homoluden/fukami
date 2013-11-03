@@ -17,56 +17,25 @@ namespace Fukami.ViewModels
 
 
         #region Properties
-        private CoreModel _model;
-
-        public CoreModel Model
-        {
-            get { return _model; }
-            set 
-            { 
-                _model = value;
-                RaisePropertyChanged("");
-            }
-        }
 
         public ulong MaxHealth
         {
             get { return Model.MaxHealth; }
-            //set
-            //{
-            //    Model.MaxHealth = value;
-            //    RaisePropertyChanged("MaxHealth");
-            //}
         }
 
         public double Size
         {
             get { return Model.Size; }
-            //set
-            //{
-            //    Model.Size = value;
-            //    RaisePropertyChanged("Size");
-            //}
         }
 
         public ALVector2D SpawningPosition
         {
             get { return Model.StartPosition; }
-            //set
-            //{
-            //    Model.StartPosition = value;
-            //    RaisePropertyChanged("SpawningPosition");
-            //}
         }
 
         public IEnumerable<IConnectionSlot> ConnectionSlots
         {
             get { return Model.ConnectionSlots; }
-            //set
-            //{
-            //    Model.ConnectionSlots = value;
-            //    RaisePropertyChanged("ConnectionSlots");
-            //}
         }
 
         #endregion
@@ -87,8 +56,9 @@ namespace Fukami.ViewModels
                             new ConnectionSlotModel
                                 {
                                     IsOccupied = false,
-                                    MaxMass = 15,
-                                    MaxSize = 15,
+                                    Size = 15,
+                                    MaxChildMass = 15,
+                                    MaxChildSize = 100,
                                     DistanceFromCenter = this.Size + 10.0f,
                                     Direction = MathHelper.PiOver2 + 0.3f,
                                     Orientation = -0.6f
@@ -96,16 +66,19 @@ namespace Fukami.ViewModels
                             new ConnectionSlotModel
                                 {
                                     IsOccupied = false,
-                                    MaxMass = 15,
-                                    MaxSize = 15,
+                                    Size = 15,
+                                    MaxChildMass = 15,
+                                    MaxChildSize = 100,
                                     DistanceFromCenter = this.Size + 10.0f,
                                     Direction = 0.0f,
                                     Orientation = 0.0f
                                 }, 
                             new ConnectionSlotModel
                                 {
-                                    MaxMass = 15,
-                                    MaxSize = 15,
+                                    IsOccupied = false,
+                                    Size = 15,
+                                    MaxChildMass = 15,
+                                    MaxChildSize = 100,
                                     DistanceFromCenter = this.Size + 10.0f,
                                     Direction = -MathHelper.PiOver2 - 0.3f,
                                     Orientation = 0.6f

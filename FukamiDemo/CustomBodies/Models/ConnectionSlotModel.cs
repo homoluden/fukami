@@ -33,20 +33,22 @@ namespace CustomBodies.Models
         /// </summary>
         public Scalar Orientation { get; set; }
 
-        public Scalar MaxSize { get; set; }
-        public Scalar MaxMass { get; set; }
+        public Scalar Size { get; set; }
+        public Scalar MaxChildSize { get; set; }
+        public Scalar MaxChildMass { get; set; }
         public bool IsOccupied { get; set; }
 
         public IConnectionSlot Duplicate()
         {
             return new ConnectionSlotModel
             {
+                Size = this.Size,
                 DistanceFromCenter = this.DistanceFromCenter,
                 Direction = this.Direction,
                 Orientation = this.Orientation,
-                MaxSize = this.MaxSize,
-                MaxMass = this.MaxMass,
-                IsOccupied = this.IsOccupied
+                MaxChildSize = this.MaxChildSize,
+                MaxChildMass = this.MaxChildMass,
+                IsOccupied = false
             };
         }
     }

@@ -1,18 +1,22 @@
-﻿namespace Fukami.ViewModels
+﻿using Interfaces;
+namespace Fukami.ViewModels
 {
-    public class NodeGeneViewModel : ConnectorGeneViewModel
+    public class NodeGeneViewModel : BaseGeneViewModel<IConnectionSlot>
     {
-        private double _size;
-
         public double Size
         {
-            get { return _size; }
+            get { return Model.Size; }
             set
             {
-                _size = value;
+                Model.Size = value;
                 RaisePropertyChanged("Size");
             }
         }
 
+
+        public override IConnectionSlot GetModel()
+        {
+            return Model.Duplicate();
+        }
     }
 }

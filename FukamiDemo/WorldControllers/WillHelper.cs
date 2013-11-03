@@ -173,7 +173,7 @@ namespace WorldControllers
 
         public static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
         {
-            var rectBody = CreateRectangle(slot.MaxSize, slot.MaxSize, 0.0005, ALVector2D.Zero);
+            var rectBody = CreateRectangle(slot.Size, slot.Size, 0.0005, ALVector2D.Zero);
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
             var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId)

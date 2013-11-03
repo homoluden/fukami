@@ -15,8 +15,9 @@ namespace Interfaces
         Scalar DistanceFromCenter { get; set; }
         Scalar Direction { get; set; }
         Scalar Orientation { get; set; }
-        Scalar MaxSize { get; set; }
-        Scalar MaxMass { get; set; }
+        Scalar Size { get; set; }
+        Scalar MaxChildSize { get; set; }
+        Scalar MaxChildMass { get; set; }
         bool IsOccupied { get; set; }
 
         IConnectionSlot Duplicate();
