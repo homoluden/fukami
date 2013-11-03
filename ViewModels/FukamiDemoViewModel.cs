@@ -323,7 +323,7 @@ namespace Fukami.ViewModels
                                                 MaxSize = 15,
                                                 DistanceFromCenter = coreSize + 10.0f,
                                                 Direction = MathHelper.PiOver2 + 0.3f,
-                                                Orientation = -0.6f
+                                                Orientation = -0.8f
                                             },
                                         new ConnectionSlotModel
                                             {
@@ -340,7 +340,7 @@ namespace Fukami.ViewModels
                                                 MaxSize = 15,
                                                 DistanceFromCenter = coreSize + 10.0f,
                                                 Direction = -MathHelper.PiOver2 - 0.3f,
-                                                Orientation = 0.6f
+                                                Orientation = 0.8f
                                             }
                                     }
                             }
