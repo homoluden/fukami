@@ -18,6 +18,16 @@ namespace CustomBodies.Models
     {
         public double Thickness { get; set; }
         public double Length { get; set; }
-        public IEnumerable<IConnectionSlot> ChildSlots { get; set; }
+        public IList<IConnectionSlot> ChildSlots { get; set; }
+
+        public BoneModel Duplicate()
+        {
+            return new BoneModel
+            {
+                ChildSlots = this.ChildSlots.Select(s => s.Duplicate()).ToList(),
+                Length = this.Length,
+                Thickness = this.Thickness
+            };
+        }
     }
 }

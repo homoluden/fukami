@@ -6,7 +6,16 @@ namespace Fukami.ViewModels
 {
     public abstract class BaseGeneViewModel<T> : BaseGeneViewModel
     {
+        #region Properties
+        private T _model;
 
+        public T Model
+        {
+            get { return _model; }
+            set { _model = value; }
+        }
+
+        #endregion
 
         #region Public Methods
 

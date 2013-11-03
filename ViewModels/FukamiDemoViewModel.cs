@@ -253,16 +253,18 @@ namespace Fukami.ViewModels
 
             if (boneBody == null)
             {
+                Will.Instance.RunPauseWilling(true);
                 return;
             }
 
             var parPos = boneBody.State.Position;
 
             var randSlot = boneBody.Model.ChildSlots.Where(s => s.IsOccupied == false).RandomOrDefault();
-            randSlot.IsOccupied = true;
-
-            var slot = (ConnectionSlotModel)randSlot.Clone();
+            
+            var slot = (ConnectionSlotModel)randSlot.Duplicate();
             slot.MaxSize = slotGene.Size;
+
+            randSlot.IsOccupied = true;
 
             var slotBody = WillHelper.CreateConnectionSlotBody(slot, boneBody.ModelId);
             

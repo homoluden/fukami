@@ -1,5 +1,6 @@
 ﻿using AdvanceMath;
 using CustomBodies.Models;
+using Interfaces;
 using Physics2DDotNet;
 using System.Collections.Generic;
 namespace Fukami.ViewModels
@@ -30,45 +31,49 @@ namespace Fukami.ViewModels
             }
         }
 
-
-
         public override BoneModel GetModel()
         {
-            var mid = this.Length * 0.5;
-
-            return new BoneModel
+            if (Model == null)
             {
-                Length = this.Length,
-                Thickness = this.Thickness,
-                ChildSlots = new List<ConnectionSlotModel> { 
-                    new ConnectionSlotModel
-                        {
-                            IsOccupied = false,
-                            MaxMass = 15,
-                            MaxSize = 15,
-                            DistanceFromCenter = mid + 4.0f,
-                            Direction = 0.4,
-                            Orientation = 1.15
-                        },
-                    new ConnectionSlotModel
-                        {
-                            IsOccupied = false,
-                            MaxMass = 15,
-                            MaxSize = 15,
-                            DistanceFromCenter = mid + 6.0f,
-                            Direction = 0.0f,
-                            Orientation = 0.0f
-                        }, 
-                    new ConnectionSlotModel
-                        {
-                            MaxMass = 15,
-                            MaxSize = 15,
-                            DistanceFromCenter = mid + 4.0f,
-                            Direction = -0.4,
-                            Orientation = -1.15
-                        }
-                }
-            };
+
+                var mid = this.Length * 0.5;
+
+                Model = new BoneModel
+                {
+                    Length = this.Length,
+                    Thickness = this.Thickness,
+                    ChildSlots = new List<IConnectionSlot> { 
+                        new ConnectionSlotModel
+                            {
+                                IsOccupied = false,
+                                MaxMass = 15,
+                                MaxSize = 15,
+                                DistanceFromCenter = mid + 4.0f,
+                                Direction = 0.4,
+                                Orientation = 1.15
+                            },
+                        new ConnectionSlotModel
+                            {
+                                IsOccupied = false,
+                                MaxMass = 15,
+                                MaxSize = 15,
+                                DistanceFromCenter = mid + 6.0f,
+                                Direction = 0.0f,
+                                Orientation = 0.0f
+                            }, 
+                        new ConnectionSlotModel
+                            {
+                                MaxMass = 15,
+                                MaxSize = 15,
+                                DistanceFromCenter = mid + 4.0f,
+                                Direction = -0.4,
+                                Orientation = -1.15
+                            }
+                    }
+                };
+            }
+            
+            return (BoneModel)Model.Duplicate();
         }
     }
 }

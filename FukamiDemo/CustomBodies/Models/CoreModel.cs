@@ -34,7 +34,7 @@ namespace CustomBodies.Models
                 Mass = this.Mass,
                 MaxHealth = this.MaxHealth,
                 StartPosition = this.StartPosition,
-                ConnectionSlots = this.ConnectionSlots.Select(s => (IConnectionSlot)s.Clone())
+                ConnectionSlots = this.ConnectionSlots.Select(s => (IConnectionSlot)s.Duplicate())
             };
             return clone;
         }

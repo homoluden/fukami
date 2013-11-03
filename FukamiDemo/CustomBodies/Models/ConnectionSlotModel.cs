@@ -37,7 +37,7 @@ namespace CustomBodies.Models
         public Scalar MaxMass { get; set; }
         public bool IsOccupied { get; set; }
 
-        public object Clone()
+        public IConnectionSlot Duplicate()
         {
             return new ConnectionSlotModel
             {
@@ -46,7 +46,7 @@ namespace CustomBodies.Models
                 Orientation = this.Orientation,
                 MaxSize = this.MaxSize,
                 MaxMass = this.MaxMass,
-                IsOccupied = false
+                IsOccupied = this.IsOccupied
             };
         }
     }

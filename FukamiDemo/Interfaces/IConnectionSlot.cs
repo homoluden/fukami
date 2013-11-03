@@ -10,7 +10,7 @@ using System;
 
 namespace Interfaces
 {
-    public interface IConnectionSlot : ICloneable
+    public interface IConnectionSlot
     {
         Scalar DistanceFromCenter { get; set; }
         Scalar Direction { get; set; }
@@ -18,5 +18,7 @@ namespace Interfaces
         Scalar MaxSize { get; set; }
         Scalar MaxMass { get; set; }
         bool IsOccupied { get; set; }
+
+        IConnectionSlot Duplicate();
     }
 }
