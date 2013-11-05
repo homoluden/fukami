@@ -312,8 +312,10 @@ namespace WorldControllers
 
                 Will.Instance.AddBody(connBody);
 
-                randSlot.State.Position = new ALVector2D((begToCenter.Angle+begPos.Angular)*0.5, begPos.Linear);
-                alignedSlot.State.Position = new ALVector2D(((-begToCenter).Angle+endPos.Angular)*0.5, endPos.Linear);
+                //randSlot.State.Position = new ALVector2D((begToCenter.Angle+begPos.Angular)*0.5, begPos.Linear);
+                //alignedSlot.State.Position = new ALVector2D(((-begToCenter).Angle+endPos.Angular)*0.5, endPos.Linear);
+                randSlot.State.Position = new ALVector2D(begToCenter.Angle, begPos.Linear);
+                alignedSlot.State.Position = new ALVector2D((-begToCenter).Angle, endPos.Linear);
 
                 var begJoint = new HingeJoint(randSlot, connBody, (2 * centerPos + 8 * begPos.Linear) * 0.1f, new Lifespan())
                 {
