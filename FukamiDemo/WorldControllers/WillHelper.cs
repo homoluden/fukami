@@ -157,7 +157,7 @@ namespace WorldControllers
                 var nodeSlot = CreateConnectionSlotBody(slot, modelId);
 
                 var slotXAngle = slot.Direction + parPos.Angular;
-                var slotCenter = Vector2D.Rotate(slotXAngle, new Vector2D(slot.DistanceFromCenter, 0.0f));
+                var slotCenter = Vector2D.Rotate(slotXAngle, new Vector2D(slot.DistanceFromCenter, 0.0f)); // Zero Angle corresponds X Axis
                 var slotPos = new ALVector2D(slot.Orientation + slotXAngle, slotCenter + parPos.Linear);
 
                 nodeSlot.State.Position = slotPos;
@@ -173,12 +173,23 @@ namespace WorldControllers
 
         public static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
         {
-            var rectBody = CreateRectangle(slot.Size, slot.Size, 0.0005, ALVector2D.Zero);
+            var size = slot.Size;
+
+            var vertexList = VertexHelper.CreateRectangle(slot.Size, slot.Size).ToList();
+            vertexList.Insert(0, new Vector2D(size, 0));
+            
+            var vertices = VertexHelper.Subdivide(vertexList.ToArray(), Math.Min(size, size) / 5);
+
+            var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertices, Math.Min(size, size) / 5);
+
+            var rectBody = new Body(new PhysicsState(ALVector2D.Zero), boxShape, 0.0001, Coefficients.Duplicate(), new Lifespan());
+            
             rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
 
             var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId)
             {
-                Model = slot
+                Model = slot,
+                IsCollidable = false
             };
 
             return newSlot;
@@ -206,7 +217,8 @@ namespace WorldControllers
             slot.IsOccupied = true;
 
             var slotPos = slotBody.State.Position;
-            var centerLoc = Vector2D.FromLengthAndAngle(boneModel.Length * 0.6, slotPos.Angular); // +0.1 as gap
+            var slotSize = slotBody.Model.Size;
+            var centerLoc = Vector2D.FromLengthAndAngle((boneModel.Length + slotSize) * 0.5, slotPos.Angular);
 
             var bonePos = new ALVector2D(slotPos.Angular, slotPos.Linear + centerLoc);
 
@@ -292,6 +304,7 @@ namespace WorldControllers
 
                 var rectBody = CreateRectangle(1, begToCenter.Magnitude * 1.8, 0.00001, connPos);
                 var connBody = rectBody.CopyAsInterconnection(randSlot.ModelId);
+                connBody.IsCollidable = false;
                 connBody.BegSlot = randSlot;
                 connBody.EndSlot = alignedSlot;
 
@@ -299,20 +312,26 @@ namespace WorldControllers
 
                 Will.Instance.AddBody(connBody);
 
+                randSlot.State.Position = new ALVector2D((begToCenter.Angle+begPos.Angular)*0.5, begPos.Linear);
+                alignedSlot.State.Position = new ALVector2D(((-begToCenter).Angle+endPos.Angular)*0.5, endPos.Linear);
+
                 var begJoint = new HingeJoint(randSlot, connBody, (2 * centerPos + 8 * begPos.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = model.MaxDistance * 0.5,
                     Softness = 10
                 };
+                var begAngle = new AngleJoint(randSlot, connBody, new Lifespan()) { Softness = 0.0001, BiasFactor = 0.2f };
 
                 var endJoint = new HingeJoint(connBody, alignedSlot, (2 * centerPos + 8 * endPos.Linear) * 0.1f, new Lifespan())
                 {
                     DistanceTolerance = model.MaxDistance * 0.5,
                     Softness = 10
                 };
+                var endAngle = new AngleJoint(connBody, alignedSlot, new Lifespan()) { Softness = 0.0001, BiasFactor = 0.2f };
 
                 Will.Instance.AddJoint(begJoint);
-                Will.Instance.AddJoint(endJoint);
+                Will.Instance.AddJoint(begAngle);
+                Will.Instance.AddJoint(endAngle);
 
                 Will.Instance.RunPauseWilling(true);
 

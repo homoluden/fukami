@@ -331,13 +331,13 @@ namespace Fukami.ViewModels
                             {
                                 StartPosition = new ALVector2D(MathHelper.PiOver2, 700 + _rnd.Next(-100, 100) * 0.1, 600 + _rnd.Next(-100, 100) * 0.1),
                                 Size = coreSize,
-                                Mass = 30,
+                                Mass = 1,
                                 ConnectionSlots = new []
                                     {
                                         new ConnectionSlotModel
                                             {
                                                 IsOccupied = false,
-                                                Size = 15,
+                                                Size = 25,
                                                 MaxChildMass = 15,
                                                 MaxChildSize = 100,
                                                 DistanceFromCenter = coreSize + 10.0f,
@@ -347,7 +347,7 @@ namespace Fukami.ViewModels
                                         new ConnectionSlotModel
                                             {
                                                 IsOccupied = false,
-                                                Size = 15,
+                                                Size = 25,
                                                 MaxChildMass = 15,
                                                 MaxChildSize = 100,
                                                 DistanceFromCenter = coreSize + 10.0f,
@@ -357,7 +357,7 @@ namespace Fukami.ViewModels
                                         new ConnectionSlotModel
                                             {
                                                 IsOccupied = false,
-                                                Size = 15,
+                                                Size = 25,
                                                 MaxChildMass = 15,
                                                 MaxChildSize = 100,
                                                 DistanceFromCenter = coreSize + 10.0f,
@@ -407,28 +407,130 @@ namespace Fukami.ViewModels
                     {
                         Id = 5, 
                         Category = "Bone", 
-                        Description = "Bone gene with Size: {75 x 2}", 
-                        Length = 75, 
-                        Thickness = 2, 
-                        ParentViewModel = this
+                        Description = "Bone gene with Size: {75 x 2}",
+                        ParentViewModel = this,
+                        Model = new BoneModel{
+                            Length = 75,
+                            Thickness = 2,
+                            ChildSlots = new List<IConnectionSlot>{
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 15,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 40.0f,
+                                        Direction = 0.4,
+                                        Orientation = 1.15
+                                    },
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 10,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 45.0f,
+                                        Direction = 0.0f,
+                                        Orientation = 0.0f
+                                    }, 
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 15,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 40.0f,
+                                        Direction = -0.4,
+                                        Orientation = -1.15
+                                    }
+                            }
+                        }
                     },
                     new BoneGeneViewModel
                     {
                         Id = 6, 
                         Category = "Bone", 
                         Description = "Bone gene with Size: {60 x 4}", 
-                        Length = 60, 
-                        Thickness = 4, 
-                        ParentViewModel = this
+                        ParentViewModel = this,
+                        Model = new BoneModel{
+                            Length = 60,
+                            Thickness = 4,
+                            ChildSlots = new List<IConnectionSlot>{
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 15,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 30.0f,
+                                        Direction = 0.4,
+                                        Orientation = 1.15
+                                    },
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 10,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 35.0f,
+                                        Direction = 0.0f,
+                                        Orientation = 0.0f
+                                    }, 
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 15,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 30.0f,
+                                        Direction = -0.4,
+                                        Orientation = -1.15
+                                    }
+                            }
+                        }
                     },
                     new BoneGeneViewModel
                     {
                         Id = 7, 
                         Category = "Bone",
                         Description = "Bone gene with Size: {40 x 1}",
-                        Length = 40, 
-                        Thickness = 1, 
-                        ParentViewModel = this
+                        ParentViewModel = this,
+                        Model = new BoneModel{
+                            Length = 40,
+                            Thickness = 1,
+                            ChildSlots = new List<IConnectionSlot>{
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 15,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 20.0f,
+                                        Direction = 0.4,
+                                        Orientation = 1.15
+                                    },
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 10,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 25.0f,
+                                        Direction = 0.0f,
+                                        Orientation = 0.0f
+                                    }, 
+                                new ConnectionSlotModel
+                                    {
+                                        IsOccupied = false,
+                                        Size = 15,
+                                        MaxChildMass = 15,
+                                        MaxChildSize = 100,
+                                        DistanceFromCenter = 20.0f,
+                                        Direction = -0.4,
+                                        Orientation = -1.15
+                                    }
+                            }
+                        }
                     },
                     new InterconnectionViewModel
                     {

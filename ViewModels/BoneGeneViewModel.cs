@@ -2,47 +2,56 @@
 using CustomBodies.Models;
 using Interfaces;
 using Physics2DDotNet;
+using System;
 using System.Collections.Generic;
 namespace Fukami.ViewModels
 {
     public class BoneGeneViewModel : BaseGeneViewModel<BoneModel>
     {
         private double _thick;
-
         public double Thickness
         {
-            get { return _thick; }
+            get { return Model.Thickness; }
             set
             {
-                _thick = value;
+                Model.Thickness = value;
                 RaisePropertyChanged("Thickness");
             }
         }
 
         private double _length;
-
         public double Length
         {
-            get { return _length; }
+            get { return Model.Length; }
             set
             {
-                _length = value;
+                Model.Length = value;
                 RaisePropertyChanged("Length");
             }
         }
 
         public override BoneModel GetModelDuplicate()
         {
-            if (Model == null)
+            return (BoneModel)Model.Duplicate();
+        }
+
+        #region Citors
+
+        public BoneGeneViewModel()
+            : this(0, "Bone", string.Empty)
+        {
+        }
+
+        protected BoneGeneViewModel(ulong id, string category, string description)
+            : base(id, category, description)
+        {
+            var mid = 10.0;
+
+            Model = new BoneModel
             {
-
-                var mid = this.Length * 0.5;
-
-                Model = new BoneModel
-                {
-                    Length = this.Length,
-                    Thickness = this.Thickness,
-                    ChildSlots = new List<IConnectionSlot> { 
+                Length = mid * 2,
+                Thickness = 3.0,
+                ChildSlots = new List<IConnectionSlot> { 
                         new ConnectionSlotModel
                             {
                                 IsOccupied = false,
@@ -74,10 +83,9 @@ namespace Fukami.ViewModels
                                 Orientation = -1.15
                             }
                     }
-                };
-            }
-            
-            return (BoneModel)Model.Duplicate();
+            };
         }
+
+        #endregion
     }
 }
