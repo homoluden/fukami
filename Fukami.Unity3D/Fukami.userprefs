@@ -1,0 +1,18 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\NodeGrow.cs">
+    <Files>
+      <File FileName="Assets\Scripts\NodeGrow.cs" Line="89" Column="12" />
+      <File FileName="Assets\Scripts\BoneGrow.cs" Line="78" Column="14" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint enabled="false" file="D:\Projects\Unity3d\Fukami\Assets\Scripts\GrowUp.cs" line="69" />
+      <Breakpoint enabled="false" file="D:\Projects\Unity3d\Fukami\Assets\Scripts\GrowUp.cs" line="55" />
+      <Breakpoint file="D:\Projects\Unity3d\Fukami\Assets\Scripts\NodeGrow.cs" line="72" />
+      <Breakpoint file="D:\Projects\Unity3d\Fukami\Assets\Scripts\NodeGrow.cs" line="56" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
