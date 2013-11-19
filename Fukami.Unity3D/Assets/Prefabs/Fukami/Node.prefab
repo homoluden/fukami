@@ -12,7 +12,7 @@ GameObject:
   - 50: {fileID: 5000000}
   - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
-  m_Layer: 12
+  m_Layer: 14
   m_Name: Node
   m_TagString: node
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayer: 4
   m_SortingOrder: 6
-  m_SortingLayerID: 1024582385
+  m_SortingLayerID: 1640115143
   m_Sprite: {fileID: 21300008, guid: e7d3a1e0e2fac4bd48b6734c2daf4fe1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000

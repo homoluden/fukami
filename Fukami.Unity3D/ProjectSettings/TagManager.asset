@@ -14,6 +14,7 @@ TagManager:
   - HealthBar
   - node
   - bone
+  - nodeGene
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
@@ -28,9 +29,9 @@ TagManager:
   User Layer 10: Enemies
   User Layer 11: Pickups
   User Layer 12: Ground
-  User Layer 13: 
-  User Layer 14: 
-  User Layer 15: 
+  User Layer 13: Bones
+  User Layer 14: Nodes
+  User Layer 15: Genes
   User Layer 16: 
   User Layer 17: 
   User Layer 18: 
@@ -63,6 +64,14 @@ TagManager:
   - name: Character
     userID: 4
     uniqueID: 2511236001
+    locked: 0
+  - name: NodeLayer
+    userID: 6
+    uniqueID: 1640115143
+    locked: 0
+  - name: BoneLayer
+    userID: 7
+    uniqueID: 2329344413
     locked: 0
   - name: Foreground
     userID: 3
