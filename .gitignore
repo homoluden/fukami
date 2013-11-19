@@ -1,6 +1,8 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/
 [Oo]bj/
+Fukami.Unity3D/Build/
+Fukami.Unity3D/Temp/
 
 # mstest test results
 TestResults
