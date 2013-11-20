@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\BoneGrow.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\ChildSlot.cs" />
+     <Compile Include="Assets\Scripts\ConstantScale.cs" />
      <Compile Include="Assets\Scripts\Destroyer.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\FollowPlayer.cs" />
@@ -72,6 +73,7 @@
      <Compile Include="Assets\Scripts\Score.cs" />
      <Compile Include="Assets\Scripts\ScoreShadow.cs" />
      <Compile Include="Assets\Scripts\SetParticleSortingLayer.cs" />
+     <Compile Include="Assets\Scripts\SmoothGrow.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

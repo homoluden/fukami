@@ -2144,7 +2144,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
@@ -4452,7 +4452,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 504946598}
   m_GameObject: {fileID: 1049173827}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26e8197b97b4a4fa2ab4c51e208a70f4, type: 3}
   m_Name: 
@@ -7667,7 +7667,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1830797955}
   m_GameObject: {fileID: 1556087192}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26e8197b97b4a4fa2ab4c51e208a70f4, type: 3}
   m_Name: 
@@ -8142,7 +8142,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
@@ -8263,6 +8263,10 @@ Prefab:
       propertyPath: ChildSlot.Angle
       value: 45
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
   m_RootGameObject: {fileID: 1929902054}
@@ -8331,6 +8335,7 @@ GameObject:
   - 50: {fileID: 1929902058}
   - 58: {fileID: 1929902056}
   - 114: {fileID: 1929902055}
+  - 114: {fileID: 1929902061}
   - 233: {fileID: 1929902057}
   m_Layer: 14
   m_Name: Node1
@@ -8441,6 +8446,21 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2034882569}
+--- !u!114 &1929902061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: b4e6ce1585085db48ab626cab9204302,
+    type: 2}
+  m_PrefabInternal: {fileID: 1878882070}
+  m_GameObject: {fileID: 1929902054}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d165547cf38a564eace416a54223d53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScaleX: 1
+  ScaleY: 1
+  Tolerance: .300000012
 --- !u!1 &1936031389
 GameObject:
   m_ObjectHideFlags: 0

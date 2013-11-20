@@ -94,6 +94,8 @@ public class NodeGrow : MonoBehaviour {
 				newGrowUp.Generation = Generation;
 			}
 
+            var constScale = gameObject.GetComponent<ConstantScale>().enabled = true;
+
 			_growed = true;
 		}
 	}
