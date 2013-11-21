@@ -11,8 +11,8 @@ GameObject:
   - 50: {fileID: 5000000}
   - 212: {fileID: 21200000}
   - 60: {fileID: 6000000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
   m_Layer: 13
   m_Name: Bone
   m_TagString: bone
@@ -92,11 +92,8 @@ MonoBehaviour:
   GenerationsMax: 3
   ChildSlots:
   - X: 2.5
-    Y: .25
+    Y: 0
     Angle: 45
-  - X: 2.5
-    Y: -.25
-    Angle: -45
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

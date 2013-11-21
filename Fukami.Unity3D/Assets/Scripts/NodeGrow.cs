@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Fukami.Entities;
+using System.Collections.Generic;
 
 public class NodeGrow : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class NodeGrow : MonoBehaviour {
 	private float _lifeTimeLeft = 10.0f;
 	private float _lifeTime = 10.0f;
 	private bool _growed = false;
+    private List<GameObject> _children = new List<GameObject>();
 	
 	#endregion
 	
@@ -52,7 +54,10 @@ public class NodeGrow : MonoBehaviour {
 	
 	void Update () {
 		if (_lifeTimeLeft <= 0.0f) {
-			if (gameObject.GetComponent<Rigidbody2D>().transform.childCount == 0) {
+            
+            _children.RemoveAll(ch => ch == null); // Overloaded comparer. Returns true if object destroyed
+
+			if (_children.Count == 0) {
 				Destroy(gameObject, DeathDelay);
 			}
 			else {
@@ -72,29 +77,23 @@ public class NodeGrow : MonoBehaviour {
 			var slot = ChildSlot;
 			
 			var newBody = (GameObject)Instantiate(PrefabToCreate, 
-                      gameObject.transform.position,
-                      Quaternion.identity);
-			newBody.transform.parent = gameObject.transform;
-			newBody.transform.localPosition = new Vector3(slot.X, slot.Y);
-			newBody.transform.localRotation = Quaternion.AngleAxis(slot.Angle, new Vector3(0.0f, 0.0f, 1.0f));
-
+                      gameObject.transform.position + new Vector3(slot.X, slot.Y),
+                      gameObject.transform.rotation * Quaternion.AngleAxis(slot.Angle, new Vector3(0.0f, 0.0f, 1.0f)));
+            _children.Add(newBody);
+            
 			var slide = newBody.AddComponent<SliderJoint2D>();
 			slide.connectedBody = gameObject.GetComponent<Rigidbody2D>();
 			slide.connectedAnchor = new Vector2(slot.X, slot.Y);
 			slide.limits = new JointTranslationLimits2D{min = -0.1f, max = 0.1f};
 			slide.useLimits = true;
 
-//			var dist = newBody.AddComponent<DistanceJoint2D>();
-//			dist.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-//			dist.distance = 0.01f;
-			
 			var newGrowUp = newBody.GetComponent<BoneGrow>();
 			if (newGrowUp != null) {
 				newGrowUp.GenerationsMax = GenerationsMax;
 				newGrowUp.Generation = Generation;
 			}
 
-            var constScale = gameObject.GetComponent<ConstantScale>().enabled = true;
+            //var constScale = gameObject.GetComponent<ConstantScale>().enabled = true;
 
 			_growed = true;
 		}

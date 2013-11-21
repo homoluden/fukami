@@ -19,6 +19,8 @@ public class SmoothGrow : MonoBehaviour
     public float EndScaleX = 1.0f;
     public float EndScaleY = 1.0f;
     public float GrowTime = 3.0f;
+    private GameObject _child;
+    private Vector2 _hingeAnchor;
     #endregion
 
     // Use this for initialization
@@ -38,6 +40,12 @@ public class SmoothGrow : MonoBehaviour
         if (_age >= GrowTime)
         {
             _growingCompleted = true;
+
+            if (_child != null)
+            {
+                _child.GetComponent<HingeJoint2D>().connectedAnchor = _hingeAnchor;
+            }
+            
             gameObject.transform.localScale = new Vector3( EndScaleX, EndScaleY, 1.0f );
             gameObject.GetComponent<Rigidbody2D>().mass = _originalMass;
         }
@@ -47,7 +55,17 @@ public class SmoothGrow : MonoBehaviour
         var y = Mathf.Lerp(StartScaleY, EndScaleY, t);
         var m = Mathf.Lerp(StartMassScale, EndMassScale, t);
 
+        if (_child != null)
+        {
+            _child.GetComponent<HingeJoint2D>().connectedAnchor = new Vector2(_hingeAnchor.x * x, _hingeAnchor.y * y);
+        }        
+
         gameObject.transform.localScale = new Vector3(x, y, 1.0f);
         gameObject.GetComponent<Rigidbody2D>().mass = m;
 	}
+
+    public void AddChild(GameObject child, Vector2 hingeAnchor) {
+        _child = child;
+        _hingeAnchor = hingeAnchor;
+    }
 }
