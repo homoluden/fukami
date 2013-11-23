@@ -65,13 +65,13 @@ TagManager:
     userID: 4
     uniqueID: 2511236001
     locked: 0
-  - name: NodeLayer
-    userID: 6
-    uniqueID: 1640115143
-    locked: 0
   - name: BoneLayer
     userID: 7
     uniqueID: 2329344413
+    locked: 0
+  - name: NodeLayer
+    userID: 6
+    uniqueID: 1640115143
     locked: 0
   - name: Foreground
     userID: 3
