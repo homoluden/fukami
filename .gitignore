@@ -4,6 +4,7 @@
 Fukami.Unity3D/Build/
 Fukami.Unity3D/Temp/
 Fukami.Unity3D/Library/metadata
+*.dwlt
 
 # mstest test results
 TestResults
