@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\GrowUp.cs" />
      <Compile Include="Assets\Scripts\Gun.cs" />
      <Compile Include="Assets\Scripts\HealthPickup.cs" />
+     <Compile Include="Assets\Scripts\HingeSmoothPos.cs" />
      <Compile Include="Assets\Scripts\LayBombs.cs" />
      <Compile Include="Assets\Scripts\NodeGrow.cs" />
      <Compile Include="Assets\Scripts\Pauser.cs" />
