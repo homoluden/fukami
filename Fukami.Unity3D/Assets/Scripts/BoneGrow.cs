@@ -12,6 +12,7 @@ public class BoneGrow : MonoBehaviour {
 	private float _growTime = 3.0f;
     private GameObject _child;
     private SmoothGrow _smoothGrow;
+
 	#endregion
 	
 	#region Properties
@@ -41,7 +42,7 @@ public class BoneGrow : MonoBehaviour {
 	#region Private Methods
 	
 	void Start () {
-        _smoothGrow = gameObject.GetComponent<SmoothGrow>();
+		_smoothGrow = gameObject.GetComponent<SmoothGrow>();
 	}
 	
 	void Update () {
@@ -55,25 +56,40 @@ public class BoneGrow : MonoBehaviour {
 			if (Generation < GenerationsMax && _currCycle < CyclesCount && _currCycle < ChildSlots.Count) {
 				
 				var slot = ChildSlots[(int)_currCycle];
-				
-				var newBody = (GameObject)Instantiate(PrefabToCreate,
-                              gameObject.transform.position,// + new Vector3(slot.X, slot.Y),
-                              gameObject.transform.rotation * Quaternion.AngleAxis(slot.Angle, new Vector3(0.0f, 0.0f, 1.0f)));
+//				
+//				var localForward = gameObject.transform.forward;
+//				var upRotation = Quaternion.FromToRotation(Vector3.up, localForward);
+//				
+//				var newBody = (GameObject)Instantiate(PrefabToCreate, 
+//				                                      gameObject.transform.position + new Vector3(slot.X, slot.Y),
+//				                                      gameObject.transform.rotation * 
+//				                                      upRotation * 
+//				                                      Quaternion.AngleAxis(slot.Angle, Vector3.forward));		
+				var newBody = (GameObject)Instantiate(PrefabToCreate, 
+				                                      gameObject.transform.position,
+				                                      Quaternion.FromToRotation(Vector3.right, Vector3.up)*
+				                                      Quaternion.AngleAxis(Random.Range(-slot.Angle, slot.Angle), Vector3.forward));
+
+				newBody.transform.parent = gameObject.transform;
+				newBody.SetActive(true);
 
                 _child = newBody;
-                if (_smoothGrow != null)
-                {
-                    _smoothGrow.AddChild(_child, new Vector2(slot.X, slot.Y));
-                }
-
+                
 				var hinge = newBody.AddComponent<HingeJoint2D>();
 				hinge.connectedBody = gameObject.GetComponent<Rigidbody2D>();
 				hinge.connectedAnchor = new Vector2(slot.X, slot.Y);
-				hinge.limits = new JointAngleLimits2D{min = -0.1f, max = 0.1f};
+				hinge.limits = new JointAngleLimits2D{min = -1.0f, max = 1.0f};
 				hinge.motor = new JointMotor2D{motorSpeed = -1000.0f, maxMotorTorque = 10000.0f};
 				hinge.useLimits = true;
 				hinge.useMotor = false;
-							
+
+				newBody.AddComponent<HingeSmoothPos>();
+
+//				if (_smoothGrow != null)
+//				{
+//					_smoothGrow.AddChild(_child, new Vector2(slot.X, slot.Y));
+//				}
+
 				var newGrowUp = newBody.GetComponent<NodeGrow>();
 				if (newGrowUp != null) {
 					newGrowUp.GenerationsMax = GenerationsMax;

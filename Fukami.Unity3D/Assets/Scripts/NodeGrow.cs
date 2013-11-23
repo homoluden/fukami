@@ -77,8 +77,11 @@ public class NodeGrow : MonoBehaviour {
 			var slot = ChildSlot;
 			
 			var newBody = (GameObject)Instantiate(PrefabToCreate, 
-                      gameObject.transform.position + new Vector3(slot.X, slot.Y),
-                      gameObject.transform.rotation * Quaternion.AngleAxis(slot.Angle, new Vector3(0.0f, 0.0f, 1.0f)));
+			          gameObject.transform.position + new Vector3(slot.X, slot.Y),
+                      gameObject.transform.rotation * Quaternion.AngleAxis(slot.Angle, Vector3.forward));
+			newBody.transform.parent = gameObject.transform;
+			newBody.SetActive(true);
+
             _children.Add(newBody);
             
 			var slide = newBody.AddComponent<SliderJoint2D>();

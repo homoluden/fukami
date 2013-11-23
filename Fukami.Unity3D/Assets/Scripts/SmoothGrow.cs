@@ -57,7 +57,7 @@ public class SmoothGrow : MonoBehaviour
 
         if (_child != null)
         {
-            _child.GetComponent<HingeJoint2D>().connectedAnchor = new Vector2(_hingeAnchor.x * x, _hingeAnchor.y * y);
+            _child.GetComponent<HingeJoint2D>().connectedAnchor = new Vector2(_hingeAnchor.x * t, _hingeAnchor.y * t);
         }        
 
         gameObject.transform.localScale = new Vector3(x, y, 1.0f);

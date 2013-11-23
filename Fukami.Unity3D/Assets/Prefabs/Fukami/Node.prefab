@@ -15,18 +15,18 @@ GameObject:
   m_Layer: 14
   m_Name: Node
   m_TagString: node
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: .258819044, w: .965925813}
+  m_LocalPosition: {x: 1.52999997, y: -.180000007, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -36,8 +36,8 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mass: 2.58999991
-  m_LinearDrag: .649999976
+  m_Mass: 4.0999999
+  m_LinearDrag: .100000001
   m_AngularDrag: .100000001
   m_GravityScale: .100000001
   m_FixedAngle: 0
@@ -54,7 +54,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Radius: .170000002
+  m_Radius: .109999999
   m_Center: {x: 5.96046448e-08, y: 2.38418579e-07}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -72,9 +72,9 @@ MonoBehaviour:
   Generation: 0
   GenerationsMax: 3
   ChildSlot:
-    X: 0
+    X: .00999999978
     Y: 0
-    Angle: 45
+    Angle: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -93,10 +93,10 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 6
   m_SortingLayerID: 1640115143
-  m_Sprite: {fileID: 21300008, guid: e7d3a1e0e2fac4bd48b6734c2daf4fe1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 039054b01bb2f794b86e3f5d7bdf52f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:

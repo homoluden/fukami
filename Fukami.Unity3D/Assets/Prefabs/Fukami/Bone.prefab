@@ -10,16 +10,16 @@ GameObject:
   - 4: {fileID: 400000}
   - 50: {fileID: 5000000}
   - 212: {fileID: 21200000}
-  - 60: {fileID: 6000000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
+  - 61: {fileID: 6100000}
   m_Layer: 13
   m_Name: Bone
   m_TagString: bone
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1182211791, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -37,17 +37,17 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mass: 1.38999999
+  m_Mass: 1.5
   m_LinearDrag: 0
-  m_AngularDrag: .620000005
-  m_GravityScale: 9.99999975e-05
+  m_AngularDrag: .100000001
+  m_GravityScale: .00100000005
   m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
---- !u!60 &6000000
-PolygonCollider2D:
+--- !u!61 &6100000
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -55,26 +55,8 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Poly:
-    m_Paths:
-    - - {x: 2.26999998, y: -.159999996}
-      - {x: 2.51999998, y: -.159999996}
-      - {x: 2.55999994, y: -.0700000003}
-      - {x: 2.55999994, y: .0899999961}
-      - {x: 2.48000002, y: .159999996}
-      - {x: 2.41999984, y: .159999996}
-      - {x: 2.24000001, y: .129999995}
-      - {x: 2.19000006, y: .049999997}
-      - {x: .25999999, y: .049999997}
-      - {x: .229999989, y: .159999996}
-      - {x: .129999995, y: .159999996}
-      - {x: .00999999978, y: .119999997}
-      - {x: .00999999978, y: -.0700000003}
-      - {x: .0700000003, y: -.159999996}
-      - {x: .170000002, y: -.159999996}
-      - {x: .280000001, y: -.0599999987}
-      - {x: 1.16999996, y: -.0799999982}
-      - {x: 2.16999984, y: -.0799999982}
+  m_Size: {x: 2.30999994, y: .370000005}
+  m_Center: {x: 1.22000003, y: -.00999999978}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -89,26 +71,26 @@ MonoBehaviour:
   CyclesCount: 1
   PrefabToCreate: {fileID: 100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
   Generation: 0
-  GenerationsMax: 3
+  GenerationsMax: 4
   ChildSlots:
-  - X: 2.5
+  - X: 2.3599999
     Y: 0
-    Angle: 45
+    Angle: 10
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edda47934dc28c04796246caa556c655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartMassScale: .100000001
+  StartMassScale: .00100000005
   EndMassScale: 1
-  StartScaleX: .100000001
-  StartScaleY: .100000001
+  StartScaleX: .00100000005
+  StartScaleY: .00100000005
   EndScaleX: 1
   EndScaleY: 1
   GrowTime: 7
@@ -130,10 +112,10 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 5
+  m_SortingLayer: 4
   m_SortingOrder: 6
   m_SortingLayerID: 2329344413
-  m_Sprite: {fileID: 21300000, guid: b81181beaf2a2504a86e328d7854c270, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c44ee275940304443bdbbad908e8cc4e, type: 3}
   m_Color: {r: .930831671, g: 1, b: .772058845, a: 1}
 --- !u!1001 &100100000
 Prefab:
