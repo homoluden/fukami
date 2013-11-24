@@ -50,22 +50,26 @@
      <Compile Include="Assets\Scripts\BackgroundPropSpawner.cs" />
      <Compile Include="Assets\Scripts\Bomb.cs" />
      <Compile Include="Assets\Scripts\BombPickup.cs" />
-     <Compile Include="Assets\Scripts\BoneGrow.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\ChildSlot.cs" />
-     <Compile Include="Assets\Scripts\ConstantScale.cs" />
      <Compile Include="Assets\Scripts\Destroyer.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\FollowPlayer.cs" />
-     <Compile Include="Assets\Scripts\GeneGrow.cs" />
-     <Compile Include="Assets\Scripts\GrowUp.cs" />
      <Compile Include="Assets\Scripts\Gun.cs" />
      <Compile Include="Assets\Scripts\HealthPickup.cs" />
+     <Compile Include="Assets\Scripts\Helpers\Wrap.cs" />
      <Compile Include="Assets\Scripts\HingeSmoothPos.cs" />
      <Compile Include="Assets\Scripts\LayBombs.cs" />
-     <Compile Include="Assets\Scripts\NodeGrow.cs" />
      <Compile Include="Assets\Scripts\Pauser.cs" />
      <Compile Include="Assets\Scripts\PickupSpawner.cs" />
+     <Compile Include="Assets\Scripts\Plant\DieIfNoChildren.cs" />
+     <Compile Include="Assets\Scripts\Plant\DnaProcessor.cs" />
+     <Compile Include="Assets\Scripts\Plant\GeneApplicant.cs" />
+     <Compile Include="Assets\Scripts\Plant\GeneCondition.cs" />
+     <Compile Include="Assets\Scripts\Plant\GeneData.cs" />
+     <Compile Include="Assets\Scripts\Plant\GeneProcessor.cs" />
+     <Compile Include="Assets\Scripts\Plant\GenesManager.cs" />
+     <Compile Include="Assets\Scripts\Plant\Seed.cs" />
      <Compile Include="Assets\Scripts\PlayerControl.cs" />
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\QuatNormalize.cs" />
@@ -76,6 +80,18 @@
      <Compile Include="Assets\Scripts\SetParticleSortingLayer.cs" />
      <Compile Include="Assets\Scripts\SmoothGrow.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
+     <None Include="Assets\Resources\Json\GeneConditions.txt" />
+     <None Include="Assets\plugins\Newtonsoft.Json.xml" />
+ <Reference Include="ICSharpCode.SharpZipLib">
+ <HintPath>Assets\plugins\ICSharpCode.SharpZipLib.dll</HintPath>
+ </Reference>
+ <Reference Include="Newtonsoft.Json">
+ <HintPath>Assets\plugins\Newtonsoft.Json.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
+      <Project>{16756762-37DD-AF0B-A7BA-396B85163CA2}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

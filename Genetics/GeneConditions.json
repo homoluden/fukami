@@ -1,0 +1,23 @@
+[
+	{
+		"idx": 0x00,
+		"distX" : 0.0f,
+		"distY" : 0.0f,
+		"distT" : 5.0f,
+		"AncsMin" : 0,
+		"AncsMax" : 5,
+		"AncTypes" : [
+			"Core",
+			"Node",
+			"Bone"
+		],
+		"SibsMin" : 0,
+		"SibsMax" : 3,
+		"MassMin" : 0.1f,
+		"MassMax" : 10.0f,
+		"AgeMin" : 0.0f,
+		"AgeMax" : 50.0f,
+		"NrgMin" : 10.0f,
+		"NrgMax" : 50.0f
+	}
+]
