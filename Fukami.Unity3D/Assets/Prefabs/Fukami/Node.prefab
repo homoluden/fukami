@@ -12,6 +12,8 @@ GameObject:
   - 50: {fileID: 5000000}
   - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 14
   m_Name: Node
   m_TagString: node
@@ -36,10 +38,10 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mass: 4.0999999
+  m_Mass: 4.57000017
   m_LinearDrag: .100000001
   m_AngularDrag: .100000001
-  m_GravityScale: .100000001
+  m_GravityScale: .00100000005
   m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -64,17 +66,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f992dcbaece81e149ad5ca17c2d1ab55, type: 3}
+  m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DeathDelay: 1
-  PrefabToCreate: {fileID: 100000, guid: 88deaa46a0211ef46b0259d49cbd8bfd, type: 2}
-  Generation: 0
-  GenerationsMax: 3
-  ChildSlot:
-    X: .00999999978
-    Y: 0
-    Angle: 0
+  BonePrefab: {fileID: 100000, guid: 88deaa46a0211ef46b0259d49cbd8bfd, type: 2}
+  NodePrefab: {fileID: 100000}
+  JointPrefab: {fileID: 0}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b4851f1173f0a4e93e309042fddb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 193d641dcef76d5449ab6d794b8edaf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplicantType: Node
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

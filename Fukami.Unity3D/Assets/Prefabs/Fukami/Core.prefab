@@ -12,6 +12,9 @@ GameObject:
   - 50: {fileID: 5000000}
   - 58: {fileID: 5800000}
   - 61: {fileID: 6100000}
+  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 12
   m_Name: Core
   m_TagString: ground
@@ -67,6 +70,44 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_Size: {x: .579999983, y: .699999988}
   m_Center: {x: 0, y: .800000012}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BonePrefab: {fileID: 100000, guid: 88deaa46a0211ef46b0259d49cbd8bfd, type: 2}
+  NodePrefab: {fileID: 100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
+  JointPrefab: {fileID: 0}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1737c6452f4b9f84b8ff366e88ebc931, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Dna: node,0,1.53,-0.18,45.0*node,0,-1.53,-0.18,135.0*bone,0,0,0.0*bone,0,0,30.0*bone,0,0,-30.0
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 193d641dcef76d5449ab6d794b8edaf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplicantType: Core
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

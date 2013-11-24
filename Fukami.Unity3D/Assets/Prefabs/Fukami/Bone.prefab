@@ -10,9 +10,10 @@ GameObject:
   - 4: {fileID: 400000}
   - 50: {fileID: 5000000}
   - 212: {fileID: 21200000}
-  - 114: {fileID: 11400002}
-  - 114: {fileID: 11400000}
   - 61: {fileID: 6100000}
+  - 60: {fileID: 6000000}
+  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   m_Layer: 13
   m_Name: Bone
   m_TagString: bone
@@ -37,22 +38,44 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mass: 1.5
+  m_Mass: 2.44000006
   m_LinearDrag: 0
   m_AngularDrag: .100000001
-  m_GravityScale: .00100000005
+  m_GravityScale: 9.99999975e-05
   m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
+--- !u!60 &6000000
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Poly:
+    m_Paths:
+    - - {x: 2.39999986, y: .159999996}
+      - {x: 1.10000002, y: .159999996}
+      - {x: .099999994, y: .159999996}
+      - {x: .0199999996, y: .0199999996}
+      - {x: .0199999996, y: -.0599999987}
+      - {x: .140000001, y: -.159999996}
+      - {x: .340000004, y: -.159999996}
+      - {x: 2.44000006, y: -.159999996}
+      - {x: 2.53999996, y: -.0799999982}
+      - {x: 2.53999996, y: .0599999987}
+      - {x: 2.51999998, y: .119999997}
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Size: {x: 2.30999994, y: .370000005}
@@ -65,35 +88,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed183f5127a867c49b38e2908dd70655, type: 3}
+  m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CyclesCount: 1
-  PrefabToCreate: {fileID: 100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
-  Generation: 0
-  GenerationsMax: 4
-  ChildSlots:
-  - X: 2.3599999
-    Y: 0
-    Angle: 10
+  BonePrefab: {fileID: 100000}
+  NodePrefab: {fileID: 100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
+  JointPrefab: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edda47934dc28c04796246caa556c655, type: 3}
+  m_Script: {fileID: 11500000, guid: 193d641dcef76d5449ab6d794b8edaf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartMassScale: .00100000005
-  EndMassScale: 1
-  StartScaleX: .00100000005
-  StartScaleY: .00100000005
-  EndScaleX: 1
-  EndScaleY: 1
-  GrowTime: 7
+  ApplicantType: Bone
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -115,7 +127,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 6
   m_SortingLayerID: 2329344413
-  m_Sprite: {fileID: 21300000, guid: c44ee275940304443bdbbad908e8cc4e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e03e1ad94191fcd4e9793aa529432939, type: 3}
   m_Color: {r: .930831671, g: 1, b: .772058845, a: 1}
 --- !u!1001 &100100000
 Prefab:
