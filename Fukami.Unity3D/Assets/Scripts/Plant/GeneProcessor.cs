@@ -25,7 +25,11 @@ public class GeneProcessor : MonoBehaviour
         set 
         { 
             _geneStr = value;
-			ParseGene(value, this);
+			_gene = ParseGene(value);
+            if (!_gene.IsValid)
+            {
+                Destroy(this);
+            }
 		}
 	}
 
@@ -105,6 +109,12 @@ public class GeneProcessor : MonoBehaviour
             return false;
         }
 
+		if (gameObject.transform.childCount < gene.Condition.SibsMin || 
+		    gameObject.transform.childCount > gene.Condition.SibsMax) 
+		{
+			return false;
+		}
+
         // TODO: Check NRG and Siblings
 
         return true;
@@ -139,10 +149,12 @@ public class GeneProcessor : MonoBehaviour
     }
 
 
-	public static void ParseGene(string geneString, GeneProcessor processor)
+	public static GeneData ParseGene(string geneString)
 	{
-		processor._gene = GenesManager.Instance.ParseGene(geneString);
-		print(string.Format("Gene ({1}) '{0}' parsed", geneString, processor._gene.Id));
+		var gene = GenesManager.Instance.ParseGene(geneString);
+        print(string.Format("Gene ({1}) '{0}' parsed", geneString, gene.Id));
+
+        return gene;
     }
 
 }
