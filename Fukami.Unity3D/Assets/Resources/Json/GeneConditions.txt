@@ -20,6 +20,105 @@
 			"AgeMax" : 50.0,
 			"NrgMin" : 10.0,
 			"NrgMax" : 50.0
+		},
+		{
+			"idx": 1,
+			"distX" : 0.0,
+			"distY" : 0.0,
+			"distT" : 10.0,
+			"AncsMin" : 1, 
+			"AncsMax" : 6, 
+			"AncTypes" : [ 
+				"Node"				
+			], 
+			"SibsMin" : 0, 
+			"SibsMax" : 0,
+			"MassMin" : 0.1,
+			"MassMax" : 10.0,
+			"AgeMin" : 0.0,
+			"AgeMax" : 15.0,
+			"NrgMin" : 10.0,
+			"NrgMax" : 50.0
+		},
+		{
+			"idx": 2,
+			"distX" : 0.0,
+			"distY" : 0.0,
+			"distT" : 5.0,
+			"AncsMin" : 0, 
+			"AncsMax" : 0, 
+			"AncTypes" : [ 
+				"Core", 
+				"Node", 
+				"Bone" 				
+			], 
+			"SibsMin" : 0, 
+			"SibsMax" : 1,
+			"MassMin" : 0.1,
+			"MassMax" : 10.0,
+			"AgeMin" : 0.0,
+			"AgeMax" : 15.0,
+			"NrgMin" : 10.0,
+			"NrgMax" : 50.0
+		},
+		{
+			"idx": 3,
+			"distX" : 0.0,
+			"distY" : 0.0,
+			"distT" : 10.0,
+			"AncsMin" : 1, 
+			"AncsMax" : 6, 
+			"AncTypes" : [ 
+				"Core", 
+				"Node", 
+				"Bone" 				
+			], 
+			"SibsMin" : 0, 
+			"SibsMax" : 0,
+			"MassMin" : 0.1,
+			"MassMax" : 10.0,
+			"AgeMin" : 0.0,
+			"AgeMax" : 15.0,
+			"NrgMin" : 10.0,
+			"NrgMax" : 50.0
+		},
+		{
+			"idx": 4,
+			"distX" : 0.0,
+			"distY" : 0.0,
+			"distT" : 8.0,
+			"AncsMin" : 4, 
+			"AncsMax" : 6, 
+			"AncTypes" : [ 
+				"Node"				
+			], 
+			"SibsMin" : 1, 
+			"SibsMax" : 1,
+			"MassMin" : 0.1,
+			"MassMax" : 10.0,
+			"AgeMin" : 0.0,
+			"AgeMax" : 15.0,
+			"NrgMin" : 10.0,
+			"NrgMax" : 50.0
+		},
+		{
+			"idx": 5,
+			"distX" : 0.0,
+			"distY" : 0.0,
+			"distT" : 8.0,
+			"AncsMin" : 4, 
+			"AncsMax" : 6, 
+			"AncTypes" : [ 
+				"Node"				
+			], 
+			"SibsMin" : 2, 
+			"SibsMax" : 2,
+			"MassMin" : 0.1,
+			"MassMax" : 10.0,
+			"AgeMin" : 0.0,
+			"AgeMax" : 15.0,
+			"NrgMin" : 10.0,
+			"NrgMax" : 50.0
 		}
 	]
 }
