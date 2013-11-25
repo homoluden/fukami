@@ -17,7 +17,20 @@ namespace Fukami.Genes
 
     public class GeneData
     {
-        public GeneType GeneType { get; set; }
+        public Guid Id = Guid.Empty;
+
+        private GeneType _geneType;
+        public GeneType GeneType
+        {
+            get { return _geneType; }
+            set 
+            { 
+                _geneType = value;
+                GeneTypeString = value.ToString();
+            }
+        }
+
+		public string GeneTypeString;
 
         public GeneCondition Condition { get; set; }
 

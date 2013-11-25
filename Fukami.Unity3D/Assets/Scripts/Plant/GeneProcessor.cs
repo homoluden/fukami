@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Fukami.Genes;
 using System.Collections.Generic;
 using System;
 using Fukami.Helpers;
+using Fukami.Genes;
 
 public class GeneProcessor : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class GeneProcessor : MonoBehaviour
 
     private string _geneStr;
     private float _age;
-    private static GeneData _gene;
+    private GeneData _gene;
     private float _mass;
 
     #endregion
@@ -25,9 +25,9 @@ public class GeneProcessor : MonoBehaviour
         set 
         { 
             _geneStr = value;
-            ParseGene(value);
-        }
-    }
+			ParseGene(value, this);
+		}
+	}
 
     #endregion
 
@@ -62,12 +62,12 @@ public class GeneProcessor : MonoBehaviour
         var type = new Wrap<PartType>();
         SendMessage("OnApplicantTypeRequested", type);
         
-        if (!type.IsSet)
+        if (type.IsSet)
         {
             switch (gene.GeneType)
             {
                 case GeneType.Node:
-                    if (type.Value != PartType.Bone || type.Value != PartType.Core)
+                    if (type.Value != PartType.Bone && type.Value != PartType.Core)
                     {
                         return false;
                     }
@@ -91,10 +91,11 @@ public class GeneProcessor : MonoBehaviour
                         return false;
                     }
                     break;
-            }
-            
-            return false;
+            }            
         }
+		else { // !type.IsSet
+			return false;
+		}
         
         // Positions check
         var posDiff = new Vector2(gameObject.transform.position.x - gene.Condition.distX, gameObject.transform.position.y - gene.Condition.distY);
@@ -138,10 +139,10 @@ public class GeneProcessor : MonoBehaviour
     }
 
 
-    public static void ParseGene(string geneString)
-    {
-        _gene = GenesManager.Instance.ParseGene(geneString);
-        print(string.Format("Gene '{0}' parsed", geneString));
+	public static void ParseGene(string geneString, GeneProcessor processor)
+	{
+		processor._gene = GenesManager.Instance.ParseGene(geneString);
+		print(string.Format("Gene ({1}) '{0}' parsed", geneString, processor._gene.Id));
     }
 
 }

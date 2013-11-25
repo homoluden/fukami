@@ -2436,7 +2436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1737c6452f4b9f84b8ff366e88ebc931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dna: node,0,1.53,-0.18,45.0*node,0,-1.53,-0.18,135.0*bone,0,0,0.0*bone,0,0,30.0*bone,0,0,-30.0
+  Dna: node,0,-1.53,-0.18,135.0*bone,0,0,0.0*bone,0,0,30.0*bone,0,0,-30.0*node,0,1.53,-0.18,45.0
 --- !u!114 &740286358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6199,6 +6199,10 @@ Prefab:
     - target: {fileID: 400000, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
+      propertyPath: Dna
+      value: node,0,-1.53,-0.18,135.0*bone,0,0,0.0*bone,0,0,30.0*bone,0,0,-30.0*node,0,1.53,-0.18,45.0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
