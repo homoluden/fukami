@@ -4,8 +4,16 @@ using System.Collections.Generic;
 
 public class DieIfNoChildren : MonoBehaviour {
     private List<GameObject> _children = new List<GameObject>();
-    private ushort _childrenCleanupPeriod = 100;
+    private ushort _childrenCleanupPeriod = 10000;
     private ushort _currentIteration = 0;
+
+	void OnChildAdded(GameObject child){
+		_children.Add(child);
+	}
+	
+	void OnChildDestroyed(GameObject child) {
+		_children.Remove(child);
+	}
 
 	void Start () {
 	
@@ -19,8 +27,8 @@ public class DieIfNoChildren : MonoBehaviour {
 
             if (_children.Count == 0)
             {
-                Destroy(this, 0.5f);
-                SendMessageUpwards("OnChildBeforeDestruction", this);
+                Destroy(gameObject, 0.5f);
+                SendMessageUpwards("OnChildBeforeDestruction", this, SendMessageOptions.DontRequireReceiver);
             }
         }
         _currentIteration++;
@@ -29,10 +37,7 @@ public class DieIfNoChildren : MonoBehaviour {
 
     void OnDestroy()
     {
-        SendMessageUpwards("OnChildDestroyed", this, SendMessageOptions.RequireReceiver);
+        gameObject.transform.parent.SendMessage("OnChildDestroyed", this, SendMessageOptions.DontRequireReceiver);
     }
 
-    void OnChildAdded(GameObject child) {
-        _children.Add(child);
-    }
 }
