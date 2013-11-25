@@ -105,29 +105,31 @@ public class DnaProcessor : MonoBehaviour
         spring.distance = 0.1f;
         spring.dampingRatio = 0.01f;
         spring.frequency = 10.0f;
+
+		gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
     }
 
     private void AddBone(GeneData gene)
     {
-        float x, y;
-        gene.FloatModifiers.TryGetValue("X", out x);
-        gene.FloatModifiers.TryGetValue("Y", out y);
-
-        var slot = new ChildSlot { X = x, Y = y };
+        float angle;
+        gene.FloatModifiers.TryGetValue("Angle", out angle);
 
         var newBody = (GameObject)Instantiate(BonePrefab,
-                  gameObject.transform.position + new Vector3(slot.X, slot.Y),
-                  gameObject.transform.rotation);
+                  gameObject.transform.position,
+                  gameObject.transform.rotation *
+		          Quaternion.AngleAxis(angle, Vector3.forward));
         newBody.transform.parent = gameObject.transform;
         newBody.SetActive(true);
 
-        var slide = newBody.AddComponent<SliderJoint2D>();
+        //var slide = newBody.AddComponent<SliderJoint2D>();
+		var slide = newBody.AddComponent<HingeJoint2D>();
         slide.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-        slide.connectedAnchor = new Vector2(slot.X, slot.Y);
-        slide.limits = new JointTranslationLimits2D { min = -0.1f, max = 0.1f };
+		slide.connectedAnchor = new Vector2(Random.Range(-0.15f, 0.15f), Random.Range(-0.15f, 0.15f));
+        //slide.limits = new JointTranslationLimits2D { min = -0.1f, max = 0.1f };
+		slide.limits = new JointAngleLimits2D { min = -1.0f, max = 1.0f };
         slide.useLimits = true;
 
-
+        gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.RequireReceiver);
     }
 
     private void AddNode(GeneData gene)
@@ -142,9 +144,10 @@ public class DnaProcessor : MonoBehaviour
         var slot = new ChildSlot { X = x, Y = y, Angle = angle };
 
         var newBody = (GameObject)Instantiate(NodePrefab,
-                                                gameObject.transform.position + new Vector3(slot.X, slot.Y),
+                                                gameObject.transform.position ,
                                                 Quaternion.FromToRotation(Vector3.right, Vector3.up) *
-                                                Quaternion.AngleAxis(Random.Range(-slot.Angle, slot.Angle), Vector3.forward));
+                                                //Quaternion.AngleAxis(Random.Range(-slot.Angle, slot.Angle), Vector3.forward));
+		                                      Quaternion.AngleAxis(slot.Angle, Vector3.forward));
 
         newBody.transform.parent = gameObject.transform;
         newBody.SetActive(true);
@@ -159,6 +162,7 @@ public class DnaProcessor : MonoBehaviour
 
         newBody.AddComponent<HingeSmoothPos>();
 
+		gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
     }
 
     void OnDnaGenRequested(Wrap<int> generation)
