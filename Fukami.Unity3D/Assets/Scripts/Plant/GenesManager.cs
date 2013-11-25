@@ -59,36 +59,33 @@ namespace Fukami.Genes
                 return _conditionsCache[idx];
             }
 
-            lock (_syncRoot)
-            {
-                if (_conditions.Length == 1)
-                {
-                    _conditionsCache.Add(idx, _conditions[0]);
-                    return _conditions[0];
-                }
-
-                var selectedCondition = DEFAULT_GENE_CONDITION;
-
-                foreach (var cond in _conditions)
-                {
-                    if (cond.idx > idx)
-                    {
-                        break;
-                    }
-                }
-
-                for (int i = 1; i < _conditions.Length; i++)
-                {
-                    if (_conditions[i].idx > idx)
-                    {
-                        break;
-                    }
-                    selectedCondition = _conditions[i];
-                }
-
-                _conditionsCache.Add(idx, selectedCondition);
-                return selectedCondition;
-            }
+			if (_conditions.Length == 1)
+			{
+				_conditionsCache.Add(idx, _conditions[0]);
+				return _conditions[0];
+			}
+			
+			var selectedCondition = DEFAULT_GENE_CONDITION;
+			
+			foreach (var cond in _conditions)
+			{
+				if (cond.idx > idx)
+				{
+					break;
+				}
+			}
+			
+			for (int i = 1; i < _conditions.Length; i++)
+			{
+				if (_conditions[i].idx > idx)
+				{
+					break;
+				}
+				selectedCondition = _conditions[i];
+			}
+			
+			_conditionsCache.Add(idx, selectedCondition);
+			return selectedCondition;
         }
 
         #endregion
@@ -160,7 +157,7 @@ namespace Fukami.Genes
 
         private void ParseStats(GeneData newGene, string[] geneSubstrings)
         {
-            newGene.IsMultyApplicable = true;
+			newGene.IsMultyApplicable = true;
             newGene.Condition = DEFAULT_GENE_CONDITION;
             newGene.ApplicationPeriod = DEFAULT_GENE_APPLICATION_TIME;
         }
@@ -174,16 +171,54 @@ namespace Fukami.Genes
 
         private void ParseNode(GeneData newGene, string[] geneSubstrings)
         {
+            // node,0,-1.53,-0.18,135.0,3.0   -> node,[Rule Idx],[X],[Y],[Direction rel. to Bone],[Grow Time]
+
+            if (geneSubstrings.Length != 6)
+            {
+                newGene.IsValid = false;
+                return;
+            }
+            
+            var ruleIdx = UInt32.Parse(geneSubstrings[1]);
+            var x = float.Parse(geneSubstrings[2]);
+            var y = float.Parse(geneSubstrings[3]);
+            var direction = float.Parse(geneSubstrings[4]);
+            var growTime = float.Parse(geneSubstrings[5]);
+
             newGene.IsMultyApplicable = false;
-            newGene.Condition = DEFAULT_GENE_CONDITION;
-            newGene.ApplicationPeriod = DEFAULT_GENE_APPLICATION_TIME;
+            newGene.Condition = GetCondition(ruleIdx);
+            newGene.ApplicationPeriod = growTime;
+
+            newGene.FloatModifiers["Angle"] = direction;
+            newGene.FloatModifiers["X"] = x;
+            newGene.FloatModifiers["Y"] = y;
+
+            newGene.IsValid = true;
         }
 
         private void ParseBone(GeneData newGene, string[] geneSubstrings)
         {
+			// bone,0,0,30.0,3.0   -> bone,[Rule Idx],[Bone Type],[Direction rel. to Node],[Grow Time]
+
+            if (geneSubstrings.Length != 5)
+            {
+                newGene.IsValid = false;
+                return;
+            }
+
+			var ruleIdx = UInt32.Parse(geneSubstrings[1]);
+			var boneType = byte.Parse(geneSubstrings[2]);
+			var direction = float.Parse(geneSubstrings[3]);
+            var growTime = float.Parse(geneSubstrings[4]);
+
             newGene.IsMultyApplicable = false;
-            newGene.Condition = DEFAULT_GENE_CONDITION;
-            newGene.ApplicationPeriod = DEFAULT_GENE_APPLICATION_TIME;
+            newGene.Condition = GetCondition(ruleIdx);
+            newGene.ApplicationPeriod = growTime;
+
+            newGene.FloatModifiers["Angle"] = direction;
+            newGene.IntegerModifiers["BoneType"] = boneType;
+
+            newGene.IsValid = true;
         }
     }
 
