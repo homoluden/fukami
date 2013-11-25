@@ -17,7 +17,7 @@ namespace Fukami.Genes
 
     public class GeneData
     {
-        public Guid Id = Guid.Empty;
+        public Guid Id = Guid.NewGuid();
 
         private GeneType _geneType;
         public GeneType GeneType
@@ -40,6 +40,8 @@ namespace Fukami.Genes
 
         public Dictionary<string, float> FloatModifiers = new Dictionary<string, float>();
         public Dictionary<string, Int32> IntegerModifiers = new Dictionary<string, Int32>();
+
+        public bool IsValid { get; set; }
     }
 
 }
