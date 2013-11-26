@@ -2076,7 +2076,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
@@ -2436,7 +2436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1737c6452f4b9f84b8ff366e88ebc931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dna: bone,5,0,-45.0,8.0*bone,4,0,45.0,7.0*node,2,-1.53,-0.18,45.0,3.0*bone,1,0,0.0,5.0*bone,1,0,30.0,4.0*bone,1,0,-30.0,6.0*node,2,1.53,-0.18,-45.0,5.0*node,3,2.5,0.0,0.0,5.0
+  Dna: bone,5,0,-45.0,8.0*bone,4,0,45.0,7.0*node,2,-1.53,-0.18,45.0,3.0*bone,1,0,0.0,4.0*bone,1,0,30.0,5.0*bone,1,0,-30.0,6.0*node,2,1.53,-0.18,-45.0,5.0*node,3,2.5,0.0,0.0,5.0
 --- !u!114 &740286358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4522,7 +4522,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 504946598}
   m_GameObject: {fileID: 1049173827}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26e8197b97b4a4fa2ab4c51e208a70f4, type: 3}
   m_Name: 
@@ -6202,7 +6202,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
       propertyPath: Dna
-      value: bone,5,0,-45.0,8.0*bone,4,0,45.0,7.0*node,2,-1.53,-0.18,45.0,3.0*bone,1,0,0.0,5.0*bone,1,0,30.0,4.0*bone,1,0,-30.0,6.0*node,2,1.53,-0.18,-45.0,5.0*node,3,2.5,0.0,0.0,5.0
+      value: bone,5,0,-45.0,8.0*bone,4,0,45.0,7.0*node,2,-1.53,-0.18,45.0,3.0*bone,1,0,0.0,4.0*bone,1,0,30.0,5.0*bone,1,0,-30.0,6.0*node,2,1.53,-0.18,-45.0,5.0*node,3,2.5,0.0,0.0,5.0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
@@ -7785,7 +7785,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1830797955}
   m_GameObject: {fileID: 1556087192}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26e8197b97b4a4fa2ab4c51e208a70f4, type: 3}
   m_Name: 
@@ -8260,7 +8260,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bdd88e3de6e024ec1bacd58073808d06, type: 2}
