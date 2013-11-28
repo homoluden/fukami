@@ -65,7 +65,6 @@
      <Compile Include="Assets\Scripts\Plant\DieIfNoChildren.cs" />
      <Compile Include="Assets\Scripts\Plant\DnaProcessor.cs" />
      <Compile Include="Assets\Scripts\Plant\GeneApplicant.cs" />
-     <Compile Include="Assets\Scripts\Plant\GeneCondition.cs" />
      <Compile Include="Assets\Scripts\Plant\GeneData.cs" />
      <Compile Include="Assets\Scripts\Plant\GeneProcessor.cs" />
      <Compile Include="Assets\Scripts\Plant\GenesManager.cs" />
