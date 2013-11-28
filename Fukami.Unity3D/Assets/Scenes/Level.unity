@@ -2436,7 +2436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1737c6452f4b9f84b8ff366e88ebc931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dna: bone,5,0,-45.0,8.0*bone,4,0,45.0,7.0*node,2,-1.53,-0.18,45.0,3.0*bone,1,0,0.0,4.0*bone,1,0,30.0,5.0*bone,1,0,-30.0,6.0*node,2,1.53,-0.18,-45.0,5.0*node,3,2.5,0.0,0.0,5.0
+  Dna: 
 --- !u!114 &740286358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4245,7 +4245,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 317552566dd1ff9488d5d34e0c3ba4f4, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: .100000001
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -6202,7 +6202,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
       propertyPath: Dna
-      value: bone,5,0,-45.0,8.0*bone,4,0,45.0,7.0*node,2,-1.53,-0.18,45.0,3.0*bone,1,0,0.0,4.0*bone,1,0,30.0,5.0*bone,1,0,-30.0,6.0*node,2,1.53,-0.18,-45.0,5.0*node,3,2.5,0.0,0.0,5.0
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\plugins\SimpleJSON.cs" />
+     <None Include="Assets\Resources\dna.txt" />
      <None Include="Assets\Resources\Json\GeneConditions.txt" />
      <None Include="Assets\plugins\Newtonsoft.Json.xml" />
  <Reference Include="ICSharpCode.SharpZipLib">

@@ -13,7 +13,7 @@ namespace Fukami.Genes
         #region Consts
 
         public static readonly char[] GENE_VALUES_SEPARATORS = ",/:".ToCharArray();
-        public static readonly char[] GENES_SEPARATORS = "*| ".ToCharArray();
+        public static readonly char[] GENES_SEPARATORS = "*| \n".ToCharArray();
         public static readonly string GENE_CONDITIONS_PATH = "Json/GeneConditions";
         public static readonly GeneCondition DEFAULT_GENE_CONDITION = new GeneCondition
         {

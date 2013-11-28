@@ -1,0 +1,9 @@
+bone,[Bone type],[Node Type],[Base depth],[Depth tolerance],[Grow Time]
+bone,1,0,4,2,320
+bone,2,0,4,2,2BC
+node,2,-1.53,-0.18,45.0,3.0
+bone,0,0,0,5,190
+bone,3,0,2,1,1F4
+bone,4,0,3,1,258
+node,2,1.53,-0.18,-45.0,5.0
+node,3,2.5,0.0,0.0,5.0

@@ -80,6 +80,7 @@
      <Compile Include="Assets\Scripts\SetParticleSortingLayer.cs" />
      <Compile Include="Assets\Scripts\SmoothGrow.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
+     <None Include="Assets\Resources\dna.txt" />
      <None Include="Assets\Resources\Json\GeneConditions.txt" />
      <None Include="Assets\plugins\Newtonsoft.Json.xml" />
  <Reference Include="ICSharpCode.SharpZipLib">
