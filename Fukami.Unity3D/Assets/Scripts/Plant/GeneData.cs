@@ -18,30 +18,24 @@ namespace Fukami.Genes
     public class GeneData
     {
         public Guid Id = Guid.NewGuid();
+		
+		public bool IsMultyApplicable;
+		
+		public bool IsValid { get; set; }
 
-        private GeneType _geneType;
-        public GeneType GeneType
-        {
-            get { return _geneType; }
-            set 
-            { 
-                _geneType = value;
-                GeneTypeString = value.ToString();
-            }
-        }
+		public string GeneType;
+		
+		public ushort Subtype;
 
-		public string GeneTypeString;
+		public ushort ApplicantSubtype;
 
-        public GeneCondition Condition { get; set; }
+		public ushort BaseDepth;
 
-        public float ApplicationPeriod { get; set; }
+		public ushort DepthTolerance;
 
-        public bool IsMultyApplicable { get; set; }
+		public float GrowTime;
 
-        public Dictionary<string, float> FloatModifiers = new Dictionary<string, float>();
-        public Dictionary<string, Int32> IntegerModifiers = new Dictionary<string, Int32>();
-
-        public bool IsValid { get; set; }
+		public int Generation;
     }
 
 }

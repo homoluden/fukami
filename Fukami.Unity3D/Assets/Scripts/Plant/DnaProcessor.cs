@@ -8,7 +8,6 @@ public class DnaProcessor : MonoBehaviour
 {
     #region Fields
 
-    private string _dnaStr;
     private float _age;
     private int _generation;
 
@@ -17,16 +16,14 @@ public class DnaProcessor : MonoBehaviour
 
     #region Properties
 
-    public GameObject BonePrefab;
-    public GameObject NodePrefab;
-    public GameObject JointPrefab;
+	public string Dna;
 
     public string DnaString
     {
-        get { return _dnaStr; }
+        get { return Dna; }
         set
         {
-            _dnaStr = value;
+            Dna = value;
             ParseDna(value);
         }
     }
@@ -44,125 +41,14 @@ public class DnaProcessor : MonoBehaviour
 
         foreach (var gene in geneStrings)
         {
-            var geneProcessor = gameObject.AddComponent<GeneProcessor>();
-            geneProcessor.GeneString = gene;
+			var geneData = GenesManager.Instance.ParseGene(gene);
+			geneData.Generation = _generation;
+
+			if (geneData.IsValid) {
+				var geneProcessor = gameObject.AddComponent<GeneProcessor>();
+				geneProcessor.Gene = geneData;
+			}
         }
-    }
-
-    void OnDnaAgeRequested(Wrap<float> age)
-    {
-        if (age.IsSet)
-        {
-            return;
-        }
-
-        age.Value = _age;
-        age.ValueSource = "DnaProcessor";
-    }
-
-    void OnApplyGene(GeneData gene)
-    {
-        switch (gene.GeneType)
-        {
-            case GeneType.Node:
-                AddNode(gene);
-                break;
-            case GeneType.Bone:
-                AddBone(gene);
-                break;
-            case GeneType.Joint:
-                AddJoint(gene);
-                break;
-            case GeneType.Stats:
-                AddStats(gene);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void AddStats(GeneData gene)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    private void AddJoint(GeneData gene)
-    {
-        float x, y;
-        gene.FloatModifiers.TryGetValue("X", out x);
-        gene.FloatModifiers.TryGetValue("Y", out y);
-
-        var slot = new ChildSlot { X = x, Y = y };
-
-        var newBody = (GameObject)Instantiate(BonePrefab,
-                  gameObject.transform.position + new Vector3(slot.X, slot.Y),
-                  gameObject.transform.rotation);
-        newBody.transform.parent = gameObject.transform;
-        newBody.SetActive(true);
-
-        var spring = newBody.AddComponent<SpringJoint2D>();
-        spring.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-        spring.distance = 0.1f;
-        spring.dampingRatio = 0.01f;
-        spring.frequency = 10.0f;
-
-		gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
-    }
-
-    private void AddBone(GeneData gene)
-    {
-        float angle;
-        gene.FloatModifiers.TryGetValue("Angle", out angle);
-
-        var newBody = (GameObject)Instantiate(BonePrefab,
-                  gameObject.transform.position,
-                  gameObject.transform.rotation *
-		          Quaternion.AngleAxis(angle, Vector3.forward));
-        newBody.transform.parent = gameObject.transform;
-        newBody.SetActive(true);
-
-        //var slide = newBody.AddComponent<SliderJoint2D>();
-		var slide = newBody.AddComponent<HingeJoint2D>();
-        slide.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-		slide.connectedAnchor = new Vector2(Random.Range(-0.15f, 0.15f), Random.Range(-0.15f, 0.15f));
-        //slide.limits = new JointTranslationLimits2D { min = -0.1f, max = 0.1f };
-		slide.limits = new JointAngleLimits2D { min = -1.0f, max = 1.0f };
-        slide.useLimits = true;
-
-        gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.RequireReceiver);
-    }
-
-    private void AddNode(GeneData gene)
-    {
-        float angle;
-        gene.FloatModifiers.TryGetValue("Angle", out angle);
-
-        float x, y;
-        gene.FloatModifiers.TryGetValue("X", out x);
-        gene.FloatModifiers.TryGetValue("Y", out y);
-
-        var slot = new ChildSlot { X = x, Y = y, Angle = angle };
-
-        var newBody = (GameObject)Instantiate(NodePrefab,
-                                                gameObject.transform.position ,
-                                                Quaternion.FromToRotation(Vector3.right, Vector3.up) *
-                                                //Quaternion.AngleAxis(Random.Range(-slot.Angle, slot.Angle), Vector3.forward));
-		                                      Quaternion.AngleAxis(slot.Angle, Vector3.forward));
-
-        newBody.transform.parent = gameObject.transform;
-        newBody.SetActive(true);
-
-        var hinge = newBody.AddComponent<HingeJoint2D>();
-        hinge.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-        hinge.connectedAnchor = new Vector2(slot.X, slot.Y);
-        hinge.limits = new JointAngleLimits2D { min = -1.0f, max = 1.0f };
-        hinge.motor = new JointMotor2D { motorSpeed = -1000.0f, maxMotorTorque = 10000.0f };
-        hinge.useLimits = true;
-        hinge.useMotor = false;
-
-        newBody.AddComponent<HingeSmoothPos>();
-
-		gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
     }
 
     void OnDnaGenRequested(Wrap<int> generation)
@@ -183,7 +69,7 @@ public class DnaProcessor : MonoBehaviour
             return;
         }
 
-        dna.Value = _dnaStr;
+        dna.Value = Dna;
         dna.ValueSource = "DnaProcessor";
     }
 
@@ -209,6 +95,7 @@ public class DnaProcessor : MonoBehaviour
 		{
 			DnaString = dna.Value;
 		}
+
     }
 
     void Update()
