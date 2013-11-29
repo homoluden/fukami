@@ -2449,9 +2449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BonePrefab: {fileID: 100000, guid: 88deaa46a0211ef46b0259d49cbd8bfd, type: 2}
-  NodePrefab: {fileID: 100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
-  JointPrefab: {fileID: 0}
+  Dna: 
 --- !u!61 &740286359
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2540,6 +2538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ApplicantType: Core
+  Slots: 
 --- !u!1 &760832215
 GameObject:
   m_ObjectHideFlags: 0
@@ -8050,9 +8049,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 15.2321968, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1049173829}
-  - {fileID: 1035144488}
   - {fileID: 1556087194}
+  - {fileID: 1035144488}
+  - {fileID: 1049173829}
   m_Father: {fileID: 0}
 --- !u!1 &1791692575
 GameObject:
