@@ -5,12 +5,14 @@ using Fukami.Genes;
 using System.Linq;
 using Fukami.Entities;
 using System;
+using System.Collections.Generic;
 
 public class GeneApplicant : MonoBehaviour {
 
 	public string ApplicantType;
 	public ushort Subtype;
-	public string Slots;
+	public string SlotsString;
+	public List<ChildSlot> Slots = new List<ChildSlot>();
 
     void OnApplicantTypeRequested(Wrap<string> type)
     {
@@ -178,9 +180,9 @@ public class GeneApplicant : MonoBehaviour {
 	void ParseSlots(){
 		// Slots example:   FFFF,FFFF,FFFF*[X],[Y],[Angle]
 
-		var slotStrings = Slots.Split (GenesManager.GENES_SEPARATORS, System.StringSplitOptions.RemoveEmptyEntries);
+		var slotStrings = SlotsString.Split (GenesManager.GENES_SEPARATORS, System.StringSplitOptions.RemoveEmptyEntries);
 
-		var slots = slotStrings.Select(str => {
+		Slots = slotStrings.Select(str => {
 			var slotVals = str.Split(GenesManager.GENE_VALUES_SEPARATORS, System.StringSplitOptions.RemoveEmptyEntries);
 			return new ChildSlot{
 				X = Convert.ToInt16(slotVals[0], 16) * 0.01f,
