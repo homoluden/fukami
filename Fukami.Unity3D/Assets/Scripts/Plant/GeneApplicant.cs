@@ -4,6 +4,7 @@ using Fukami.Helpers;
 using Fukami.Genes;
 using System.Linq;
 using Fukami.Entities;
+using System;
 
 public class GeneApplicant : MonoBehaviour {
 
