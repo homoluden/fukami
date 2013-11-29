@@ -189,7 +189,7 @@ public class GeneApplicant : MonoBehaviour {
 				Y = Convert.ToInt16(slotVals[1], 16) * 0.01f,
 				Angle = Convert.ToInt16(slotVals[0], 16) * 5.493164E-3f
 			};
-		});
+		}).ToList ();
 	}
 
 
