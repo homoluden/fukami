@@ -2,6 +2,8 @@
 using System.Collections;
 using Fukami.Helpers;
 using Fukami.Genes;
+using System.Linq;
+using Fukami.Entities;
 
 public class GeneApplicant : MonoBehaviour {
 
@@ -171,5 +173,21 @@ public class GeneApplicant : MonoBehaviour {
 
 		return true;
 	}
+
+	void ParseSlots(){
+		// Slots example:   FFFF,FFFF,FFFF*[X],[Y],[Angle]
+
+		var slotStrings = Slots.Split (GenesManager.GENES_SEPARATORS, System.StringSplitOptions.RemoveEmptyEntries);
+
+		var slots = slotStrings.Select(str => {
+			var slotVals = str.Split(GenesManager.GENE_VALUES_SEPARATORS, System.StringSplitOptions.RemoveEmptyEntries);
+			return new ChildSlot{
+				X = Convert.ToInt16(slotVals[0], 16) * 0.01f,
+				Y = Convert.ToInt16(slotVals[1], 16) * 0.01f,
+				Angle = Convert.ToInt16(slotVals[0], 16) * 5.493164E-3f
+			};
+		});
+	}
+
 
 }
