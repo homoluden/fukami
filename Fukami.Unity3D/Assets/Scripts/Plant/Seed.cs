@@ -9,7 +9,7 @@ public class Seed : MonoBehaviour
 
 	void Start(){
 		var dnaAsset = Resources.Load<TextAsset>("dna");
-		Dna = dnaAsset.text.Replace("\n","*");
+		Dna = dnaAsset.text.Replace("\r\n","*");
 	}
 
 		void OnSeedDnaStringRequested (Wrap<string> dna)
