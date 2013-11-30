@@ -1,12 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Plant\NodesApplicant.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Plant\BonesApplicant.cs">
     <Files>
-      <File FileName="Assets\Scripts\Plant\NodesApplicant.cs" Line="89" Column="1" />
+      <File FileName="Assets\Scripts\Plant\BonesApplicant.cs" Line="36" Column="18" />
+      <File FileName="Assets\Scripts\Plant\NodesApplicant.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Plant\GeneData.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Plant\GeneProcessor.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Helpers\PrefabsManager.cs" Line="15" Column="9" />
-      <File FileName="Assets\Resources\dna.txt" Line="8" Column="17" />
+      <File FileName="Assets\Resources\dna.txt" Line="12" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -16,8 +16,8 @@
       <Breakpoint file="D:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Plant\NodesApplicant.cs" line="94" />
       <Breakpoint file="D:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Plant\NodesApplicant.cs" line="103" />
       <Breakpoint file="D:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Plant\NodesApplicant.cs" line="41" />
-      <Breakpoint file="D:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Plant\NodesApplicant.cs" line="61" />
-      <Breakpoint file="D:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Helpers\PrefabsManager.cs" line="22" />
+      <Breakpoint file="D:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Plant\BonesApplicant.cs" line="87" />
+      <Breakpoint file="D:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Plant\BonesApplicant.cs" line="100" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
