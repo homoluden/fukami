@@ -32,7 +32,7 @@ namespace Fukami.Genes
         #region Singleton implementation
 
         private static volatile GenesManager _instance;
-        private static object _syncRoot = new System.Object();
+        private static readonly object SyncRoot = new System.Object();
 
         private GenesManager()
         {
@@ -45,7 +45,7 @@ namespace Fukami.Genes
             {
                 if (_instance == null)
                 {
-                    lock (_syncRoot)
+                    lock (SyncRoot)
                     {
                         if (_instance == null)
                             _instance = new GenesManager();

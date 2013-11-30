@@ -35,7 +35,6 @@ namespace Fukami.Genes
 
 		public float GrowTime;
 
-		public int Generation;
     }
 
 }

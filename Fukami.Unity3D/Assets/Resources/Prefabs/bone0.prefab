@@ -8,20 +8,19 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 212: {fileID: 21200000}
   - 50: {fileID: 5000000}
-  - 58: {fileID: 5800000}
+  - 212: {fileID: 21200000}
   - 61: {fileID: 6100000}
+  - 60: {fileID: 6000000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400004}
-  m_Layer: 12
-  m_Name: Core
-  m_TagString: ground
-  m_Icon: {fileID: 0}
+  m_Layer: 13
+  m_Name: bone0
+  m_TagString: bone
+  m_Icon: {fileID: 1182211791, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -29,7 +28,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .779999971, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -39,17 +38,17 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mass: 1
-  m_LinearDrag: .569999993
-  m_AngularDrag: .439999998
-  m_GravityScale: 1
-  m_FixedAngle: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
+  m_Mass: 2.44000006
+  m_LinearDrag: 3.5999999
+  m_AngularDrag: 16.1299992
+  m_GravityScale: 9.99999975e-05
+  m_FixedAngle: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
---- !u!58 &5800000
-CircleCollider2D:
+  m_CollisionDetection: 1
+--- !u!60 &6000000
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -57,19 +56,30 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Radius: 1.65999997
-  m_Center: {x: 0, y: -1.10000002}
+  m_Poly:
+    m_Paths:
+    - - {x: 2.39999986, y: .159999996}
+      - {x: 1.10000002, y: .159999996}
+      - {x: .099999994, y: .159999996}
+      - {x: .0199999996, y: .0199999996}
+      - {x: .0199999996, y: -.0599999987}
+      - {x: .140000001, y: -.159999996}
+      - {x: .340000004, y: -.159999996}
+      - {x: 2.44000006, y: -.159999996}
+      - {x: 2.53999996, y: -.0799999982}
+      - {x: 2.53999996, y: .0599999987}
+      - {x: 2.51999998, y: .119999997}
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Size: {x: .579999983, y: .699999988}
-  m_Center: {x: 0, y: .800000012}
+  m_Size: {x: 2.30999994, y: .370000005}
+  m_Center: {x: 1.22000003, y: -.00999999978}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -81,9 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BonePrefab: {fileID: 100000, guid: 88deaa46a0211ef46b0259d49cbd8bfd, type: 2}
-  NodePrefab: {fileID: 100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
-  JointPrefab: {fileID: 0}
+  Dna: 
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -92,22 +100,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1737c6452f4b9f84b8ff366e88ebc931, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b2c7a997f39413418e29a94e39afece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dna: node,0,1.53,-0.18,45.0*node,0,-1.53,-0.18,135.0*bone,0,0,0.0*bone,0,0,30.0*bone,0,0,-30.0
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 193d641dcef76d5449ab6d794b8edaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ApplicantType: Core
+  ApplicantType: bone
+  Slots:
+  - X: 0
+    Y: 0
+    Angle: 0
+    IsOccupied: 0
+  - X: 0
+    Y: 0
+    Angle: 0
+    IsOccupied: 0
+  - X: 0
+    Y: 0
+    Angle: 0
+    IsOccupied: 0
+  Generation: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -126,11 +136,11 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 3
-  m_SortingOrder: 1
-  m_SortingLayerID: 2511236001
-  m_Sprite: {fileID: 21300000, guid: d4f47b781bc88f742a65dac3ae5fbc67, type: 3}
-  m_Color: {r: .190743953, g: .926470578, b: .500256658, a: 1}
+  m_SortingLayer: 4
+  m_SortingOrder: 6
+  m_SortingLayerID: 2329344413
+  m_Sprite: {fileID: 21300000, guid: e03e1ad94191fcd4e9793aa529432939, type: 3}
+  m_Color: {r: .195285484, g: .948529422, b: .63684231, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

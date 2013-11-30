@@ -57,17 +57,19 @@
      <Compile Include="Assets\Scripts\FollowPlayer.cs" />
      <Compile Include="Assets\Scripts\Gun.cs" />
      <Compile Include="Assets\Scripts\HealthPickup.cs" />
+     <Compile Include="Assets\Scripts\Helpers\GenesManager.cs" />
+     <Compile Include="Assets\Scripts\Helpers\PrefabsManager.cs" />
      <Compile Include="Assets\Scripts\Helpers\Wrap.cs" />
      <Compile Include="Assets\Scripts\HingeSmoothPos.cs" />
      <Compile Include="Assets\Scripts\LayBombs.cs" />
      <Compile Include="Assets\Scripts\Pauser.cs" />
      <Compile Include="Assets\Scripts\PickupSpawner.cs" />
+     <Compile Include="Assets\Scripts\Plant\BonesApplicant.cs" />
      <Compile Include="Assets\Scripts\Plant\DieIfNoChildren.cs" />
      <Compile Include="Assets\Scripts\Plant\DnaProcessor.cs" />
-     <Compile Include="Assets\Scripts\Plant\GeneApplicant.cs" />
      <Compile Include="Assets\Scripts\Plant\GeneData.cs" />
      <Compile Include="Assets\Scripts\Plant\GeneProcessor.cs" />
-     <Compile Include="Assets\Scripts\Plant\GenesManager.cs" />
+     <Compile Include="Assets\Scripts\Plant\NodesApplicant.cs" />
      <Compile Include="Assets\Scripts\Plant\Seed.cs" />
      <Compile Include="Assets\Scripts\PlayerControl.cs" />
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
@@ -81,7 +83,6 @@
      <Compile Include="Assets\Scripts\Spawner.cs" />
      <None Include="Assets\Resources\dna.txt" />
      <None Include="Assets\Resources\Json\GeneConditions.txt" />
-     <None Include="Assets\plugins\Newtonsoft.Json.xml" />
  <Reference Include="ICSharpCode.SharpZipLib">
  <HintPath>Assets\plugins\ICSharpCode.SharpZipLib.dll</HintPath>
  </Reference>

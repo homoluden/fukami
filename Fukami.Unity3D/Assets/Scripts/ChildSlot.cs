@@ -15,6 +15,7 @@ namespace Fukami.Entities
 		public float X = 0.0f;
 		public float Y = 0.0f;
 		public float Angle = 0.0f;
+	    public bool IsOccupied = false;
 	}
 }
 

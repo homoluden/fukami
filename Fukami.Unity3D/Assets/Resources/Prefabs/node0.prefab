@@ -8,16 +8,16 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 50: {fileID: 5000000}
   - 212: {fileID: 21200000}
-  - 61: {fileID: 6100000}
-  - 60: {fileID: 6000000}
+  - 50: {fileID: 5000000}
+  - 58: {fileID: 5800000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
-  m_Layer: 13
-  m_Name: Bone
-  m_TagString: bone
-  m_Icon: {fileID: 1182211791, guid: 0000000000000000d000000000000000, type: 0}
+  - 114: {fileID: 11400004}
+  m_Layer: 14
+  m_Name: node0
+  m_TagString: node
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -38,17 +38,17 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mass: 2.44000006
-  m_LinearDrag: 3.5999999
-  m_AngularDrag: 16.1299992
-  m_GravityScale: 9.99999975e-05
+  m_Mass: 4.57000017
+  m_LinearDrag: 1.39999998
+  m_AngularDrag: 7.07999992
+  m_GravityScale: .00100000005
   m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
---- !u!60 &6000000
-PolygonCollider2D:
+--- !u!58 &5800000
+CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -56,30 +56,8 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Poly:
-    m_Paths:
-    - - {x: 2.39999986, y: .159999996}
-      - {x: 1.10000002, y: .159999996}
-      - {x: .099999994, y: .159999996}
-      - {x: .0199999996, y: .0199999996}
-      - {x: .0199999996, y: -.0599999987}
-      - {x: .140000001, y: -.159999996}
-      - {x: .340000004, y: -.159999996}
-      - {x: 2.44000006, y: -.159999996}
-      - {x: 2.53999996, y: -.0799999982}
-      - {x: 2.53999996, y: .0599999987}
-      - {x: 2.51999998, y: .119999997}
---- !u!61 &6100000
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 0
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Size: {x: 2.30999994, y: .370000005}
-  m_Center: {x: 1.22000003, y: -.00999999978}
+  m_Radius: .109999999
+  m_Center: {x: 5.96046448e-08, y: 2.38418579e-07}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -91,9 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BonePrefab: {fileID: 100000}
-  NodePrefab: {fileID: 100000, guid: b4e6ce1585085db48ab626cab9204302, type: 2}
-  JointPrefab: {fileID: 0}
+  Dna: 
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -102,10 +78,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 193d641dcef76d5449ab6d794b8edaf8, type: 3}
+  m_Script: {fileID: 11500000, guid: f6b4851f1173f0a4e93e309042fddb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ApplicantType: Bone
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23e6b94562baa2a458a55fc861be1c3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplicantType: node
+  SlotsString: 0,A,2000*A,0,0*0,-A,-2000
+  Slots: []
+  Generation: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -124,11 +114,11 @@ SpriteRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 6
-  m_SortingLayerID: 2329344413
-  m_Sprite: {fileID: 21300000, guid: e03e1ad94191fcd4e9793aa529432939, type: 3}
-  m_Color: {r: .195285484, g: .948529422, b: .63684231, a: 1}
+  m_SortingLayerID: 1640115143
+  m_Sprite: {fileID: 21300000, guid: 039054b01bb2f794b86e3f5d7bdf52f8, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

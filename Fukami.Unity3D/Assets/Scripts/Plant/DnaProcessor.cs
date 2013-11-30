@@ -42,7 +42,6 @@ public class DnaProcessor : MonoBehaviour
         foreach (var gene in geneStrings)
         {
 			var geneData = GenesManager.Instance.ParseGene(gene);
-			geneData.Generation = _generation;
 
 			if (geneData.IsValid) {
 				var geneProcessor = gameObject.AddComponent<GeneProcessor>();
