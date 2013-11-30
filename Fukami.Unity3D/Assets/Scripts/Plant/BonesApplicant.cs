@@ -12,8 +12,11 @@ public class BonesApplicant : MonoBehaviour {
 
 	public string ApplicantType = "node";
 	public ushort Subtype;
-	public string SlotsString;
-	public List<ChildSlot> Slots = new List<ChildSlot>();
+	public List<ChildSlot> Slots = new List<ChildSlot>{
+		new ChildSlot{Angle = 0f},
+		new ChildSlot{Angle = -30f},
+		new ChildSlot{Angle = 30f}
+	};
     public Int32 Generation;
 
     void OnApplicantTypeRequested(Wrap<string> type)
@@ -100,7 +103,7 @@ public class BonesApplicant : MonoBehaviour {
         //var slide = newBody.AddComponent<SliderJoint2D>();
         var slide = newBody.AddComponent<HingeJoint2D>();
         slide.connectedBody = gameObject.GetComponent<Rigidbody2D>();
-        slide.connectedAnchor = new Vector2(UnityEngine.Random.Range(-0.15f, 0.15f), UnityEngine.Random.Range(-0.15f, 0.15f));
+        slide.connectedAnchor = new Vector2(slot.X, slot.Y);
         //slide.limits = new JointTranslationLimits2D { min = -0.1f, max = 0.1f };
         slide.limits = new JointAngleLimits2D { min = -1.0f, max = 1.0f };
         slide.useLimits = true;
@@ -134,28 +137,8 @@ public class BonesApplicant : MonoBehaviour {
 		return true;
 	}
 
-	void ParseSlots(){
-		// Slots example:   FFFF,FFFF,FFFF*[X],[Y],[Angle]
-
-		var slotStrings = SlotsString.Split (GenesManager.GENES_SEPARATORS, System.StringSplitOptions.RemoveEmptyEntries);
-
-		Slots = slotStrings.Select(str => {
-			var slotVals = str.Split(GenesManager.GENE_VALUES_SEPARATORS, System.StringSplitOptions.RemoveEmptyEntries);
-			return new ChildSlot{
-				X = Convert.ToInt16(slotVals[0], 16) * 0.01f,
-				Y = Convert.ToInt16(slotVals[1], 16) * 0.01f,
-				Angle = Convert.ToInt16(slotVals[0], 16) * 5.493164E-3f
-			};
-		}).ToList ();
-	}
-
     private void Start()
     {
-        if (!string.IsNullOrEmpty(SlotsString))
-        {
-            ParseSlots();
-        }
-
         var genWrap = new Wrap<Int32>();
         gameObject.SendMessage("OnDnaGenRequested", genWrap, SendMessageOptions.DontRequireReceiver);
         Generation = genWrap.IsSet ? genWrap.Value : 0;

@@ -105,18 +105,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ApplicantType: bone
   Slots:
-  - X: 0
+  - X: 1.24000001
     Y: 0
     Angle: 0
     IsOccupied: 0
   - X: 0
     Y: 0
     Angle: 0
-    IsOccupied: 0
+    IsOccupied: 1
   - X: 0
     Y: 0
     Angle: 0
-    IsOccupied: 0
+    IsOccupied: 1
   Generation: 0
 --- !u!212 &21200000
 SpriteRenderer:

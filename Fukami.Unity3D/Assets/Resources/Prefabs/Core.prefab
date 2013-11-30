@@ -102,12 +102,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 193d641dcef76d5449ab6d794b8edaf8, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b2c7a997f39413418e29a94e39afece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ApplicantType: 436f7265
-  SlotsString: 
-  Slots: []
+  ApplicantType: bone
+  Slots:
+  - X: 0
+    Y: 0
+    Angle: 0
+    IsOccupied: 0
+  - X: 0
+    Y: 0
+    Angle: 0
+    IsOccupied: 0
+  - X: 0
+    Y: 0
+    Angle: 0
+    IsOccupied: 0
+  Generation: 0
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
