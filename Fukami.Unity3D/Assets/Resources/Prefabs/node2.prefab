@@ -89,7 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23e6b94562baa2a458a55fc861be1c3d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9068a68c19fc43b4c871736e3057a95a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ApplicantType: node
@@ -101,11 +101,11 @@ MonoBehaviour:
   - X: 0
     Y: 0
     Angle: -30
-    IsOccupied: 0
+    IsOccupied: 1
   - X: 0
     Y: 0
     Angle: 30
-    IsOccupied: 1
+    IsOccupied: 0
   Generation: 0
 --- !u!212 &21200000
 SpriteRenderer:

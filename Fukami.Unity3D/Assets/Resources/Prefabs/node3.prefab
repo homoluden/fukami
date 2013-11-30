@@ -11,11 +11,11 @@ GameObject:
   - 212: {fileID: 21200000}
   - 50: {fileID: 5000000}
   - 58: {fileID: 5800000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
   - 114: {fileID: 11400004}
   m_Layer: 14
-  m_Name: node0
+  m_Name: node3
   m_TagString: node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,10 +66,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
+  m_Script: {fileID: 11500000, guid: f6b4851f1173f0a4e93e309042fddb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dna: 
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -78,9 +77,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6b4851f1173f0a4e93e309042fddb1b, type: 3}
+  m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Dna: 
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23e6b94562baa2a458a55fc861be1c3d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9068a68c19fc43b4c871736e3057a95a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ApplicantType: node
@@ -101,7 +101,7 @@ MonoBehaviour:
   - X: 0
     Y: 0
     Angle: -30
-    IsOccupied: 1
+    IsOccupied: 0
   - X: 0
     Y: 0
     Angle: 30

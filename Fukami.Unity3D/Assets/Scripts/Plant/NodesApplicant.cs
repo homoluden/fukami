@@ -77,7 +77,7 @@ public class NodesApplicant : MonoBehaviour {
 
         newBody.AddComponent<HingeSmoothPos>();
 
-        //gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
+        gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
 
 	}
 	

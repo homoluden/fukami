@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 public class DieIfNoChildren : MonoBehaviour {
     private List<GameObject> _children = new List<GameObject>();
-    private ushort _childrenCleanupPeriod = 10000;
-    private ushort _currentIteration = 0;
+	private float _age = 0f;
+
+	public float MaxAge = 10f;
 
 	void OnChildAdded(GameObject child){
 		_children.Add(child);
@@ -20,9 +21,9 @@ public class DieIfNoChildren : MonoBehaviour {
 	}
 	
 	void Update () {
-        if (_currentIteration >= _childrenCleanupPeriod)
+        if (_age >= MaxAge)
         {
-            _currentIteration = 0;
+            _age = 0;
             _children.RemoveAll(ch => ch == null);
 
             if (_children.Count == 0)
@@ -31,7 +32,7 @@ public class DieIfNoChildren : MonoBehaviour {
                 SendMessageUpwards("OnChildBeforeDestruction", this, SendMessageOptions.DontRequireReceiver);
             }
         }
-        _currentIteration++;
+        _age += Time.deltaTime;
 
 	}
 

@@ -15,7 +15,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   m_Layer: 13
-  m_Name: bone0
+  m_Name: bone1
   m_TagString: bone
   m_Icon: {fileID: 1182211791, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b2c7a997f39413418e29a94e39afece, type: 3}
+  m_Script: {fileID: 11500000, guid: 42af74a1caa3d034289767fa99f94b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ApplicantType: bone

@@ -1,12 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Plant\BonesApplicant.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\dna.txt">
     <Files>
-      <File FileName="Assets\Scripts\Plant\BonesApplicant.cs" Line="36" Column="18" />
-      <File FileName="Assets\Scripts\Plant\NodesApplicant.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Plant\GeneData.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Plant\GeneProcessor.cs" Line="38" Column="1" />
+      <File FileName="Assets\Scripts\Plant\BonesApplicant.cs" Line="147" Column="1" />
+      <File FileName="Assets\Scripts\Plant\NodesApplicant.cs" Line="117" Column="1" />
+      <File FileName="Assets\Scripts\Plant\GeneData.cs" Line="41" Column="1" />
       <File FileName="Assets\Scripts\Plant\GeneProcessor.cs" Line="1" Column="1" />
-      <File FileName="Assets\Resources\dna.txt" Line="12" Column="9" />
+      <File FileName="Assets\Resources\dna.txt" Line="5" Column="1" />
+      <File FileName="d:\_Docs\GitHub\fukami\Fukami.Unity3D\Assets\Scripts\BackgroundParallax.cs" Line="1" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

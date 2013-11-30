@@ -108,7 +108,7 @@ public class BonesApplicant : MonoBehaviour {
         slide.limits = new JointAngleLimits2D { min = -1.0f, max = 1.0f };
         slide.useLimits = true;
 
-        //gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
+        gameObject.SendMessage("OnChildAdded", newBody, SendMessageOptions.DontRequireReceiver);
 	}
 	
 	bool GetIsApplicable(GeneData gene)
