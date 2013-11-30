@@ -5,7 +5,7 @@ public class HingeSmoothPos : MonoBehaviour {
 
 	public float AnchorX = 0.0f;
 	public float AnchorY = 0.0f;
-	public float Duration = 3.0f;
+	public float Duration = 2f;
 
 	private HingeJoint2D _hinge;
 	private float _age = Time.fixedDeltaTime;
