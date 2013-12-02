@@ -1,15 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HingeSmoothPos.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\dna.txt">
     <Files>
       <File FileName="Assets\Scripts\Plant\GeneProcessor.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Plant\BonesApplicant.cs" Line="111" Column="9" />
-      <File FileName="Assets\Scripts\Plant\NodesApplicant.cs" Line="80" Column="9" />
+      <File FileName="Assets\Scripts\Plant\BonesApplicant.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Plant\NodesApplicant.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Plant\GeneData.cs" Line="1" Column="1" />
       <File FileName="Assets\Resources\dna.txt" Line="15" Column="17" />
-      <File FileName="d:\_Docs\GitHub\fukami\Fukami.Unity3D\Assets\Scripts\BackgroundParallax.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Plant\DieIfNoChildren.cs" Line="35" Column="31" />
+      <File FileName="Assets\Scripts\Plant\DieIfNoChildren.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\HingeSmoothPos.cs" Line="8" Column="27" />
+      <File FileName="d:\Dev\github.com\fukami\Fukami.Unity3D\Assets\Scripts\Helpers\GenesManager.cs" Line="101" Column="1" />
+      <File FileName="Assets\Scripts\Helpers\PrefabsManager.cs" Line="21" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
