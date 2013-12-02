@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
-using SimpleJSON;
 using System.Collections.Generic;
 
 namespace Fukami.Genes

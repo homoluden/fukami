@@ -12,8 +12,8 @@ GameObject:
   - 50: {fileID: 5000000}
   - 58: {fileID: 5800000}
   - 61: {fileID: 6100000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
   - 114: {fileID: 11400004}
   m_Layer: 12
   m_Name: Core
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1737c6452f4b9f84b8ff366e88ebc931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Dna: 
@@ -90,10 +90,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1737c6452f4b9f84b8ff366e88ebc931, type: 3}
+  m_Script: {fileID: 11500000, guid: 7183a49cca9d49d4e918e19695c3781f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dna: node,0,1.53,-0.18,45.0*node,0,-1.53,-0.18,135.0*bone,0,0,0.0*bone,0,0,30.0*bone,0,0,-30.0
+  Dna: 
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -102,22 +102,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b2c7a997f39413418e29a94e39afece, type: 3}
+  m_Script: {fileID: 11500000, guid: 23e6b94562baa2a458a55fc861be1c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ApplicantType: bone
+  ApplicantType: node
   Slots:
   - X: 0
-    Y: 0
+    Y: 1.38999999
     Angle: 0
     IsOccupied: 0
-  - X: 0
-    Y: 0
-    Angle: 0
+  - X: -1.37
+    Y: -.300000012
+    Angle: -60
     IsOccupied: 0
-  - X: 0
-    Y: 0
-    Angle: 0
+  - X: 1.37
+    Y: -.300000012
+    Angle: 60
     IsOccupied: 0
   Generation: 0
 --- !u!212 &21200000

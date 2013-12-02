@@ -2435,7 +2435,7 @@ GameObject:
 --- !u!114 &740286357
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: c634273ee8c240e488b33ae25fb0f525,
+  m_PrefabParentObject: {fileID: 11400000, guid: c634273ee8c240e488b33ae25fb0f525,
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 740286356}
@@ -2448,7 +2448,7 @@ MonoBehaviour:
 --- !u!114 &740286358
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: c634273ee8c240e488b33ae25fb0f525,
+  m_PrefabParentObject: {fileID: 11400002, guid: c634273ee8c240e488b33ae25fb0f525,
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 740286356}
@@ -2542,11 +2542,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 740286356}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42af74a1caa3d034289767fa99f94b60, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b2c7a997f39413418e29a94e39afece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ApplicantType: bone
+  ApplicantType: node
   Slots:
+  - X: 0
+    Y: 1.38999999
+    Angle: 0
+    IsOccupied: 0
   - X: -1.37
     Y: -.300000012
     Angle: 60
@@ -2554,10 +2558,6 @@ MonoBehaviour:
   - X: 1.37
     Y: -.300000012
     Angle: -60
-    IsOccupied: 0
-  - X: 0
-    Y: 1.25
-    Angle: 0
     IsOccupied: 0
   Generation: 0
 --- !u!1 &760832215
