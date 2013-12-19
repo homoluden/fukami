@@ -1,0 +1,249 @@
+fileFormatVersion: 2
+guid: 10b969b50ae58144fb1ff2ae3d1549e6
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 4096
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 50
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: Web
+    maxTextureSize: 1024
+    textureFormat: -1
+    compressionQuality: 50
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    compressionQuality: 50
+  - buildTarget: iPhone
+    maxTextureSize: 1024
+    textureFormat: -1
+    compressionQuality: 50
+  - buildTarget: Android
+    maxTextureSize: 1024
+    textureFormat: -1
+    compressionQuality: 50
+  - buildTarget: BlackBerry
+    maxTextureSize: 1024
+    textureFormat: -1
+    compressionQuality: 50
+  - buildTarget: WP8
+    maxTextureSize: 2048
+    textureFormat: -1
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: Sky
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 2367
+        width: 2634
+        height: 1714
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Bush1
+      rect:
+        serializedVersion: 2
+        x: 2811
+        y: 3441
+        width: 1280
+        height: 655
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Bush2
+      rect:
+        serializedVersion: 2
+        x: 2801
+        y: 2796
+        width: 960
+        height: 641
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Bush3
+      rect:
+        serializedVersion: 2
+        x: 2797
+        y: 2297
+        width: 1050
+        height: 482
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Grass1
+      rect:
+        serializedVersion: 2
+        x: 2825
+        y: 2138
+        width: 116
+        height: 134
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Grass2
+      rect:
+        serializedVersion: 2
+        x: 3092
+        y: 2147
+        width: 78
+        height: 128
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Grass4
+      rect:
+        serializedVersion: 2
+        x: 2822
+        y: 1976
+        width: 74
+        height: 129
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Grass3
+      rect:
+        serializedVersion: 2
+        x: 3218
+        y: 2144
+        width: 69
+        height: 135
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Mushroom1
+      rect:
+        serializedVersion: 2
+        x: 3332
+        y: 1818
+        width: 445
+        height: 454
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Grass5
+      rect:
+        serializedVersion: 2
+        x: 2771
+        y: 1690
+        width: 211
+        height: 202
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Grass6
+      rect:
+        serializedVersion: 2
+        x: 2235
+        y: 1767
+        width: 526
+        height: 130
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Cloud1
+      rect:
+        serializedVersion: 2
+        x: 1941
+        y: 1764
+        width: 263
+        height: 106
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Cloud2
+      rect:
+        serializedVersion: 2
+        x: 1604
+        y: 1743
+        width: 301
+        height: 146
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Cloud3
+      rect:
+        serializedVersion: 2
+        x: 1578
+        y: 1607
+        width: 364
+        height: 118
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Cloud4
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 1596
+        width: 608
+        height: 283
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Cloud5
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 1589
+        width: 754
+        height: 321
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Sprites_16
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 1919
+        width: 2653
+        height: 443
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: SunFlare2
+      rect:
+        serializedVersion: 2
+        x: 2386
+        y: 1073
+        width: 1669
+        height: 574
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: SunFlare1
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 1223
+        width: 1170
+        height: 301
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: SunFlare3
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 578
+        width: 2013
+        height: 539
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 
