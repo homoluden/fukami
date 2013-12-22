@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 08f156bcb508a4c58bb09311fa0a1f62
+guid: f0657be45913fbb40a70691f357bbe25
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -35,20 +35,15 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
-  spritePixelsToUnits: 20.1200008
+  spritePixelsToUnits: 10.0600004
   alphaIsTransparency: 1
   textureType: 8
-  buildTargetSettings: []
+  buildTargetSettings:
+  - buildTarget: iPhone
+    maxTextureSize: 1024
+    textureFormat: -2
+    compressionQuality: 50
   spriteSheet:
-    sprites:
-    - name: env_9_Fog
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1920
-        height: 1080
-      alignment: 0
-      pivot: {x: .5, y: .5}
+    sprites: []
   spritePackingTag: 
   userData: 
