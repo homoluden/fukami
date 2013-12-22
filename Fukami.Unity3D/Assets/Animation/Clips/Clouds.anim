@@ -6,9 +6,10 @@ AnimationClip:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Clouds
-  serializedVersion: 3
+  serializedVersion: 4
   m_AnimationType: 2
   m_Compressed: 0
+  m_UseHighQualityCurve: 1
   m_RotationCurves: []
   m_CompressedRotationCurves: []
   m_PositionCurves:
@@ -17,7 +18,7 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: {x: 0, y: 0, z: 0}
-        inSlope: {x: 1.30140078, y: 0, z: 0}
+        inSlope: {x: 1.30140078, y: 0, z: Infinity}
         outSlope: {x: 1.30140078, y: 0, z: 0}
         tangentMode: 0
       - time: 10
@@ -107,14 +108,14 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 0
-        inSlope: 0
+        inSlope: Infinity
         outSlope: 0
-        tangentMode: 10
+        tangentMode: 7
       - time: 10
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 10
+        tangentMode: 0
       - time: 36.8833351
         value: 0
         inSlope: 0
