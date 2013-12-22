@@ -5874,7 +5874,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 5.5323391
+      value: 14.4360886
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5914,12 +5914,28 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 2000000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
       propertyPath: field of view
-      value: 54
+      value: 57
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
       propertyPath: Player
       value: 
       objectReference: {fileID: 2086931158}
+    - target: {fileID: 11400000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
+      propertyPath: maxXAndY.x
+      value: 6.17000008
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
+      propertyPath: maxXAndY.y
+      value: 6.40999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
+      propertyPath: minXAndY.x
+      value: -6.09000015
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
+      propertyPath: minXAndY.y
+      value: .550000012
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 64b12b15baf9644af9f0651e6705f0ef, type: 2}
   m_RootGameObject: {fileID: 1972830846}
@@ -8208,8 +8224,8 @@ MonoBehaviour:
   yMargin: 2
   xSmooth: 2
   ySmooth: 2
-  maxXAndY: {x: 5, y: 5}
-  minXAndY: {x: -5, y: -5}
+  maxXAndY: {x: 6.17000008, y: 6.40999985}
+  minXAndY: {x: -6.09000015, y: .550000012}
   Player: {fileID: 2086931158}
 --- !u!124 &1972830849
 Behaviour:
@@ -8246,7 +8262,7 @@ Camera:
     height: 1
   near clip plane: .300000012
   far clip plane: 1000
-  field of view: 54
+  field of view: 57
   orthographic: 0
   orthographic size: 21.5
   m_Depth: -1
@@ -8264,7 +8280,7 @@ Transform:
   m_PrefabInternal: {fileID: 1243540802}
   m_GameObject: {fileID: 1972830846}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.5323391, z: -19.5400009}
+  m_LocalPosition: {x: 0, y: 14.4360886, z: -19.5400009}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
