@@ -2160,7 +2160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &740286357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4380,6 +4380,10 @@ Prefab:
       propertyPath: m_Color.b
       value: .480496198
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c634273ee8c240e488b33ae25fb0f525, type: 2}
   m_RootGameObject: {fileID: 740286356}
@@ -6180,6 +6184,55 @@ Transform:
   m_GameObject: {fileID: 1158763730}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
   m_LocalPosition: {x: 0, y: 1000, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+--- !u!1 &1172968860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1172968862}
+  - 114: {fileID: 1172968861}
+  m_Layer: 0
+  m_Name: VoroTester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1172968861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1172968860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c38c5c451768c2459761e55e1b683f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Vertices:
+  - {x: -41.1788216, y: -18.2431164}
+  - {x: -31.5648308, y: 33.3578339}
+  - {x: 2.79912353, y: 21.0690346}
+  - {x: -31.6329479, y: 36.5968094}
+  - {x: -2.29250789, y: -15.8384857}
+  - {x: -15.5344067, y: 8.34121132}
+  - {x: -26.2886639, y: 9.57840061}
+  - {x: -26.9967804, y: 14.8988333}
+  - {x: -20.4823074, y: 25.3396606}
+  - {x: 41.849575, y: -14.6489677}
+--- !u!4 &1172968862
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1172968860}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.2638731, y: 7.05779552, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
