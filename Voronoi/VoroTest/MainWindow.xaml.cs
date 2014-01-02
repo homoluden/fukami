@@ -31,18 +31,30 @@ namespace VoroTest
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _verts = new Vector2[10];
+            _verts = new Vector2[100];
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
             {
                 _verts[i] = new Vector2((float)(300 * (_rnd.NextDouble() - 0.5)), (float)(300 * (_rnd.NextDouble() - 0.5)));
             }
 
             var graph = Fortune.GenerateGraph(_verts);
 
-            var site = _verts[0];
+            var cells = _verts.Select(v =>
+            {
+                var edges = graph.Edges.Where(edge => edge.Left.Equals(v) || edge.Right.Equals(v)).ToArray();
 
-            var edges = graph.Edges.Where(edge => edge.Left.Equals(site) || edge.Right.Equals(site));
+                var cell = new Tuple<Vector2, IEnumerable<VoronoiEdge>, bool>(v,
+                                                                              edges,
+                                                                              edges.All(ed =>
+                                                                                !ed.VVertexA.Equals(Fortune.VVUnkown) && !ed.VVertexB.Equals(Fortune.VVUnkown)));
+
+                return cell;
+            }).Where(c => c.Item3).ToArray();
+
+            
+
+
         }
     }
 }
