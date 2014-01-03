@@ -4,7 +4,7 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Canvas x:Name="MainCanvas">
-            
+            <Polygon Points="-100,-100 -25,50 100,-100" Fill="Blue" Stroke="Black" StrokeThickness="3" Canvas.Left="250" Canvas.Top="175"/>
         </Canvas>
         
         <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="Generate" Click="Button_Click"/>

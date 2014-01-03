@@ -47,9 +47,6 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\XNA-Voronoi-Diagram\bin\Debug\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="VoronoiMap">
-      <HintPath>..\..\..\XNA-Voronoi-Diagram\bin\Debug\VoronoiMap.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -95,6 +92,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FortuneVoronoi\FortuneVoronoi.csproj">
+      <Project>{ddf5d740-6ee1-44ba-9db9-782bf23e28d6}</Project>
+      <Name>FortuneVoronoi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
