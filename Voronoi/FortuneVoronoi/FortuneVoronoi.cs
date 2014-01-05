@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using BenTools.Data;
+using System.Collections.Generic;
 
 namespace BenTools.Mathematics
 {
@@ -8,7 +9,9 @@ namespace BenTools.Mathematics
 	{
 		public HashSet<Vector> Vertizes = new HashSet<Vector>();
 		public HashSet<VoronoiEdge> Edges = new HashSet<VoronoiEdge>();
-	}
+
+        public Dictionary<Vector, IList<VoronoiEdge>> Cells { get; set; }
+    }
 	public class VoronoiEdge
 	{
 		internal bool Done = false;
@@ -618,23 +621,59 @@ namespace BenTools.Mathematics
 			}
 			
 			ArrayList MinuteEdges = new ArrayList();
-			foreach(VoronoiEdge VE in VG.Edges)
-			{
-				if(!VE.IsPartlyInfinite && VE.VVertexA.Equals(VE.VVertexB))
-				{
-					MinuteEdges.Add(VE);
-					// prevent rounding errors from expanding to holes
-					foreach(VoronoiEdge VE2 in VG.Edges)
-					{
-						if(VE2.VVertexA.Equals(VE.VVertexA))
-							VE2.VVertexA = VE.VVertexA;
-						if(VE2.VVertexB.Equals(VE.VVertexA))
-							VE2.VVertexB = VE.VVertexA;
-					}
-				}
-			}
+
+            foreach (var edge in VG.Edges)
+            {
+                double ax = Math.Round(edge.VVertexA[0], Vector.Precision), ay = Math.Round(edge.VVertexA[1], Vector.Precision),
+                       bx = Math.Round(edge.VVertexB[0], Vector.Precision), by = Math.Round(edge.VVertexB[1], Vector.Precision);
+                if (ax == bx && ay == by)
+                {
+                    MinuteEdges.Add(edge);
+                    continue;
+                }
+
+                edge.VVertexA = new Vector(ax, ay);
+                edge.VVertexB = new Vector(bx, by);
+            }
+            
 			foreach(VoronoiEdge VE in MinuteEdges)
-				VG.Edges.Remove(VE);
+                VG.Edges.Remove(VE);
+
+            var cells = new Dictionary<Vector, IList<VoronoiEdge>>();
+            foreach (var edge in VG.Edges)
+            {
+                IList<VoronoiEdge> cellRightEdges, cellLeftEdges;
+                if (cells.ContainsKey(edge.RightData))
+                {
+                    cellRightEdges = cells[edge.RightData];
+                }
+                else
+                {
+                    cellRightEdges = new List<VoronoiEdge>();
+                    cells.Add(edge.RightData, cellRightEdges);
+                }
+                
+                if (cells.ContainsKey(edge.LeftData))
+                {
+                    cellLeftEdges = cells[edge.LeftData];
+                }
+                else
+                {
+                    cellLeftEdges = new List<VoronoiEdge>();
+                    cells.Add(edge.LeftData, cellLeftEdges);
+                }
+
+                if (!cellRightEdges.Contains(edge))
+                {
+                    cellRightEdges.Add(edge);
+                }
+                if (!cellLeftEdges.Contains(edge))
+                {
+                    cellLeftEdges.Add(edge);
+                }
+            }
+
+            VG.Cells = cells;
 
 			return VG;
 		}

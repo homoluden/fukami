@@ -51,17 +51,22 @@ namespace VoroTest
 
             var graph = Fortune.ComputeVoronoiGraph(_verts);
 
-            var cells = _verts.Select(v =>
-            {
-                var edges = graph.Edges.Where(edge => edge.LeftData.Equals(v) || edge.RightData.Equals(v)).ToArray();
+            //var cells = _verts.Select(v =>
+            //{
+            //    var edges = graph.Edges.Where(edge => edge.LeftData.Equals(v) || edge.RightData.Equals(v)).ToArray();
 
-                var cell = new Tuple<BenTools.Mathematics.Vector, IEnumerable<VoronoiEdge>, bool>(v,
-                                                                              edges,
-                                                                              !edges.Any(ed => ed.IsInfinite || ed.IsPartlyInfinite));
+            //    var cell = new Tuple<BenTools.Mathematics.Vector, IEnumerable<VoronoiEdge>, bool>(v,
+            //                                                                  edges,
+            //                                                                  !edges.Any(ed => ed.IsInfinite || ed.IsPartlyInfinite));
 
-                return cell;
-            }).ToArray();
+            //    return cell;
+            //}).ToArray();
 
+            var cells = graph.Cells.Select(c =>
+                new Tuple<BenTools.Mathematics.Vector, IList<VoronoiEdge>, bool>(
+                    c.Key,
+                    c.Value,
+                    !c.Value.Any(ed => ed.IsInfinite || ed.IsPartlyInfinite)));
 
             foreach (var cell in cells.Where(c => c.Item3)) //
             {
