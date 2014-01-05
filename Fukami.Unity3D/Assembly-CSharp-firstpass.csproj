@@ -52,8 +52,8 @@
  <Reference Include="ICSharpCode.SharpZipLib">
  <HintPath>Assets\plugins\ICSharpCode.SharpZipLib.dll</HintPath>
  </Reference>
- <Reference Include="VoronoiMap">
- <HintPath>Assets\plugins\VoronoiMap.dll</HintPath>
+ <Reference Include="FortuneVoronoi">
+ <HintPath>Assets\plugins\FortuneVoronoi.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
