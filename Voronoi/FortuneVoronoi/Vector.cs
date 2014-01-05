@@ -204,7 +204,11 @@ namespace BenTools.Mathematics
 			int i;
 			for(i=0;i<data.Length;i++)
 			{
-				if(/*!data[i].Equals(B.data[i]) && */Math.Abs(data[i]-B.data[i])>1e-10)
+                double a = data[i];
+                double b = B.data[i];
+                if (double.IsNaN(a) && !double.IsNaN(b) || double.IsNaN(b) && !double.IsNaN(a) ||
+                    double.IsInfinity(a) && !double.IsInfinity(b) || double.IsInfinity(b) && !double.IsInfinity(a) || 
+                    Math.Abs(data[i] - B.data[i]) > 1e-10)
 					return false;
 			}
 			return true;

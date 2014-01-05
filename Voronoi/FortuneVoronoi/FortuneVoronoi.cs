@@ -16,19 +16,19 @@ namespace BenTools.Mathematics
 		public Vector VVertexA = Fortune.VVUnkown, VVertexB = Fortune.VVUnkown;
 		public void AddVertex(Vector V)
 		{
-			if(VVertexA==Fortune.VVUnkown)
+			if(VVertexA.Equals(Fortune.VVUnkown))
 				VVertexA = V;
-			else if(VVertexB==Fortune.VVUnkown)
+			else if(VVertexB.Equals(Fortune.VVUnkown))
 				VVertexB = V;
 			else throw new Exception("Tried to add third vertex!");
 		}
 		public bool IsInfinite
 		{
-			get {return VVertexA == Fortune.VVInfinite && VVertexB == Fortune.VVInfinite;}
+			get {return VVertexA.Equals(Fortune.VVInfinite) && VVertexB.Equals(Fortune.VVInfinite);}
 		}
 		public bool IsPartlyInfinite
 		{
-			get {return VVertexA == Fortune.VVInfinite || VVertexB == Fortune.VVInfinite;}
+			get {return VVertexA.Equals(Fortune.VVInfinite) || VVertexB.Equals(Fortune.VVInfinite);}
 		}
 		public Vector FixedPoint
 		{
@@ -36,7 +36,7 @@ namespace BenTools.Mathematics
 			{
 				if(IsInfinite)
 					return 0.5 * (LeftData+RightData);
-				if(VVertexA!=Fortune.VVInfinite)
+				if(!VVertexA.Equals(Fortune.VVInfinite))
 					return VVertexA;
 				return VVertexB;
 			}
@@ -605,7 +605,7 @@ namespace BenTools.Mathematics
 			{
 				if(VE.Done)
 					continue;
-				if(VE.VVertexB == Fortune.VVUnkown)
+				if(VE.VVertexB.Equals(Fortune.VVUnkown))
 				{
 					VE.AddVertex(Fortune.VVInfinite);
 					if(Math.Abs(VE.LeftData[1]-VE.RightData[1])<1e-10 && VE.LeftData[0]<VE.RightData[0])
