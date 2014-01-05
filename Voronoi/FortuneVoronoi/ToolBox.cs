@@ -2,10 +2,27 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text;
-using System.Drawing;
 
 namespace BenTools.Mathematics
 {
+    public struct Point {
+        public Point(double x, double y)
+        {
+            X = x; Y = y;
+        }
+        public double X;
+        public double Y;
+    }
+    
+    public struct PointF {
+        public PointF(float x, float y)
+        {
+            X = x; Y = y;
+        }
+        public float X;
+        public float Y;
+    }
+
 	public abstract class MathTools
 	{
 		/// <summary>
@@ -161,22 +178,22 @@ namespace BenTools.Mathematics
 			return (string[])CopyToArray(Erg,typeof(string));
 		}
 
-		public static RectangleF MaxRectangleFit(RectangleF Target, SizeF Source)
-		{
-			float W,H;
-			// 1. Auf höhe probieren
-			H = Target.Height;
-			W = Target.Height/Source.Height*Source.Width;
-			if(W<=Target.Width)
-			{
-				return new RectangleF(Target.X+Target.Width/2-W/2,Target.Y,W,H);
-			}
-			// 2. Auf weite probieren
-			W = Target.Width;
-			H = Target.Width/Source.Width*Source.Height;
-			return new RectangleF(Target.X,Target.Y+Target.Height/2-H/2,W,H);
+        //public static RectangleF MaxRectangleFit(RectangleF Target, SizeF Source)
+        //{
+        //    float W,H;
+        //    // 1. Auf höhe probieren
+        //    H = Target.Height;
+        //    W = Target.Height/Source.Height*Source.Width;
+        //    if(W<=Target.Width)
+        //    {
+        //        return new RectangleF(Target.X+Target.Width/2-W/2,Target.Y,W,H);
+        //    }
+        //    // 2. Auf weite probieren
+        //    W = Target.Width;
+        //    H = Target.Width/Source.Width*Source.Height;
+        //    return new RectangleF(Target.X,Target.Y+Target.Height/2-H/2,W,H);
 
-		}
+        //}
 		public static double DASkalar(double[] A, double[] B)
 		{
 			if(A.Length!=B.Length)
@@ -314,11 +331,11 @@ namespace BenTools.Mathematics
 			}
 			return C;
 		}
-		public static Color HSBtoRGB(int hue, int saturation, int brightness)
-		{
-			double[] C = HSBtoRGB(hue,saturation,brightness,null);
-			return Color.FromArgb((int)C[0],(int)C[1],(int)C[2]);
-		}
+        //public static Color HSBtoRGB(int hue, int saturation, int brightness)
+        //{
+        //    double[] C = HSBtoRGB(hue,saturation,brightness,null);
+        //    return Color.FromArgb((int)C[0],(int)C[1],(int)C[2]);
+        //}
 		public static double GetAngle(double x, double y)
 		{
 			if(x==0)
@@ -349,7 +366,7 @@ namespace BenTools.Mathematics
 		}
 		public static int ccw(Point P0, Point P1, Point P2, bool PlusOneOnZeroDegrees)
 		{
-			int dx1, dx2, dy1, dy2;
+			double dx1, dx2, dy1, dy2;
 			dx1 = P1.X - P0.X; dy1 = P1.Y - P0.Y;
 			dx2 = P2.X - P0.X; dy2 = P2.Y - P0.Y;
 			if (dx1*dy2 > dy1*dx2) return +1;

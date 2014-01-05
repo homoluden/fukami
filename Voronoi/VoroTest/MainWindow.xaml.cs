@@ -105,9 +105,9 @@ namespace VoroTest
             var poly = new Polygon
             {
                 Points = new PointCollection { 
-                    new Point(v1[0], v1[1]),
-                    new Point(v2[0], v2[1]),
-                    new Point(v3[0], v3[1])
+                    new System.Windows.Point(v1[0], v1[1]),
+                    new System.Windows.Point(v2[0], v2[1]),
+                    new System.Windows.Point(v3[0], v3[1])
                 },
                 Stroke = Brushes.Black,
                 StrokeThickness = 0.125
