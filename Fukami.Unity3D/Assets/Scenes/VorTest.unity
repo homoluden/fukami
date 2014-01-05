@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c38c5c451768c2459761e55e1b683f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RegeneratePeriod: 10
   Vertices: []
   MeshMaterials: []
 --- !u!4 &678840558
