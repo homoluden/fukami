@@ -39,10 +39,6 @@ public class VoronoiTest : MonoBehaviour
     float _timeLeft;
     List<GameObject> _vorCells = new List<GameObject>();
 
-    // The count of vertices on horizontal and vertical borders. Border vertices will not be represented in Voronoi Map
-    ushort _xBoundVertsCount = 30;
-    ushort _yBoundVertsCount = 30;
-
     #endregion
 
     #region Properties
@@ -53,11 +49,22 @@ public class VoronoiTest : MonoBehaviour
     public float MapWidth = 700f;
     public float MapHeight = 300f;
 
+    public int CellsCount = 500;
+
+    // The count of vertices on horizontal and vertical borders. Border vertices will not be represented in Voronoi Map
+    public int XBoundVertsCount = 60;
+    public int YBoundVertsCount = 60;
+
     #endregion
 
     // Use this for initialization
     void Start()
     {
+        if (CellsCount < 1)
+        {
+            CellsCount = 500;
+        }
+
         _timeLeft = RegeneratePeriod;
         GenerateVorMap();
     }
@@ -73,18 +80,18 @@ public class VoronoiTest : MonoBehaviour
         var verts = new List<Vector2>();
         var boundingVerts = new List<Vector2>();
 
-        var dx = MapWidth / _xBoundVertsCount;
-        var dy = MapHeight / _yBoundVertsCount;
+        var dx = MapWidth / XBoundVertsCount;
+        var dy = MapHeight / YBoundVertsCount;
         var xMax = MapWidth * 0.5f;
         var yMax = MapHeight * 0.5f;
 
-        for (int i = 0; i < _xBoundVertsCount / 2; i++)
+        for (int i = 0; i < XBoundVertsCount / 2; i++)
         {
             var x = i * dx;
             boundingVerts.AddRange(new []{ new Vector2(x, yMax), new Vector2(-x, yMax), new Vector2(x, -yMax), new Vector2(-x, -yMax)});
         }
 
-        for (int i = 0; i < _yBoundVertsCount / 2; i++)
+        for (int i = 0; i < YBoundVertsCount / 2; i++)
         {
             var y = i * dy;
             boundingVerts.AddRange(new[] { new Vector2(xMax, y), new Vector2(xMax, -y), new Vector2(-xMax, y), new Vector2(-xMax, -y) });
@@ -92,7 +99,7 @@ public class VoronoiTest : MonoBehaviour
 
         boundingVerts = boundingVerts.Distinct(new Vector2Comparer()).ToList();
 
-        for (int i = 0; i < 500; i++)
+        for (int i = 0; i < CellsCount; i++)
         {
             verts.Add(new Vector2(Random.Range(-xMax + dx, xMax - dx), Random.Range(-yMax + dy, yMax - dy)));
         }
