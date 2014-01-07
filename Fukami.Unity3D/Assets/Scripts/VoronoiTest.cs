@@ -4,6 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using BenTools.Mathematics;
 
+public class Vector2Comparer : IEqualityComparer<Vector2>
+{
+    public bool Equals(Vector2 x, Vector2 y)
+    {
+        return x.Equals(y);
+    }
+
+    public int GetHashCode(Vector2 obj)
+    {
+        return obj.GetHashCode();
+    }
+}
+
+
 public struct VorSiteInfo
 {
     public Vector2 Site;
@@ -25,15 +39,19 @@ public class VoronoiTest : MonoBehaviour
     float _timeLeft;
     List<GameObject> _vorCells = new List<GameObject>();
 
+    // The count of vertices on horizontal and vertical borders. Border vertices will not be represented in Voronoi Map
+    ushort _xBoundVertsCount = 30;
+    ushort _yBoundVertsCount = 30;
+
     #endregion
 
     #region Properties
 
     public float RegeneratePeriod = 3f;
-    public Vector2[] Vertices;
     public Material[] MeshMaterials;
 
-
+    public float MapWidth = 700f;
+    public float MapHeight = 300f;
 
     #endregion
 
@@ -52,25 +70,34 @@ public class VoronoiTest : MonoBehaviour
         }
         _vorCells.Clear();
 
-        Vertices = new Vector2[1008];
+        var verts = new List<Vector2>();
+        var boundingVerts = new List<Vector2>();
 
-        Vertices[1000] = new Vector2(-700f, 0f);
-        Vertices[1001] = new Vector2(700f, 0f);
-        Vertices[1002] = new Vector2(0f, 300f);
-        Vertices[1003] = new Vector2(0f, -300f);
+        var dx = MapWidth / _xBoundVertsCount;
+        var dy = MapHeight / _yBoundVertsCount;
+        var xMax = MapWidth * 0.5f;
+        var yMax = MapHeight * 0.5f;
 
-        Vertices[1004] = new Vector2(-700f, -300f);
-        Vertices[1005] = new Vector2(700f, -300f);
-        Vertices[1006] = new Vector2(-700f, 300f);
-        Vertices[1007] = new Vector2(700f, 300f);
-
-
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < _xBoundVertsCount / 2; i++)
         {
-            Vertices[i] = new Vector2(Random.Range(-500f, 500f), Random.Range(-200f, 200f));
+            var x = i * dx;
+            boundingVerts.AddRange(new []{ new Vector2(x, yMax), new Vector2(-x, yMax), new Vector2(x, -yMax), new Vector2(-x, -yMax)});
         }
 
-        _graph = Fortune.ComputeVoronoiGraph(Vertices.Select(v => new BenTools.Mathematics.Vector(v.x, v.y)));
+        for (int i = 0; i < _yBoundVertsCount / 2; i++)
+        {
+            var y = i * dy;
+            boundingVerts.AddRange(new[] { new Vector2(xMax, y), new Vector2(xMax, -y), new Vector2(-xMax, y), new Vector2(-xMax, -y) });
+        }
+
+        boundingVerts = boundingVerts.Distinct(new Vector2Comparer()).ToList();
+
+        for (int i = 0; i < 500; i++)
+        {
+            verts.Add(new Vector2(Random.Range(-xMax + dx, xMax - dx), Random.Range(-yMax + dy, yMax - dy)));
+        }
+
+        _graph = Fortune.ComputeVoronoiGraph(boundingVerts.Concat(verts).Select(v => new BenTools.Mathematics.Vector(v.x, v.y)));
 
 
         var cells = _graph.Cells.Select(c =>
@@ -79,7 +106,8 @@ public class VoronoiTest : MonoBehaviour
                                             Site = new Vector2((float)c.Key[0], (float)c.Key[1]),
                                             Edges = c.Value,
                                             IsClosed = !c.Value.Any(ed => ed.IsInfinite || ed.IsPartlyInfinite)
-                                        });
+                                        }).ToList();
+        cells.RemoveAll(c => boundingVerts.Contains(c.Site));
 
         int j = 0;
         foreach (var cell in cells.Where(c => c.IsClosed))
@@ -90,25 +118,25 @@ public class VoronoiTest : MonoBehaviour
 
     private void AddSiteObject(VorSiteInfo siteInfo, int cellIndex)
     {
-        if (siteInfo.Edges.Any(e =>
-        {
-            var a = e.VVertexA;
-            var b = e.VVertexB;
+        //if (siteInfo.Edges.Any(e =>
+        //{
+        //    var a = e.VVertexA;
+        //    var b = e.VVertexB;
 
-            if (a[0] > 700f || a[0] < -700f || a[1] > 300f || a[1] < -300f)
-            {
-                return true;
-            }
-            if (b[0] > 700f || b[0] < -700f || b[1] > 300f || b[1] < -300f)
-            {
-                return true;
-            }
+        //    if (a[0] > 700f || a[0] < -700f || a[1] > 300f || a[1] < -300f)
+        //    {
+        //        return true;
+        //    }
+        //    if (b[0] > 700f || b[0] < -700f || b[1] > 300f || b[1] < -300f)
+        //    {
+        //        return true;
+        //    }
 
-            return false;
-        }))
-        {
-            return;
-        }
+        //    return false;
+        //}))
+        //{
+        //    return;
+        //}
         var cellObject = new GameObject { name = string.Format("VorCell_{0}", cellIndex) };
         //cellObject.SetActive (false);
 
