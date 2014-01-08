@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\HealthPickup.cs" />
      <Compile Include="Assets\Scripts\Helpers\GenesManager.cs" />
      <Compile Include="Assets\Scripts\Helpers\PrefabsManager.cs" />
+     <Compile Include="Assets\Scripts\Helpers\VoronoiHelper.cs" />
      <Compile Include="Assets\Scripts\Helpers\Wrap.cs" />
      <Compile Include="Assets\Scripts\HingeSmoothPos.cs" />
      <Compile Include="Assets\Scripts\LayBombs.cs" />
@@ -81,6 +82,7 @@
      <Compile Include="Assets\Scripts\SetParticleSortingLayer.cs" />
      <Compile Include="Assets\Scripts\SmoothGrow.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
+     <Compile Include="Assets\Scripts\VorCell.cs" />
      <Compile Include="Assets\Scripts\VoronoiTest.cs" />
      <None Include="Assets\Resources\dna.txt" />
      <None Include="Assets\Resources\Json\GeneConditions.txt" />
