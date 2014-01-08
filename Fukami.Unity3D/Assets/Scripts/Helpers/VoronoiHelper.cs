@@ -86,7 +86,8 @@ namespace Assets.Scripts.Helpers
 
             for (int i = 0; i < visibleCellsCount; i++)
             {
-                visibleVerts.Add(new Vector2(Random.Range(-xMax + dx, xMax - dx), Random.Range(-yMax + dy, yMax - dy)));
+                //visibleVerts.Add(new Vector2(Random.Range(-xMax + dx, xMax - dx), Random.Range(-yMax + dy, yMax - dy)));
+                visibleVerts.Add(new Vector2(Random.Range(-xMax + dx * 0.5f, xMax - dx * 0.5f), Random.Range(-yMax + dy * 0.5f, yMax - dy * 0.5f)));
             }
 
             var graph = Fortune.ComputeVoronoiGraph(boundingVerts.Concat(visibleVerts).Select(v => new BenTools.Mathematics.Vector(v.x, v.y)));

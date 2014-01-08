@@ -132,7 +132,7 @@ public class VorCell : MonoBehaviour
 
         var polyCollider = gameObject.AddComponent<EdgeCollider2D>();
 
-        polyCollider.points = cellCorners.Skip(1).Select(c => new Vector2(c.x, c.y)).ToArray();//(0, cellCorners.Select(c => new Vector2(c.x, c.y)).ToArray());
+        polyCollider.points = cellCorners.Skip(1).Select(c => new Vector2(c.x, c.y)).ToArray();
 	}
 	
 	void Update () {
