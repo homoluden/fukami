@@ -60,10 +60,10 @@ public class VoronoiMap : MonoBehaviour
 
     private void AddSiteObject(VorCellInfo cellData, int cellIndex)
     {
-        var cellObject = new GameObject { name = string.Format("VorCell_{0}", cellIndex) };
+        var cellObject = new GameObject(string.Format("VorCell_{0}", cellIndex)) { tag = gameObject.tag, layer = gameObject.layer};
 
-        cellObject.transform.position = new Vector3(cellData.Site.x, cellData.Site.y);
         cellObject.transform.parent = gameObject.transform;
+        cellObject.transform.localPosition = new Vector3(cellData.Site.x, cellData.Site.y);
 
         var vorCell = cellObject.AddComponent<VorCell>();
 
@@ -71,7 +71,7 @@ public class VoronoiMap : MonoBehaviour
 
         if (MeshMaterials.Length > 0)
         {
-            vorCell.MeshMaterial = MeshMaterials[Random.Range(0, MeshMaterials.Length - 1)];
+            vorCell.MeshMaterial = MeshMaterials[Random.Range(0, MeshMaterials.Length )];
         }
 
         _vorCells.Add(cellObject);

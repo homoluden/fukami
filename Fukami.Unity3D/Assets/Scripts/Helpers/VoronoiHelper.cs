@@ -103,8 +103,8 @@ namespace Assets.Scripts.Helpers
 
             return cells.Where(c => c.IsClosed).ToArray();
         }
-        #endregion // Public Methods
 
+        #endregion // Public Methods
 
         #region Singleton implementation
 

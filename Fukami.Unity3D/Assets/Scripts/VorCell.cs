@@ -115,6 +115,7 @@ public class VorCell : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         mesh.Optimize();
+        mesh.RecalculateTangents();
 
         meshFilter.sharedMesh = mesh;
 

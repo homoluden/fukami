@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\Gun.cs" />
      <Compile Include="Assets\Scripts\HealthPickup.cs" />
      <Compile Include="Assets\Scripts\Helpers\GenesManager.cs" />
+     <Compile Include="Assets\Scripts\Helpers\MeshHelper.cs" />
      <Compile Include="Assets\Scripts\Helpers\PrefabsManager.cs" />
      <Compile Include="Assets\Scripts\Helpers\VoronoiHelper.cs" />
      <Compile Include="Assets\Scripts\Helpers\Wrap.cs" />
