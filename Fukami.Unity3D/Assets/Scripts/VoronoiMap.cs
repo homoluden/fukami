@@ -4,7 +4,7 @@ using BenTools.Mathematics;
 using System.Collections.Generic;
 using System.Linq;
 
-public class VoronoiTest : MonoBehaviour
+public class VoronoiMap : MonoBehaviour
 {
     #region Fields
 

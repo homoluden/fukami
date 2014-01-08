@@ -79,11 +79,11 @@ public class VorCell : MonoBehaviour
         Mesh mesh = new Mesh();
         mesh.name = "cellMesh";
 
-        var verts = new Vector3[edges.Length * 2 + 1];
+        var cellCorners = new Vector3[edges.Length * 2 + 1];
         var triangles = new int[edges.Length * 3];
         var uvs = new Vector2[edges.Length * 2 + 1];
 
-        verts[0] = Vector3.zero;   // Placing Cell Center at Origin of new GameObjects
+        cellCorners[0] = Vector3.zero;   // Placing Cell Center at Origin of new GameObjects
 
         //verts [1] = new Vector3 (edges [0].Start.x, edges [0].Start.y, 0f);
 
@@ -95,8 +95,8 @@ public class VorCell : MonoBehaviour
         {
             var edge = edges[i];
 
-            verts[2 * i + 1] = new Vector3(edges[i].Start.x, edges[i].Start.y, 0f);
-            verts[2 * i + 2] = new Vector3(edges[i].End.x, edges[i].End.y, 0f);
+            cellCorners[2 * i + 1] = new Vector3(edges[i].Start.x, edges[i].Start.y, 0f);
+            cellCorners[2 * i + 2] = new Vector3(edges[i].End.x, edges[i].End.y, 0f);
 
             var uvStart = (edge.Start) / maxDistFromCenter + shift;
             var uvEnd = (edge.End) / maxDistFromCenter + shift;
@@ -108,7 +108,7 @@ public class VorCell : MonoBehaviour
             triangles[3 * i + 2] = 2 * i + 2;
         }
 
-        mesh.vertices = verts;
+        mesh.vertices = cellCorners;
         mesh.uv = uvs;
         mesh.triangles = triangles;
 
@@ -129,7 +129,8 @@ public class VorCell : MonoBehaviour
             meshRenderer.material = MeshMaterial;
         }
 
-        gameObject.AddComponent<MeshCollider>();
+        var polyCollider = gameObject.AddComponent<PolygonCollider2D>();
+        polyCollider.SetPath(0, cellCorners.Select(c => new Vector2(c.x, c.y)).ToArray());
 	}
 	
 	void Update () {

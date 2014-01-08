@@ -103,9 +103,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RegeneratePeriod: 3
   MeshMaterials: []
-  MapWidth: 700
-  MapHeight: 300
-  CellsCount: 3000
+  MapSize: {x: 700, y: 300}
+  CellsCount: 2000
   XBoundVertsCount: 60
   YBoundVertsCount: 60
 --- !u!4 &678840558
