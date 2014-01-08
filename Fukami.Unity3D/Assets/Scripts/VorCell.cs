@@ -130,8 +130,9 @@ public class VorCell : MonoBehaviour
             meshRenderer.material = MeshMaterial;
         }
 
-        var polyCollider = gameObject.AddComponent<PolygonCollider2D>();
-        polyCollider.SetPath(0, cellCorners.Select(c => new Vector2(c.x, c.y)).ToArray());
+        var polyCollider = gameObject.AddComponent<EdgeCollider2D>();
+
+        polyCollider.points = cellCorners.Skip(1).Select(c => new Vector2(c.x, c.y)).ToArray();//(0, cellCorners.Select(c => new Vector2(c.x, c.y)).ToArray());
 	}
 	
 	void Update () {
