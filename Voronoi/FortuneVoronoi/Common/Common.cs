@@ -16,15 +16,12 @@ namespace FortuneVoronoi.Common
         public Point(double x, double y)
         {
             X = x; Y = y;
-
-            LengthSqr = x*x + y*y;
-            Length = System.Math.Sqrt(LengthSqr);
         }
 
         public readonly double X;
         public readonly double Y;
-        public readonly double LengthSqr;
-        public readonly double Length;
+        public double LengthSqr { get { return X*X + Y*Y; } }
+        public double Length { get { return Math.Sqrt(LengthSqr); } }
 
         /// <summary>
         /// Subtract two vectors
