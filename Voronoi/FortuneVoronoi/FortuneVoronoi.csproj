@@ -101,6 +101,7 @@
     <Compile Include="PriorityQueue.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\SitesGridGenerator.cs" />
     <Compile Include="Tools\ToolBox.cs">
       <SubType>Code</SubType>
     </Compile>
