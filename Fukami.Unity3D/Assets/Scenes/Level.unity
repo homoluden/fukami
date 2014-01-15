@@ -6518,11 +6518,13 @@ Prefab:
     - target: {fileID: 11400000, guid: 708042f972a104a1793983dbefca755f, type: 2}
       propertyPath: MeshMaterials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: bce0cd8cdfffc2a41b798316325a24d2, type: 2}
+      objectReference: {fileID: 565561993, guid: cb12f1a806a18364385c603b44e2e020,
+        type: 3}
     - target: {fileID: 11400000, guid: 708042f972a104a1793983dbefca755f, type: 2}
       propertyPath: MeshMaterials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: fedc75da63b32e249bccd7450cd29351, type: 2}
+      objectReference: {fileID: -106926425, guid: 367e5b5841f63fa48a02e2e5c102b385,
+        type: 3}
     - target: {fileID: 11400000, guid: 708042f972a104a1793983dbefca755f, type: 2}
       propertyPath: YBoundVertsCount
       value: 600
@@ -9735,8 +9737,8 @@ MonoBehaviour:
   RegeneratePeriod: 60
   MeshMaterials:
   - {fileID: -198600889, guid: 4bd5672752bbd624aa4c0b96f184a51d, type: 3}
-  - {fileID: 2100000, guid: bce0cd8cdfffc2a41b798316325a24d2, type: 2}
-  - {fileID: 2100000, guid: fedc75da63b32e249bccd7450cd29351, type: 2}
+  - {fileID: 565561993, guid: cb12f1a806a18364385c603b44e2e020, type: 3}
+  - {fileID: -106926425, guid: 367e5b5841f63fa48a02e2e5c102b385, type: 3}
   MapSize: {x: 150, y: 30}
   CellsCount: 3000
   XBoundVertsCount: 600
