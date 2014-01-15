@@ -16,12 +16,19 @@ namespace FortuneVoronoi.Common
         public Point(double x, double y)
         {
             X = x; Y = y;
+
+            _lengthSqrInt = double.NaN;
+            _lengthInt = double.NaN;
         }
 
         public readonly double X;
         public readonly double Y;
-        public double LengthSqr { get { return X*X + Y*Y; } }
-        public double Length { get { return Math.Sqrt(LengthSqr); } }
+
+        private double _lengthSqrInt;
+        public double LengthSqr { get { return double.IsNaN(_lengthSqrInt) ? _lengthSqrInt = X*X + Y*Y : _lengthSqrInt; } }
+
+        private double _lengthInt;
+        public double Length { get { return double.IsNaN(_lengthSqrInt) ? _lengthInt = Math.Sqrt(LengthSqr) : _lengthInt; } }
 
         /// <summary>
         /// Subtract two vectors
@@ -79,8 +86,18 @@ namespace FortuneVoronoi.Common
         public static bool operator ==(Point A, Point B)
         {
             var diff = B - A;
+
             var dx = System.Math.Abs(diff.X);
+            if ((double.IsNaN(A.X) && double.IsNaN(B.X)) || (double.IsPositiveInfinity(A.X) && double.IsPositiveInfinity(B.X)) || (double.IsNegativeInfinity(A.X) && double.IsNegativeInfinity(B.X)))
+            {
+                dx = 0;
+            }
+
             var dy = System.Math.Abs(diff.Y);
+            if ((double.IsNaN(A.Y) && double.IsNaN(B.Y)) || (double.IsPositiveInfinity(A.Y) && double.IsPositiveInfinity(B.Y)) || (double.IsNegativeInfinity(A.Y) && double.IsNegativeInfinity(B.Y)))
+            {
+                dy = 0;
+            }
 
             return dx <= Precision && dy <= Precision;
         }
@@ -92,11 +109,47 @@ namespace FortuneVoronoi.Common
         {
             var diff = B - A;
             var dx = System.Math.Abs(diff.X);
+            if ((double.IsNaN(A.X) && double.IsNaN(B.X)) || (double.IsPositiveInfinity(A.X) && double.IsPositiveInfinity(B.X)) || (double.IsNegativeInfinity(A.X) && double.IsNegativeInfinity(B.X)))
+            {
+                dx = 0;
+            }
+
             var dy = System.Math.Abs(diff.Y);
+            if ((double.IsNaN(A.Y) && double.IsNaN(B.Y)) || (double.IsPositiveInfinity(A.Y) && double.IsPositiveInfinity(B.Y)) || (double.IsNegativeInfinity(A.Y) && double.IsNegativeInfinity(B.Y)))
+            {
+                dy = 0;
+            }
 
             return dx > Precision && dy > Precision;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Point))
+            {
+                return false;
+            }
+
+            Point other = (Point) obj;
+            if (IsUndefined)
+            {
+                return other.IsUndefined;
+            }
+
+            return this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode();
+        }
+
+        public bool IsUndefined { get { return double.IsNaN(X) && double.IsNaN(Y); } }
+
+        public override string ToString()
+        {
+            return string.Format("[{0}; {1}]", X, Y);
+        }
     }
 
     public struct PointF

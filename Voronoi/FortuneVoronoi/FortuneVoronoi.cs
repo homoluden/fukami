@@ -21,19 +21,19 @@ namespace FortuneVoronoi
 		public Point VVertexA = Fortune.VVUnkown, VVertexB = Fortune.VVUnkown;
 		public void AddVertex(Point V)
 		{
-			if(VVertexA.Equals(Fortune.VVUnkown))
+			if(VVertexA.IsUndefined)
 				VVertexA = V;
-			else if(VVertexB.Equals(Fortune.VVUnkown))
+			else if(VVertexB.IsUndefined)
 				VVertexB = V;
 			else throw new Exception("Tried to add third vertex!");
 		}
 		public bool IsInfinite
 		{
-			get {return VVertexA.Equals(Fortune.VVInfinite) && VVertexB.Equals(Fortune.VVInfinite);}
+			get {return VVertexA == Fortune.VVInfinite && VVertexB == Fortune.VVInfinite;}
 		}
 		public bool IsPartlyInfinite
 		{
-			get {return VVertexA.Equals(Fortune.VVInfinite) || VVertexB.Equals(Fortune.VVInfinite);}
+            get { return VVertexA == Fortune.VVInfinite && VVertexB == Fortune.VVInfinite; }
 		}
 		public Point FixedPoint
 		{
@@ -41,7 +41,7 @@ namespace FortuneVoronoi
 			{
 				if(IsInfinite)
 					return (LeftData+RightData) * 0.5;
-				if(!VVertexA.Equals(Fortune.VVInfinite))
+				if(VVertexA != Fortune.VVInfinite)
 					return VVertexA;
 				return VVertexB;
 			}
@@ -608,7 +608,7 @@ namespace FortuneVoronoi
 			{
 				if(VE.Done)
 					continue;
-				if(VE.VVertexB.Equals(Fortune.VVUnkown))
+				if(VE.VVertexB.IsUndefined)
 				{
 					VE.AddVertex(Fortune.VVInfinite);
 					if(Math.Abs(VE.LeftData.Y-VE.RightData.Y)<1e-10 && VE.LeftData.X<VE.RightData.X)
