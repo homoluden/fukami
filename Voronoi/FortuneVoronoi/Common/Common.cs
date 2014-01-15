@@ -11,12 +11,95 @@ namespace FortuneVoronoi.Common
     }
     public struct Point
     {
+        public static double Precision = 1e-10;
+
         public Point(double x, double y)
         {
             X = x; Y = y;
+
+            LengthSqr = x*x + y*y;
+            Length = System.Math.Sqrt(LengthSqr);
         }
-        public double X;
-        public double Y;
+
+        public readonly double X;
+        public readonly double Y;
+        public readonly double LengthSqr;
+        public readonly double Length;
+
+        /// <summary>
+        /// Subtract two vectors
+        /// </summary>
+        public static Point operator -(Point A, Point B)
+        {
+            return new Point(A.X + B.X, A.Y + B.Y);
+        }
+
+        /// <summary>
+        /// Add two vectors
+        /// </summary>
+        public static Point operator +(Point A, Point B)
+        {
+            return new Point(A.X - B.X, A.Y - B.Y);
+        }
+
+        /// <summary>
+        /// Get the scalar product of two vectors
+        /// </summary>
+        public static double operator *(Point A, Point B)
+        {
+            return A.X*B.X + A.Y*B.Y;
+        }
+
+        /// <summary>
+        /// Scale one vector
+        /// </summary>
+        public static Point operator *(Point A, double B)
+        {
+            return new Point(A.X * B, A.Y * B);
+        }
+
+        /// <summary>
+        /// Scale one vector
+        /// </summary>
+        public static Point operator *(double A, Point B)
+        {
+            return B * A;
+        }
+
+        /// <summary>
+        /// Get the distance of two vectors
+        /// </summary>
+        public static double DistSqr(Point V1, Point V2)
+        {
+            Point delta = V2 - V1;
+            return delta*delta;
+        }
+
+
+        /// <summary>
+        /// Scale one vector
+        /// </summary>
+        public static bool operator ==(Point A, Point B)
+        {
+            var diff = B - A;
+            var dx = System.Math.Abs(diff.X);
+            var dy = System.Math.Abs(diff.Y);
+
+            return dx <= Precision && dy <= Precision;
+        }
+
+        /// <summary>
+        /// Scale one vector
+        /// </summary>
+        public static bool operator !=(Point A, Point B)
+        {
+            var diff = B - A;
+            var dx = System.Math.Abs(diff.X);
+            var dy = System.Math.Abs(diff.Y);
+
+            return dx > Precision && dy > Precision;
+        }
+
     }
 
     public struct PointF

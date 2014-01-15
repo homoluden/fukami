@@ -37,9 +37,9 @@ namespace VoroTest
         {
             MainCanvas.Children.Clear();
 
-            var cells = new Dictionary<VectorF, VoronoiCell>();
+            var cells = new Dictionary<FortuneVoronoi.Common.Point, VoronoiCell>();
 
-            const int internalSitesCnt = 400;
+            const int internalSitesCnt = 800;
             const int horBorderSitesCnt = 50;
             const int vertBorderSitesCnt = 50;
             const int resolution = 24;
@@ -54,7 +54,7 @@ namespace VoroTest
             {
                 var x = site.X*dx;
                 var y = site.Y*dy;
-                var v = new VectorF(x, y);
+                var v = new FortuneVoronoi.Common.Point(x, y);
 
                 if (cells.ContainsKey(v))
                 {

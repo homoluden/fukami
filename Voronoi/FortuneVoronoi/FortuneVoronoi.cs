@@ -9,17 +9,17 @@ namespace FortuneVoronoi
 {
 	public class VoronoiGraph
 	{
-		public HashSet<Vector> Vertizes = new HashSet<Vector>();
+		public HashSet<Point> Vertizes = new HashSet<Point>();
 		public HashSet<VoronoiEdge> Edges = new HashSet<VoronoiEdge>();
 
-        public Dictionary<Vector, VoronoiCell> Cells { get; set; }
+        public Dictionary<Point, VoronoiCell> Cells { get; set; }
     }
 	public class VoronoiEdge
 	{
 		internal bool Done = false;
-		public Vector RightData, LeftData;
-		public Vector VVertexA = Fortune.VVUnkown, VVertexB = Fortune.VVUnkown;
-		public void AddVertex(Vector V)
+		public Point RightData, LeftData;
+		public Point VVertexA = Fortune.VVUnkown, VVertexB = Fortune.VVUnkown;
+		public void AddVertex(Point V)
 		{
 			if(VVertexA.Equals(Fortune.VVUnkown))
 				VVertexA = V;
@@ -35,43 +35,41 @@ namespace FortuneVoronoi
 		{
 			get {return VVertexA.Equals(Fortune.VVInfinite) || VVertexB.Equals(Fortune.VVInfinite);}
 		}
-		public Vector FixedPoint
+		public Point FixedPoint
 		{
 			get
 			{
 				if(IsInfinite)
-					return 0.5 * (LeftData+RightData);
+					return (LeftData+RightData) * 0.5;
 				if(!VVertexA.Equals(Fortune.VVInfinite))
 					return VVertexA;
 				return VVertexB;
 			}
 		}
-		public Vector DirectionVector
+		public Point DirectionVector
 		{
 			get
 			{
 				if(!IsPartlyInfinite)
-					return (VVertexB-VVertexA)*(1.0/Math.Sqrt(Vector.Dist(VVertexA,VVertexB)));
-				if(LeftData[0]==RightData[0])
+					return (VVertexB-VVertexA)*(1.0/Math.Sqrt(Point.DistSqr(VVertexA,VVertexB)));
+				if(LeftData.X==RightData.Y)
 				{
-					if(LeftData[1]<RightData[1])
-						return new Vector(-1,0);
-					return new Vector(1,0);
+					if(LeftData.Y<RightData.Y)
+						return new Point(-1,0);
+					return new Point(1,0);
 				}
-				Vector Erg = new Vector(-(RightData[1]-LeftData[1])/(RightData[0]-LeftData[0]),1);
-				if(RightData[0]<LeftData[0])
-					Erg.Multiply(-1);
-				Erg.Multiply(1.0/Math.Sqrt(Erg.SquaredLength));
-				return Erg;
+				Point erg = new Point(-(RightData.Y-LeftData.Y)/(RightData.X-LeftData.X),1);
+				if(RightData.X<LeftData.X)
+					erg *= -1;
+                erg *= 1/erg.Length;
+				return erg;
 			}
 		}
 		public double Length
 		{
 			get
 			{
-				if(IsPartlyInfinite)
-					return double.PositiveInfinity;
-				return Math.Sqrt(Vector.Dist(VVertexA,VVertexB));
+			    return IsPartlyInfinite ? double.PositiveInfinity : Math.Sqrt(Point.DistSqr(VVertexA,VVertexB));
 			}
 		}
 	}
@@ -225,7 +223,7 @@ namespace FortuneVoronoi
 				return Root;
 			}
 			//1. Find the node to be replaced
-			VNode C = VNode.FindDataNode(Root, ys, e.DataPoint[0]);
+			VNode C = VNode.FindDataNode(Root, ys, e.DataPoint.X);
 			//2. Create the subtree (ONE Edge, but two VEdgeNodes)
 			VoronoiEdge VE = new VoronoiEdge();
 			VE.LeftData = ((VDataNode)C).DataPoint;
@@ -235,9 +233,9 @@ namespace FortuneVoronoi
 			VG.Edges.Add(VE);
 
 			VNode SubRoot;
-			if(Math.Abs(VE.LeftData[1]-VE.RightData[1])<1e-10)
+			if(Math.Abs(VE.LeftData.Y-VE.RightData.Y)<1e-10)
 			{
-				if(VE.LeftData[0]<VE.RightData[0])
+				if(VE.LeftData.X<VE.RightData.X)
 				{
 					SubRoot = new VEdgeNode(VE,false);
 					SubRoot.Left = new VDataNode(VE.LeftData);
@@ -282,9 +280,9 @@ namespace FortuneVoronoi
 			eu = (VEdgeNode)b.Parent;
 			CircleCheckList = new VDataNode[] {a,c};
 			//1. Create the new Vertex
-			Vector VNew = new Vector(e.Center[0],e.Center[1]);
-//			VNew[0] = Fortune.ParabolicCut(a.DataPoint[0],a.DataPoint[1],c.DataPoint[0],c.DataPoint[1],ys);
-//			VNew[1] = (ys + a.DataPoint[1])/2 - 1/(2*(ys-a.DataPoint[1]))*(VNew[0]-a.DataPoint[0])*(VNew[0]-a.DataPoint[0]);
+			Point VNew = new Point(e.Center.X,e.Center.Y);
+//			VNew.X = Fortune.ParabolicCut(a.DataPoint.X,a.DataPoint.Y,c.DataPoint.X,c.DataPoint.Y,ys);
+//			VNew.Y = (ys + a.DataPoint.Y)/2 - 1/(2*(ys-a.DataPoint.Y))*(VNew.X-a.DataPoint.X)*(VNew.X-a.DataPoint.X);
 			VG.Vertizes.Add(VNew);
 			//2. Find out if a or c are in a distand part of the tree (the other is then b's sibling) and assign the new vertex
 			if(eu.Left==b) // c is sibling
@@ -343,9 +341,9 @@ namespace FortuneVoronoi
 			VDataNode r = VNode.RightDataNode(n);
 			if(l==null || r==null || l.DataPoint==r.DataPoint || l.DataPoint==n.DataPoint || n.DataPoint==r.DataPoint)
 				return null;
-			if(MathF.ccw(l.DataPoint[0],l.DataPoint[1],n.DataPoint[0],n.DataPoint[1],r.DataPoint[0],r.DataPoint[1],false)<=0)
+			if(MathF.ccw(l.DataPoint.X,l.DataPoint.Y,n.DataPoint.X,n.DataPoint.Y,r.DataPoint.X,r.DataPoint.Y,false)<=0)
 				return null;
-			Vector Center = Fortune.CircumCircleCenter(l.DataPoint,n.DataPoint,r.DataPoint);
+			Point Center = Fortune.CircumCircleCenter(l.DataPoint,n.DataPoint,r.DataPoint);
 			VCircleEvent VC = new VCircleEvent();
 			VC.NodeN = n;
 			VC.NodeL = l;
@@ -369,7 +367,7 @@ namespace FortuneVoronoi
 			}
 			if(VE.Flipped)
 			{
-				Vector T = VE.Edge.LeftData;
+				Point T = VE.Edge.LeftData;
 				VE.Edge.LeftData = VE.Edge.RightData;
 				VE.Edge.RightData = T;
 			}
@@ -381,11 +379,11 @@ namespace FortuneVoronoi
 
 	internal class VDataNode : VNode
 	{
-		public VDataNode(Vector DP)
+		public VDataNode(Point DP)
 		{
 			this.DataPoint = DP;
 		}
-		public Vector DataPoint;
+		public Point DataPoint;
 	}
 
 	internal class VEdgeNode : VNode
@@ -400,8 +398,8 @@ namespace FortuneVoronoi
 		public double Cut(double ys, double x)
 		{
 			if(!Flipped)
-				return Math.Round(x-Fortune.ParabolicCut(Edge.LeftData[0], Edge.LeftData[1], Edge.RightData[0], Edge.RightData[1], ys),10);
-			return Math.Round(x-Fortune.ParabolicCut(Edge.RightData[0], Edge.RightData[1], Edge.LeftData[0], Edge.LeftData[1], ys),10);
+				return Math.Round(x-Fortune.ParabolicCut(Edge.LeftData.X, Edge.LeftData.Y, Edge.RightData.X, Edge.RightData.Y, ys),10);
+			return Math.Round(x-Fortune.ParabolicCut(Edge.RightData.X, Edge.RightData.Y, Edge.LeftData.X, Edge.LeftData.Y, ys),10);
 		}
 	}
 
@@ -427,8 +425,8 @@ namespace FortuneVoronoi
 
 	internal class VDataEvent : VEvent
 	{
-		public Vector DataPoint;
-		public VDataEvent(Vector DP)
+		public Point DataPoint;
+		public VDataEvent(Point DP)
 		{
 			this.DataPoint = DP;
 		}
@@ -436,7 +434,7 @@ namespace FortuneVoronoi
 		{
 			get
 			{
-				return DataPoint[1];
+				return DataPoint.Y;
 			}
 		}
 
@@ -444,7 +442,7 @@ namespace FortuneVoronoi
 		{
 			get
 			{
-				return DataPoint[0];
+				return DataPoint.X;
 			}
 		}
 
@@ -453,12 +451,12 @@ namespace FortuneVoronoi
 	internal class VCircleEvent : VEvent
 	{
 		public VDataNode NodeN, NodeL, NodeR;
-		public Vector Center;
+		public Point Center;
 		public override double Y
 		{
 			get
 			{
-				return Math.Round(Center[1]+MathF.Dist(NodeN.DataPoint[0],NodeN.DataPoint[1],Center[0],Center[1]),10);
+				return Math.Round(Center.Y+MathF.Dist(NodeN.DataPoint.X,NodeN.DataPoint.Y,Center.X,Center.Y),10);
 			}
 		}
 
@@ -466,7 +464,7 @@ namespace FortuneVoronoi
 		{
 			get
 			{
-				return Center[0];
+				return Center.X;
 			}
 		}
 
@@ -475,8 +473,8 @@ namespace FortuneVoronoi
 
 	public abstract class Fortune
 	{
-		public static readonly Vector VVInfinite = new Vector(double.PositiveInfinity, double.PositiveInfinity);
-		public static readonly Vector VVUnkown = new Vector(double.NaN, double.NaN);
+		public static readonly Point VVInfinite = new Point(double.PositiveInfinity, double.PositiveInfinity);
+		public static readonly Point VVUnkown = new Point(double.NaN, double.NaN);
 		internal static double ParabolicCut(double x1, double y1, double x2, double y2, double ys)
 		{
 //			y1=-y1;
@@ -517,51 +515,51 @@ namespace FortuneVoronoi
 				return xs2;
 			return xs1;
 		}
-		internal static Vector CircumCircleCenter(Vector A, Vector B, Vector C)
+		internal static Point CircumCircleCenter(Point A, Point B, Point C)
 		{
 			if(A==B || B==C || A==C)
 				throw new Exception("Need three different points!");
-			double tx = (A[0] + C[0])/2;
-			double ty = (A[1] + C[1])/2;
+			double tx = (A.X + C.X)/2;
+			double ty = (A.Y + C.Y)/2;
 
-			double vx = (B[0] + C[0])/2;
-			double vy = (B[1] + C[1])/2;
+			double vx = (B.X + C.X)/2;
+			double vy = (B.Y + C.Y)/2;
 
 			double ux,uy,wx,wy;
 			
-			if(A[0] == C[0])
+			if(A.X == C.X)
 			{
 				ux = 1;
 				uy = 0;
 			}
 			else
 			{
-				ux = (C[1] - A[1])/(A[0] - C[0]);
+				ux = (C.Y - A.Y)/(A.X - C.X);
 				uy = 1;
 			}
 
-			if(B[0] == C[0])
+			if(B.X == C.X)
 			{
 				wx = -1;
 				wy = 0;
 			}
 			else
 			{
-				wx = (B[1] - C[1])/(B[0] - C[0]);
+				wx = (B.Y - C.Y)/(B.X - C.X);
 				wy = -1;
 			}
 
 			double alpha = (wy*(vx-tx)-wx*(vy - ty))/(ux*wy-wx*uy);
 
-			return new Vector(tx+alpha*ux,ty+alpha*uy);
+			return new Point(tx+alpha*ux,ty+alpha*uy);
 		}	
-		public static VoronoiGraph ComputeVoronoiGraph(Dictionary<Vector, VoronoiCell> cells)
+		public static VoronoiGraph ComputeVoronoiGraph(Dictionary<Point, VoronoiCell> cells)
 		{
 			BinaryPriorityQueue PQ = new BinaryPriorityQueue();
 			Hashtable CurrentCircles = new Hashtable();
 			VoronoiGraph VG = new VoronoiGraph();
 			VNode RootNode = null;
-			foreach(Vector V in cells.Keys)
+			foreach(Point V in cells.Keys)
 			{
                 PQ.Push(new VDataEvent(V));
 			}
@@ -597,10 +595,10 @@ namespace FortuneVoronoi
 				}
 				if(VE is VDataEvent)
 				{
-					Vector DP = ((VDataEvent)VE).DataPoint;
+					Point DP = ((VDataEvent)VE).DataPoint;
 					foreach(VCircleEvent VCE in CurrentCircles.Values)
 					{
-                        if (MathF.Dist(DP[0], DP[1], VCE.Center[0], VCE.Center[1]) < VCE.Y - VCE.Center[1] && Math.Abs(MathF.Dist(DP[0], DP[1], VCE.Center[0], VCE.Center[1]) - (VCE.Y - VCE.Center[1])) > 1e-10)
+                        if (MathF.Dist(DP.X, DP.Y, VCE.Center.X, VCE.Center.Y) < VCE.Y - VCE.Center.Y && Math.Abs(MathF.Dist(DP.X, DP.Y, VCE.Center.X, VCE.Center.Y) - (VCE.Y - VCE.Center.Y)) > 1e-10)
 							VCE.Valid = false;
 					}
 				}
@@ -613,9 +611,9 @@ namespace FortuneVoronoi
 				if(VE.VVertexB.Equals(Fortune.VVUnkown))
 				{
 					VE.AddVertex(Fortune.VVInfinite);
-					if(Math.Abs(VE.LeftData[1]-VE.RightData[1])<1e-10 && VE.LeftData[0]<VE.RightData[0])
+					if(Math.Abs(VE.LeftData.Y-VE.RightData.Y)<1e-10 && VE.LeftData.X<VE.RightData.X)
 					{
-						Vector T = VE.LeftData;
+						Point T = VE.LeftData;
 						VE.LeftData = VE.RightData;
 						VE.RightData = T;
 					}
@@ -626,16 +624,16 @@ namespace FortuneVoronoi
 
             foreach (var edge in VG.Edges)
             {
-                double ax = Math.Round(edge.VVertexA[0], Vector.Precision), ay = Math.Round(edge.VVertexA[1], Vector.Precision),
-                       bx = Math.Round(edge.VVertexB[0], Vector.Precision), by = Math.Round(edge.VVertexB[1], Vector.Precision);
+                double ax = Math.Round(edge.VVertexA.X, Vector.Precision), ay = Math.Round(edge.VVertexA.Y, Vector.Precision),
+                       bx = Math.Round(edge.VVertexB.X, Vector.Precision), by = Math.Round(edge.VVertexB.Y, Vector.Precision);
                 if (ax == bx && ay == by)
                 {
                     MinuteEdges.Add(edge);
                     continue;
                 }
 
-                edge.VVertexA = new Vector(ax, ay);
-                edge.VVertexB = new Vector(bx, by);
+                edge.VVertexA = new Point(ax, ay);
+                edge.VVertexB = new Point(bx, by);
             }
             
 			foreach(VoronoiEdge VE in MinuteEdges)
@@ -664,7 +662,7 @@ namespace FortuneVoronoi
 			VoronoiGraph VGErg = new VoronoiGraph();
 			foreach(VoronoiEdge VE in VG.Edges)
 			{
-				if(Math.Sqrt(Vector.Dist(VE.LeftData,VE.RightData))>=minLeftRightDist)
+				if(Math.Sqrt(Point.DistSqr(VE.LeftData,VE.RightData))>=minLeftRightDist)
 					VGErg.Edges.Add(VE);
 			}
 			foreach(VoronoiEdge VE in VGErg.Edges)
