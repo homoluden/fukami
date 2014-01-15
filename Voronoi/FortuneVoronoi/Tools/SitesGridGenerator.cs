@@ -33,24 +33,32 @@ namespace FortuneVoronoi.Tools
             var vertBorder = new List<IntSite>();
             for (int i = 0, j = 0; i < height; i++, j += resolution)
             {
-                vertBorder.Add(new IntSite{IsBorder = true, X = - halfX, Y = j - halfY});
-                vertBorder.Add(new IntSite { IsBorder = false, X = fullWidth - 1 - halfX, Y = j - halfY });
+                var randomShiftX = Rnd.Next(resolution - 3);
+                var randomShiftY = Rnd.Next(resolution - 3);
 
-                var randomShift = Rnd.Next(resolution - 1);
-                vertBorder.Add(new IntSite { IsBorder = false, X = 1 - halfX, Y = j + randomShift - halfY });
-                vertBorder.Add(new IntSite { IsBorder = true, X = fullWidth - halfX, Y = j + randomShift - halfY });
+                vertBorder.Add(new IntSite{IsBorder = true, X = - halfX + randomShiftX, Y = j + randomShiftY - halfY});
+                vertBorder.Add(new IntSite { IsBorder = false, X = fullWidth + randomShiftX - resolution - halfX, Y = j + randomShiftY - halfY });
+
+                randomShiftX = Rnd.Next(resolution - 2);
+                randomShiftY = Rnd.Next(resolution - 2);
+                vertBorder.Add(new IntSite { IsBorder = false, X = resolution + randomShiftX - halfX, Y = j + randomShiftY - halfY });
+                vertBorder.Add(new IntSite { IsBorder = true, X = fullWidth + randomShiftX - halfX, Y = j + randomShiftY - halfY });
             }
 
 
             var horBorder = new List<IntSite>();
             for (int i = 0, j = 0; i < width; i++, j += resolution)
             {
-                horBorder.Add(new IntSite { IsBorder = true, X = j - halfX, Y = -halfY });
-                horBorder.Add(new IntSite { IsBorder = false, X = j - halfX, Y = fullHeight - 1 - halfY });
+                var randomShiftX = Rnd.Next(resolution - 3);
+                var randomShiftY = Rnd.Next(resolution - 3);
 
-                var randomShift = Rnd.Next(resolution - 1);
-                horBorder.Add(new IntSite { IsBorder = false, X = j + randomShift - halfX, Y = 1 - halfY });
-                horBorder.Add(new IntSite { IsBorder = true, X = j + randomShift - halfX, Y = fullHeight - halfY });
+                horBorder.Add(new IntSite { IsBorder = true, X = j + randomShiftX - halfX, Y = -halfY + randomShiftY });
+                horBorder.Add(new IntSite { IsBorder = false, X = j + randomShiftX - halfX, Y = fullHeight + randomShiftY - resolution - halfY });
+
+                randomShiftX = Rnd.Next(resolution - 2);
+                randomShiftY = Rnd.Next(resolution - 2);
+                horBorder.Add(new IntSite { IsBorder = false, X = j + randomShiftX - halfX, Y = resolution + randomShiftY - halfY });
+                horBorder.Add(new IntSite { IsBorder = true, X = j + randomShiftX - halfX, Y = fullHeight + randomShiftY - halfY });
             }
 
             var resultingSites = new List<IntSite>(internalSitesCount + vertBorder.Count + horBorder.Count);
@@ -59,8 +67,8 @@ namespace FortuneVoronoi.Tools
                 resultingSites.Add(new IntSite
                     {
                         IsBorder = false,
-                        X = Rnd.Next(- halfX + 2, halfX - 1),
-                        Y = Rnd.Next(-halfY + 2, halfY - 1)
+                        X = Rnd.Next(-halfX + resolution + 1, halfX - resolution - 1),
+                        Y = Rnd.Next(-halfY + resolution + 1, halfY - resolution - 1)
                     });
             }
 

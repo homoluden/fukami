@@ -16,6 +16,7 @@ using FortuneVoronoi.Common;
 using VectorF = FortuneVoronoi.Common.Vector;
 using FortuneVoronoi;
 using VoroTest.Helpers;
+using FortuneVoronoi.Tools;
 
 namespace VoroTest
 {
@@ -37,32 +38,32 @@ namespace VoroTest
             MainCanvas.Children.Clear();
 
             var cells = new Dictionary<VectorF, VoronoiCell>();
+
+            const int internalSitesCnt = 400;
+            const int horBorderSitesCnt = 50;
+            const int vertBorderSitesCnt = 50;
+            const int resolution = 24;
+            const double realWidth = 1000.0;
+            const double realHeight = 700.0;
+            var dx = realWidth/horBorderSitesCnt/resolution;
+            var dy = realHeight/vertBorderSitesCnt/resolution;
             
-            for (int i = 0; i < 400; i++)
+            var sitesGrid = SitesGridGenerator.GenerateSymmetricIntGrid(horBorderSitesCnt, vertBorderSitesCnt, resolution, internalSitesCnt);
+
+            foreach (var site in sitesGrid)
             {
-                var v = new VectorF((500f * ((float)_rnd.NextDouble() - 0.5f)), (500f * ((float)_rnd.NextDouble() - 0.5f)));
-                cells.Add(v, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(v[0], v[1]), IsVisible = true });
+                var x = site.X*dx;
+                var y = site.Y*dy;
+                var v = new VectorF(x, y);
+
+                if (cells.ContainsKey(v))
+                {
+                    continue;
+                }
+
+                cells.Add(v, new VoronoiCell{ IsVisible = !site.IsBorder, Site = new FortuneVoronoi.Common.Point(x, y)});
             }
             
-            var edgeV = new VectorF(-300f, 0f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });
-
-            edgeV = new VectorF(300f, 0f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });
-            edgeV = new VectorF(0f, 300f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });
-            edgeV = new VectorF(0f, -300f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });
-
-            edgeV = new VectorF(-300f, -300f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });
-            edgeV = new VectorF(300f, -300f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });
-            edgeV = new VectorF(-300f, 300f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });
-            edgeV = new VectorF(300f, 300f);
-            cells.Add(edgeV, new VoronoiCell { Site = new FortuneVoronoi.Common.Point(edgeV[0], edgeV[1]) });            
-
             var graph = Fortune.ComputeVoronoiGraph(cells);
 
             foreach (var cell in cells.Values.Where(c => c.IsVisible && c.IsClosed))
