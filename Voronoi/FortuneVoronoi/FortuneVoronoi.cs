@@ -33,7 +33,7 @@ namespace FortuneVoronoi
 		}
 		public bool IsPartlyInfinite
 		{
-            get { return VVertexA == Fortune.VVInfinite && VVertexB == Fortune.VVInfinite; }
+            get { return VVertexA == Fortune.VVInfinite || VVertexB == Fortune.VVInfinite; }
 		}
 		public Point FixedPoint
 		{

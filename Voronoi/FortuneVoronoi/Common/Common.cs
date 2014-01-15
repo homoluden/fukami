@@ -35,7 +35,7 @@ namespace FortuneVoronoi.Common
         /// </summary>
         public static Point operator -(Point A, Point B)
         {
-            return new Point(A.X + B.X, A.Y + B.Y);
+            return new Point(A.X - B.X, A.Y - B.Y);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace FortuneVoronoi.Common
         /// </summary>
         public static Point operator +(Point A, Point B)
         {
-            return new Point(A.X - B.X, A.Y - B.Y);
+            return new Point(A.X + B.X, A.Y + B.Y);
         }
 
         /// <summary>
