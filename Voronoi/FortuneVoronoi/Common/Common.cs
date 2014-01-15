@@ -4,12 +4,6 @@ using System.Text;
 
 namespace FortuneVoronoi.Common
 {
-    public struct VorSite
-    {
-        public Point Vertice;
-        public bool IsVisible;
-    }
-
     public struct VorSiteF
     {
         public PointF Vertice;

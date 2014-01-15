@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using FortuneVoronoi.Common;
 using MathF = FortuneVoronoi.Tools.Math;
 
-namespace BenTools.Mathematics
+namespace FortuneVoronoi
 {
 	public class VoronoiGraph
 	{
 		public HashSet<Vector> Vertizes = new HashSet<Vector>();
 		public HashSet<VoronoiEdge> Edges = new HashSet<VoronoiEdge>();
 
-        public Dictionary<Vector, IList<VoronoiEdge>> Cells { get; set; }
+        public Dictionary<Vector, VoronoiCell> Cells { get; set; }
     }
 	public class VoronoiEdge
 	{
@@ -555,15 +555,15 @@ namespace BenTools.Mathematics
 
 			return new Vector(tx+alpha*ux,ty+alpha*uy);
 		}	
-		public static VoronoiGraph ComputeVoronoiGraph(IEnumerable Datapoints)
+		public static VoronoiGraph ComputeVoronoiGraph(Dictionary<Vector, VoronoiCell> cells)
 		{
 			BinaryPriorityQueue PQ = new BinaryPriorityQueue();
 			Hashtable CurrentCircles = new Hashtable();
 			VoronoiGraph VG = new VoronoiGraph();
 			VNode RootNode = null;
-			foreach(Vector V in Datapoints)
+			foreach(Vector V in cells.Keys)
 			{
-				PQ.Push(new VDataEvent(V));
+                PQ.Push(new VDataEvent(V));
 			}
 			while(PQ.Count>0)
 			{
@@ -641,37 +641,17 @@ namespace BenTools.Mathematics
 			foreach(VoronoiEdge VE in MinuteEdges)
                 VG.Edges.Remove(VE);
 
-            var cells = new Dictionary<Vector, IList<VoronoiEdge>>();
             foreach (var edge in VG.Edges)
             {
-                IList<VoronoiEdge> cellRightEdges, cellLeftEdges;
-                if (cells.ContainsKey(edge.RightData))
-                {
-                    cellRightEdges = cells[edge.RightData];
-                }
-                else
-                {
-                    cellRightEdges = new List<VoronoiEdge>();
-                    cells.Add(edge.RightData, cellRightEdges);
-                }
-                
-                if (cells.ContainsKey(edge.LeftData))
-                {
-                    cellLeftEdges = cells[edge.LeftData];
-                }
-                else
-                {
-                    cellLeftEdges = new List<VoronoiEdge>();
-                    cells.Add(edge.LeftData, cellLeftEdges);
-                }
+                VoronoiCell rightCell = cells[edge.RightData], leftCell = cells[edge.LeftData];
 
-                if (!cellRightEdges.Contains(edge))
+                if (!rightCell.Edges.Contains(edge))
                 {
-                    cellRightEdges.Add(edge);
+                    rightCell.Edges.Add(edge);
                 }
-                if (!cellLeftEdges.Contains(edge))
+                if (!leftCell.Edges.Contains(edge))
                 {
-                    cellLeftEdges.Add(edge);
+                    leftCell.Edges.Add(edge);
                 }
             }
 

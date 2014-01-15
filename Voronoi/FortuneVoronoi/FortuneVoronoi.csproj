@@ -107,6 +107,7 @@
     <Compile Include="Common\Vector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="VoronoiCell.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
