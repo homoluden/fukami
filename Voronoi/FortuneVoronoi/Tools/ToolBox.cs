@@ -2,28 +2,12 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text;
+using FortuneVoronoi.Common;
+using MathF = FortuneVoronoi.Tools.Math;
 
-namespace BenTools.Mathematics
+namespace FortuneVoronoi.Tools
 {
-    public struct Point {
-        public Point(double x, double y)
-        {
-            X = x; Y = y;
-        }
-        public double X;
-        public double Y;
-    }
-    
-    public struct PointF {
-        public PointF(float x, float y)
-        {
-            X = x; Y = y;
-        }
-        public float X;
-        public float Y;
-    }
-
-	public abstract class MathTools
+    public abstract class Math
 	{
 		/// <summary>
 		/// One static Random instance for use in the entire application
@@ -31,7 +15,7 @@ namespace BenTools.Mathematics
 		public static readonly Random R = new Random((int)DateTime.Now.Ticks);
 		public static double Dist(double x1, double y1, double x2, double y2)
 		{
-			return Math.Sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+			return System.Math.Sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
 		}
 		public static IList Shuffle(IList S, Random R, bool Copy)
 		{
@@ -291,7 +275,7 @@ namespace BenTools.Mathematics
 				hue = 360 - (-hue % 360);
 			hue = hue % 360;
 
-			int i = (int)Math.Floor(hue/60.0),j;
+            int i = (int)System.Math.Floor(hue / 60.0), j;
 			double[] C;
 			if(OldCol==null || OldCol.Length!=3)
 				C = new double[3];
@@ -341,25 +325,25 @@ namespace BenTools.Mathematics
 			if(x==0)
 			{
 				if(y>0)
-					return Math.PI/2.0;
+                    return System.Math.PI / 2.0;
 				if(y==0)
 					return 0;
 				if(y<0)
-					return Math.PI*3.0/2.0;
+                    return System.Math.PI * 3.0 / 2.0;
 			}
-			double atan = Math.Atan(y/x);
+            double atan = System.Math.Atan(y / x);
 			if(x>0 && y>=0)
 				return atan;
 			if(x>0 && y<0)
-				return 2*Math.PI+atan;
-			return Math.PI+atan;
+                return 2 * System.Math.PI + atan;
+            return System.Math.PI + atan;
 		}
 		public static double GetAngleTheta(double x, double y)
 		{
 			double dx, dy, ax, ay;
 			double t;
-			dx = x; ax = Math.Abs(dx);
-			dy = y; ay = Math.Abs(dy);
+            dx = x; ax = System.Math.Abs(dx);
+            dy = y; ay = System.Math.Abs(dy);
 			t = (ax+ay == 0) ? 0 : dy/(ax+ay);
 			if (dx < 0) t = 2-t; else if (dy < 0) t = 4+t;
 			return t*90.0;		

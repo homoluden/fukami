@@ -91,6 +91,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\Common.cs" />
     <Compile Include="FortuneVoronoi.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -100,13 +101,14 @@
     <Compile Include="PriorityQueue.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ToolBox.cs">
+    <Compile Include="Tools\ToolBox.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Vector.cs">
+    <Compile Include="Common\Vector.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

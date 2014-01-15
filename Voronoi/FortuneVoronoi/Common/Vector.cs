@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using BenTools.Data;
+using MathF = FortuneVoronoi.Tools.Math;
 
-namespace BenTools.Mathematics
+namespace FortuneVoronoi.Common
 {
 	/// <summary>
 	/// A vector class, implementing all interesting features of vectors
@@ -47,7 +48,7 @@ namespace BenTools.Mathematics
 		{
 			if(S[0]!='(' || S[S.Length-1]!=')')
 				throw new Exception("Formatfehler!");
-			string[] P = MathTools.HighLevelSplit(S.Substring(1,S.Length-2),';');
+			string[] P = MathF.HighLevelSplit(S.Substring(1,S.Length-2),';');
 			data = new double[P.Length];
 			int i;
 			for(i=0;i<data.Length;i++)
@@ -116,7 +117,7 @@ namespace BenTools.Mathematics
 			int i;
 			for(i=0;i<data.Length;i++)
 			{
-				this[i] = Min + (Max-Min)*MathTools.R.NextDouble();
+				this[i] = Min + (Max-Min)*MathF.R.NextDouble();
 			}
 		}
 		/// <summary>
@@ -129,7 +130,7 @@ namespace BenTools.Mathematics
 			int i;
 			for(i=0;i<data.Length;i++)
 			{
-				this[i] = MinMax[0][i] + (MinMax[1][i]-MinMax[0][i])*MathTools.R.NextDouble();
+                this[i] = MinMax[0][i] + (MinMax[1][i] - MinMax[0][i]) * MathF.R.NextDouble();
 			}
 		}
 		/// <summary>

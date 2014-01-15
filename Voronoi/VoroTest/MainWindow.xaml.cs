@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UnityEngine;
 using BenTools.Mathematics;
+using FortuneVoronoi.Common;
+using VectorF = FortuneVoronoi.Common.Vector;
 
 namespace VoroTest
 {
@@ -22,7 +24,7 @@ namespace VoroTest
     public partial class MainWindow : Window
     {
         System.Random _rnd = new System.Random(DateTime.Now.Millisecond);
-        BenTools.Mathematics.Vector[] _verts;
+        VectorF[] _verts;
 
         public MainWindow()
         {
@@ -33,21 +35,21 @@ namespace VoroTest
         {
             MainCanvas.Children.Clear();
 
-            _verts = new BenTools.Mathematics.Vector[408];
+            _verts = new VectorF[408];
 
             for (int i = 0; i < 400; i++)
             {
-                _verts[i] = new BenTools.Mathematics.Vector((500f * ((float)_rnd.NextDouble() - 0.5f)), (500f * ((float)_rnd.NextDouble() - 0.5f)));
+                _verts[i] = new VectorF((500f * ((float)_rnd.NextDouble() - 0.5f)), (500f * ((float)_rnd.NextDouble() - 0.5f)));
             }
-            _verts[400] = new BenTools.Mathematics.Vector(-300f, 0f);
-            _verts[401] = new BenTools.Mathematics.Vector(300f, 0f);
-            _verts[402] = new BenTools.Mathematics.Vector(0f, 300f);
-            _verts[403] = new BenTools.Mathematics.Vector(0f, -300f);
+            _verts[400] = new VectorF(-300f, 0f);
+            _verts[401] = new VectorF(300f, 0f);
+            _verts[402] = new VectorF(0f, 300f);
+            _verts[403] = new VectorF(0f, -300f);
 
-            _verts[404] = new BenTools.Mathematics.Vector(-300f, -300f);
-            _verts[405] = new BenTools.Mathematics.Vector(300f, -300f);
-            _verts[406] = new BenTools.Mathematics.Vector(-300f, 300f);
-            _verts[407] = new BenTools.Mathematics.Vector(300f, 300f);
+            _verts[404] = new VectorF(-300f, -300f);
+            _verts[405] = new VectorF(300f, -300f);
+            _verts[406] = new VectorF(-300f, 300f);
+            _verts[407] = new VectorF(300f, 300f);
 
             var graph = Fortune.ComputeVoronoiGraph(_verts);
 
@@ -55,7 +57,7 @@ namespace VoroTest
             //{
             //    var edges = graph.Edges.Where(edge => edge.LeftData.Equals(v) || edge.RightData.Equals(v)).ToArray();
 
-            //    var cell = new Tuple<BenTools.Mathematics.Vector, IEnumerable<VoronoiEdge>, bool>(v,
+            //    var cell = new Tuple<VectorF, IEnumerable<VoronoiEdge>, bool>(v,
             //                                                                  edges,
             //                                                                  !edges.Any(ed => ed.IsInfinite || ed.IsPartlyInfinite));
 
@@ -63,7 +65,7 @@ namespace VoroTest
             //}).ToArray();
 
             var cells = graph.Cells.Select(c =>
-                new Tuple<BenTools.Mathematics.Vector, IList<VoronoiEdge>, bool>(
+                new Tuple<VectorF, IList<VoronoiEdge>, bool>(
                     c.Key,
                     c.Value,
                     !c.Value.Any(ed => ed.IsInfinite || ed.IsPartlyInfinite)));
@@ -105,7 +107,7 @@ namespace VoroTest
 
         }
 
-        private Polygon CreateTriangle(BenTools.Mathematics.Vector v1, BenTools.Mathematics.Vector v2, BenTools.Mathematics.Vector v3)
+        private Polygon CreateTriangle(VectorF v1, VectorF v2, VectorF v3)
         {
             var poly = new Polygon
             {

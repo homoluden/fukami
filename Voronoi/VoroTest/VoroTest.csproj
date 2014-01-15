@@ -45,7 +45,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\XNA-Voronoi-Diagram\bin\Debug\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\..\Unity3D\Editor\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

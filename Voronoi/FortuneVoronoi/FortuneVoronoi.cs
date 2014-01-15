@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using BenTools.Data;
 using System.Collections.Generic;
+using FortuneVoronoi.Common;
+using MathF = FortuneVoronoi.Tools.Math;
 
 namespace BenTools.Mathematics
 {
@@ -341,7 +343,7 @@ namespace BenTools.Mathematics
 			VDataNode r = VNode.RightDataNode(n);
 			if(l==null || r==null || l.DataPoint==r.DataPoint || l.DataPoint==n.DataPoint || n.DataPoint==r.DataPoint)
 				return null;
-			if(MathTools.ccw(l.DataPoint[0],l.DataPoint[1],n.DataPoint[0],n.DataPoint[1],r.DataPoint[0],r.DataPoint[1],false)<=0)
+			if(MathF.ccw(l.DataPoint[0],l.DataPoint[1],n.DataPoint[0],n.DataPoint[1],r.DataPoint[0],r.DataPoint[1],false)<=0)
 				return null;
 			Vector Center = Fortune.CircumCircleCenter(l.DataPoint,n.DataPoint,r.DataPoint);
 			VCircleEvent VC = new VCircleEvent();
@@ -456,7 +458,7 @@ namespace BenTools.Mathematics
 		{
 			get
 			{
-				return Math.Round(Center[1]+MathTools.Dist(NodeN.DataPoint[0],NodeN.DataPoint[1],Center[0],Center[1]),10);
+				return Math.Round(Center[1]+MathF.Dist(NodeN.DataPoint[0],NodeN.DataPoint[1],Center[0],Center[1]),10);
 			}
 		}
 
@@ -598,7 +600,7 @@ namespace BenTools.Mathematics
 					Vector DP = ((VDataEvent)VE).DataPoint;
 					foreach(VCircleEvent VCE in CurrentCircles.Values)
 					{
-						if(MathTools.Dist(DP[0],DP[1],VCE.Center[0],VCE.Center[1])<VCE.Y-VCE.Center[1] && Math.Abs(MathTools.Dist(DP[0],DP[1],VCE.Center[0],VCE.Center[1])-(VCE.Y-VCE.Center[1]))>1e-10)
+                        if (MathF.Dist(DP[0], DP[1], VCE.Center[0], VCE.Center[1]) < VCE.Y - VCE.Center[1] && Math.Abs(MathF.Dist(DP[0], DP[1], VCE.Center[0], VCE.Center[1]) - (VCE.Y - VCE.Center[1])) > 1e-10)
 							VCE.Valid = false;
 					}
 				}
