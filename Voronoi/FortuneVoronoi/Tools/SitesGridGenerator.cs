@@ -47,7 +47,7 @@ namespace FortuneVoronoi.Tools
 
 
             var horBorder = new List<IntSite>();
-            for (int i = 0, j = 0; i < width; i++, j += resolution)
+            for (int i = 0, j = 0; i < width-1; i++, j += resolution)
             {
                 var randomShiftX = Rnd.Next(resolution - 3);
                 var randomShiftY = Rnd.Next(resolution - 3);
@@ -62,13 +62,14 @@ namespace FortuneVoronoi.Tools
             }
 
             var resultingSites = new List<IntSite>(internalSitesCount + vertBorder.Count + horBorder.Count);
+            var internalSitesPadding = resolution * 3;
             for (int i = 0; i < internalSitesCount; i++)
             {
                 resultingSites.Add(new IntSite
                     {
                         IsBorder = false,
-                        X = Rnd.Next(-halfX + resolution + 1, halfX - resolution - 1),
-                        Y = Rnd.Next(-halfY + resolution + 1, halfY - resolution - 1)
+                        X = Rnd.Next(-halfX + internalSitesPadding, halfX - internalSitesPadding),
+                        Y = Rnd.Next(-halfY + internalSitesPadding, halfY - internalSitesPadding)
                     });
             }
 

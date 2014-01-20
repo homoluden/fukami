@@ -12,7 +12,7 @@ namespace FortuneVoronoi
 		public HashSet<Point> Vertizes = new HashSet<Point>();
 		public HashSet<VoronoiEdge> Edges = new HashSet<VoronoiEdge>();
 
-        public Dictionary<Point, VoronoiCell> Cells { get; set; }
+        public Dictionary<Point, VoronoiCell> Cells;
     }
 	public class VoronoiEdge
 	{
@@ -72,7 +72,9 @@ namespace FortuneVoronoi
 			    return IsPartlyInfinite ? double.PositiveInfinity : Math.Sqrt(Point.DistSqr(VVertexA,VVertexB));
 			}
 		}
-	}
+
+        public bool IsBorder = false;
+    }
 	
 	// VoronoiVertex or VoronoiDataPoint are represented as Vector
 

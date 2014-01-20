@@ -32,25 +32,54 @@ namespace VoroTest.Helpers
 
         public static Polygon[] CreateTriangles(this VoronoiCell cell)
         { 
-            
             var site = cell.Site;
-            var triangles = new Polygon[cell.Edges.Count];
-
-            for (int i = 0; i < cell.Edges.Count; i++)
+            var triangles = new List<Polygon>(cell.Edges.Count);
+            var hiddenEdges = cell.Edges.Where(e => e.IsBorder).ToList();
+            var visibleEdges = cell.Edges.Where(e => !e.IsBorder);
+            
+            foreach(var edge in visibleEdges)
             {
-                var edge = cell.Edges[i];
-
-                if (edge.IsInfinite || edge.IsPartlyInfinite)
+                
+                if (edge.IsBorder)
                 {
                     continue;
                 }
 
-                Polygon triangle = CreateTriangle(site, edge.VVertexA, edge.VVertexB);
+                Point a = site, b, c;
 
-                triangles[i] = triangle;
+                bool hideA = false, hideB = false;
+                if (hiddenEdges.Any(e => e.VVertexA == edge.VVertexA || e.VVertexB == edge.VVertexA))
+                {
+                    hideA = true;
+                }
+                if (hiddenEdges.Any(e => e.VVertexA == edge.VVertexB || e.VVertexB == edge.VVertexB))
+                {
+                    hideB = true;
+                }
+
+                if (hideA && hideB)
+                {
+                    continue;
+                }
+                else if (!hideA && !hideB)
+                {
+                    b = edge.VVertexA;
+                    c = edge.VVertexB;
+                }
+                else
+                {
+                    var opposite = edge.LeftData != site ? edge.LeftData : edge.RightData;
+                    var mid = (site + opposite)*0.5;
+                    b = new Point(mid.X, mid.Y);
+                    c = hideB ? edge.VVertexA : edge.VVertexB;
+                }
+
+                Polygon triangle = CreateTriangle(a, b, c);
+
+                triangles.Add(triangle);
             }
             
-            return triangles;
+            return triangles.ToArray();
         }
 
     }

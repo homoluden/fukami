@@ -72,6 +72,13 @@ namespace VoroTest
                 _rnd.NextBytes(rgbFill);
                 var fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(rgbFill[0], rgbFill[1], rgbFill[2]));
 
+                cell.Edges.ForEach(edge =>
+                {
+                    if (cells[edge.LeftData].IsVisible != cells[edge.RightData].IsVisible)
+                    {
+                        edge.IsBorder = true;
+                    }
+                });
                 var triangles = cell.CreateTriangles();
                 foreach (var triangle in triangles)
                 {
