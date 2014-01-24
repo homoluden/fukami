@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BenTools.Data;
 
 namespace FortuneVoronoi.Tools
 {
@@ -30,38 +31,26 @@ namespace FortuneVoronoi.Tools
             var halfX = (int) System.Math.Floor(fullWidth*0.5);
             var halfY = (int)System.Math.Floor(fullHeight * 0.5);
 
-            var vertBorder = new List<IntSite>();
-            for (int i = 0, j = 0; i < height; i++, j += resolution)
+            var cornerSites = new HashSet<IntSite>();
+            for (int i = 1, j = resolution; i < height; i++, j += resolution)
             {
-                var randomShiftX = Rnd.Next(resolution - 3);
-                var randomShiftY = Rnd.Next(resolution - 3);
-
-                vertBorder.Add(new IntSite{IsBorder = true, X = - halfX + randomShiftX, Y = j + randomShiftY - halfY});
-                vertBorder.Add(new IntSite { IsBorder = false, X = fullWidth + randomShiftX - resolution - halfX, Y = j + randomShiftY - halfY });
-
-                randomShiftX = Rnd.Next(resolution - 2);
-                randomShiftY = Rnd.Next(resolution - 2);
-                vertBorder.Add(new IntSite { IsBorder = false, X = resolution + randomShiftX - halfX, Y = j + randomShiftY - halfY });
-                vertBorder.Add(new IntSite { IsBorder = true, X = fullWidth + randomShiftX - halfX, Y = j + randomShiftY - halfY });
+                cornerSites.Add(new IntSite{ IsBorder = true, X = 0, Y = j });
+                cornerSites.Add(new IntSite { IsBorder = false, X = resolution, Y = j });
             }
 
+            cornerSites.Add(new IntSite { IsBorder = true, X = 0, Y = 0 }); // Left-Bottom Corner
 
-            var horBorder = new List<IntSite>();
-            for (int i = 0, j = 0; i < width; i++, j += resolution)
+            for (int i = 1, j = resolution; i < width; i++, j += resolution)
             {
-                var randomShiftX = Rnd.Next(resolution - 3);
-                var randomShiftY = Rnd.Next(resolution - 3);
-
-                horBorder.Add(new IntSite { IsBorder = true, X = j + randomShiftX - halfX, Y = -halfY + randomShiftY });
-                horBorder.Add(new IntSite { IsBorder = false, X = j + randomShiftX - halfX, Y = fullHeight + randomShiftY - resolution - halfY });
-
-                randomShiftX = Rnd.Next(resolution - 2);
-                randomShiftY = Rnd.Next(resolution - 2);
-                horBorder.Add(new IntSite { IsBorder = false, X = j + randomShiftX - halfX, Y = resolution + randomShiftY - halfY });
-                horBorder.Add(new IntSite { IsBorder = true, X = j + randomShiftX - halfX, Y = fullHeight + randomShiftY - halfY });
+                cornerSites.Add(new IntSite { IsBorder = true, X = j, Y = 0 });
+                cornerSites.Add(new IntSite { IsBorder = false, X = j, Y = resolution });
             }
 
-            var resultingSites = new List<IntSite>(internalSitesCount + vertBorder.Count + horBorder.Count);
+            var randomizedCorner = Randomize(Shift(cornerSites, -halfX, -halfY), resolution);
+
+            var symBorder = MirrorVertically(MirrorHorizontally(randomizedCorner));
+
+            var resultingSites = new List<IntSite>(internalSitesCount + symBorder.Count);
             for (int i = 0; i < internalSitesCount; i++)
             {
                 resultingSites.Add(new IntSite
@@ -72,10 +61,56 @@ namespace FortuneVoronoi.Tools
                     });
             }
 
-            resultingSites.AddRange(vertBorder);
-            resultingSites.AddRange(horBorder);
+
+            resultingSites.AddRange(symBorder);
 
             return resultingSites;
+        }
+
+        public static List<IntSite> Randomize(IEnumerable<IntSite> regularGrid, int resolution)
+        {
+            var result = new List<IntSite>();
+            foreach (var site in regularGrid)
+            {
+                result.Add(new IntSite{ IsBorder = site.IsBorder, X = site.X + Rnd.Next(0, resolution), Y = site.Y + Rnd.Next(0, resolution)});
+            }
+
+            return result;
+        }
+
+        public static List<IntSite> MirrorVertically(IEnumerable<IntSite> originalSites)
+        {
+            var result = new List<IntSite>();
+            foreach (var site in originalSites)
+            {
+                result.Add(new IntSite{ IsBorder = site.IsBorder, X = site.X, Y = - site.Y});
+                result.Add(site);
+            }
+
+            return result;
+        }
+
+        public static List<IntSite> MirrorHorizontally(IEnumerable<IntSite> originalSites)
+        {
+            var result = new List<IntSite>();
+            foreach (var site in originalSites)
+            {
+                result.Add(new IntSite{ IsBorder = site.IsBorder, X = - site.X, Y = site.Y});
+                result.Add(site);
+            }
+
+            return result;
+        }
+
+        public static List<IntSite> Shift(IEnumerable<IntSite> originalSites, int dx, int dy)
+        {
+            var result = new List<IntSite>();
+            foreach (var site in originalSites)
+            {
+                result.Add(new IntSite{ IsBorder = site.IsBorder, X = site.X + dx, Y = site.Y + dy});
+            }
+
+            return result;
         }
     }
 }
