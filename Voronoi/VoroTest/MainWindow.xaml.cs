@@ -39,10 +39,10 @@ namespace VoroTest
 
             var cells = new Dictionary<FortuneVoronoi.Common.Point, VoronoiCell>();
 
-            const int internalSitesCnt = 800;
+            const int internalSitesCnt = 1600;
             const int horBorderSitesCnt = 50;
             const int vertBorderSitesCnt = 50;
-            const int resolution = 24;
+            const int resolution = 16;
             const double realWidth = 1000.0;
             const double realHeight = 700.0;
             var dx = realWidth/horBorderSitesCnt/resolution;
