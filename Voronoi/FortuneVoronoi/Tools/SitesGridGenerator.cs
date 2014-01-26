@@ -31,38 +31,54 @@ namespace FortuneVoronoi.Tools
             var halfX = (int) System.Math.Floor(fullWidth*0.5);
             var halfY = (int)System.Math.Floor(fullHeight * 0.5);
 
-            var cornerSites = new HashSet<IntSite>();
-            for (int i = 1, j = resolution; i < height; i++, j += resolution)
+            var margin = 2;
+
+            var vBorderSites = new HashSet<IntSite>();
+            for (int i = margin, j = resolution; i < height - margin; i++, j += resolution)
             {
-                cornerSites.Add(new IntSite{ IsBorder = true, X = 0, Y = j });
-                cornerSites.Add(new IntSite { IsBorder = false, X = resolution, Y = j });
+                vBorderSites.Add(new IntSite{ IsBorder = true, X = 0, Y = j });
+                vBorderSites.Add(new IntSite { IsBorder = false, X = resolution, Y = j });
             }
 
-            cornerSites.Add(new IntSite { IsBorder = true, X = 0, Y = 0 }); // Left-Bottom Corner
+            //cornerSites.Add(new IntSite { IsBorder = true, X = 0, Y = 0 }); // Left-Bottom Corner
 
-            for (int i = 1, j = resolution; i < width; i++, j += resolution)
+            var vBorderRepeated = RepeatHorizontally(Randomize(Shift(vBorderSites, -halfX, -halfY),resolution - 1), fullWidth - resolution);
+
+            var hBorderSites = new HashSet<IntSite>();
+            for (int i = margin, j = resolution; i < width - margin; i++, j += resolution)
             {
-                cornerSites.Add(new IntSite { IsBorder = true, X = j, Y = 0 });
-                cornerSites.Add(new IntSite { IsBorder = false, X = j, Y = resolution });
+                hBorderSites.Add(new IntSite { IsBorder = true, X = j, Y = 0 });
+                hBorderSites.Add(new IntSite { IsBorder = false, X = j, Y = resolution });
             }
 
-            var randomizedCorner = Randomize(Shift(cornerSites, -halfX, -halfY), resolution);
+            var hBorderRepeated = RepeatVertically(Randomize(Shift(hBorderSites, -halfX, -halfY), resolution / 2 + 2), fullHeight - resolution);
 
-            var symBorder = MirrorVertically(MirrorHorizontally(randomizedCorner));
+            var borderWithoutCorners = new HashSet<IntSite>();
+            borderWithoutCorners.AddRange(vBorderRepeated);
+            borderWithoutCorners.AddRange(hBorderRepeated);
 
-            var resultingSites = new List<IntSite>(internalSitesCount + symBorder.Count);
+            var resultingSites = new List<IntSite>(internalSitesCount + borderWithoutCorners.Count);
+
+            resultingSites.AddRange(new[]
+            {
+                new IntSite{ IsBorder = true, X = -halfX, Y = -halfY},
+                new IntSite{ IsBorder = true, X = -halfX, Y = halfY},
+                new IntSite{ IsBorder = true, X = halfX, Y = -halfY},
+                    new IntSite{ IsBorder = true, X = halfX, Y = halfY},
+            });
+
             for (int i = 0; i < internalSitesCount; i++)
             {
                 resultingSites.Add(new IntSite
                     {
                         IsBorder = false,
-                        X = Rnd.Next(-halfX + resolution + 1, halfX - resolution - 1),
-                        Y = Rnd.Next(-halfY + resolution + 1, halfY - resolution - 1)
+                        X = Rnd.Next(-halfX + resolution + margin, halfX - resolution - margin),
+                        Y = Rnd.Next(-halfY + resolution + margin, halfY - resolution - margin)
                     });
             }
 
 
-            resultingSites.AddRange(symBorder);
+            resultingSites.AddRange(borderWithoutCorners);
 
             return resultingSites;
         }
@@ -78,24 +94,24 @@ namespace FortuneVoronoi.Tools
             return result;
         }
 
-        public static List<IntSite> MirrorVertically(IEnumerable<IntSite> originalSites)
+        public static List<IntSite> RepeatVertically(IEnumerable<IntSite> originalSites, int deltaY)
         {
             var result = new List<IntSite>();
             foreach (var site in originalSites)
             {
-                result.Add(new IntSite{ IsBorder = site.IsBorder, X = site.X, Y = - site.Y});
+                result.Add(new IntSite{ IsBorder = !site.IsBorder, X = site.X, Y = site.Y + deltaY});
                 result.Add(site);
             }
 
             return result;
         }
 
-        public static List<IntSite> MirrorHorizontally(IEnumerable<IntSite> originalSites)
+        public static List<IntSite> RepeatHorizontally(IEnumerable<IntSite> originalSites, int deltaX)
         {
             var result = new List<IntSite>();
             foreach (var site in originalSites)
             {
-                result.Add(new IntSite{ IsBorder = site.IsBorder, X = - site.X, Y = site.Y});
+                result.Add(new IntSite{ IsBorder = !site.IsBorder, X = site.X + deltaX, Y = site.Y});
                 result.Add(site);
             }
 
