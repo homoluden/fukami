@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BenTools.Data;
+using FortuneVoronoi.Common;
 
 namespace FortuneVoronoi.Tools
 {
@@ -25,7 +26,7 @@ namespace FortuneVoronoi.Tools
             margin = 2;
         }
 
-        public static BenTools.Data.HashSet<IntSite> GenerateTileBorder(int width, int height, int resolution)
+        public static BenTools.Data.HashSet<IntSite> GenerateTileBorder(int width, int height, int resolution, Func<int,int,IntPoint> randomGenerator)
         {
             if (width < 1 || height < 1)
             {
@@ -39,14 +40,27 @@ namespace FortuneVoronoi.Tools
             int fullWidth, fullHeight, halfX, halfY, margin;
             CalculateGridParameters(width, height, resolution, out fullWidth, out fullHeight, out halfX, out halfY, out margin);
 
+            int deviation = resolution / 2 - 1;
+
             var vBorderSites = new BenTools.Data.HashSet<IntSite>();
             for (int i = margin, j = resolution; i < height - margin; i++, j += resolution)
             {
-                vBorderSites.Add(new IntSite{ IsBorder = true, X = 0, Y = j });
+                vBorderSites.Add(new IntSite { IsBorder = true, X = 0, Y = j });
                 vBorderSites.Add(new IntSite { IsBorder = false, X = resolution, Y = j });
             }
 
-            var vBorderRepeated = RepeatHorizontally(Randomize(Shift(vBorderSites, -halfX, -halfY),resolution - 1), fullWidth - resolution);
+            var vBorderShifted = Shift(vBorderSites, -halfX, -halfY);
+            var randomVBorder = new BenTools.Data.HashSet<IntSite>();
+
+            vBorderShifted.ForEach(s => {
+                var randomShift = randomGenerator(-deviation, deviation);
+                s.X += randomShift.X;
+                s.Y += randomShift.Y;
+                
+                randomVBorder.Add(s);
+            });
+
+            var vBorderRepeated = RepeatHorizontally(randomVBorder, fullWidth - resolution);
 
             var hBorderSites = new BenTools.Data.HashSet<IntSite>();
             for (int i = margin, j = resolution; i < width - margin; i++, j += resolution)
@@ -55,13 +69,24 @@ namespace FortuneVoronoi.Tools
                 hBorderSites.Add(new IntSite { IsBorder = false, X = j, Y = resolution });
             }
 
-            var hBorderRepeated = RepeatVertically(Randomize(Shift(hBorderSites, -halfX, -halfY), resolution / 2 + 2), fullHeight - resolution);
+            var hBorderShifted = Shift(hBorderSites, -halfX, -halfY);
+            var randomHBorder = new BenTools.Data.HashSet<IntSite>();
+            hBorderShifted.ForEach(s =>
+            {
+                var randomShift = randomGenerator(-deviation, deviation);
+                s.X += randomShift.X;
+                s.Y += randomShift.Y;
 
-            var borderWithoutCorners = new BenTools.Data.HashSet<IntSite>();
-            borderWithoutCorners.AddRange(vBorderRepeated);
-            borderWithoutCorners.AddRange(hBorderRepeated);
+                randomHBorder.Add(s);
+            });
 
-            borderWithoutCorners.AddRange(new[]
+            var hBorderRepeated = RepeatVertically(randomHBorder, fullHeight - resolution);
+
+            var resultingBorder = new BenTools.Data.HashSet<IntSite>();
+            resultingBorder.AddRange(vBorderRepeated);
+            resultingBorder.AddRange(hBorderRepeated);
+
+            resultingBorder.AddRange(new[]
             {
                 new IntSite{ IsBorder = true, X = -halfX, Y = -halfY},
                 new IntSite{ IsBorder = true, X = -halfX, Y = halfY},
@@ -69,10 +94,15 @@ namespace FortuneVoronoi.Tools
                     new IntSite{ IsBorder = true, X = halfX, Y = halfY},
             });
 
-            return borderWithoutCorners;
+            return resultingBorder;
         }
 
-        public static BenTools.Data.HashSet<IntSite> GenerateInternalSites(int width, int height, int resolution, int internalSitesCount)
+        public static BenTools.Data.HashSet<IntSite> GenerateTileBorder(int width, int height, int resolution)
+        {
+            return GenerateTileBorder(width, height, resolution, (min, max) => new IntPoint(Rnd.Next(min, max), Rnd.Next(min, max)));
+        }
+
+        public static BenTools.Data.HashSet<IntSite> GenerateInternalSites(int width, int height, int resolution, int internalSitesCount, Func<int, int, IntPoint> randomGenerator)
         {
             if (width < 1 || height < 1 || internalSitesCount < 1)
             {
@@ -85,21 +115,30 @@ namespace FortuneVoronoi.Tools
 
             int fullWidth, fullHeight, halfX, halfY, margin;
             CalculateGridParameters(width, height, resolution, out fullWidth, out fullHeight, out halfX, out halfY, out margin);
+            
+            int deviation = resolution / 2 - 1;
 
             var randomSites = new BenTools.Data.HashSet<IntSite>();
 
             for (int i = 0; i < internalSitesCount; i++)
             {
+                var randomPoint = randomGenerator(-halfX + resolution + margin, halfX - resolution - margin);
+
                 randomSites.Add(new IntSite
                 {
                     IsBorder = false,
-                    X = Rnd.Next(-halfX + resolution + margin, halfX - resolution - margin),
-                    Y = Rnd.Next(-halfY + resolution + margin, halfY - resolution - margin)
+                    X = randomPoint.X,
+                    Y = randomPoint.Y
                 });
             }
 
 
             return randomSites;
+        }
+
+        public static BenTools.Data.HashSet<IntSite> GenerateInternalSites(int width, int height, int resolution, int internalSitesCount)
+        {
+            return GenerateInternalSites(width, height, resolution, internalSitesCount, (min, max) => new IntPoint(Rnd.Next(min, max), Rnd.Next(min, max)));
         }
 
         public static List<IntSite> Randomize(IEnumerable<IntSite> regularGrid, int resolution)
