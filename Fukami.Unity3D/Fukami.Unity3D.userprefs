@@ -1,8 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\VoronoiTest.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Helpers\VoronoiHelper.cs">
     <Files>
-      <File FileName="Assets\Scripts\VoronoiTest.cs" Line="113" Column="3" />
+      <File FileName="Assets\Scripts\VoronoiMap.cs" Line="48" Column="55" />
+      <File FileName="Assets\Scripts\Helpers\VoronoiHelper.cs" Line="33" Column="56" />
+      <File FileName="d:\_Docs\GitHub\fukami\Fukami.Unity3D\Assets\Scripts\VorCell.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
