@@ -2,107 +2,59 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BenTools.Mathematics;
+
+using FortuneVoronoi;
+using FortuneVoronoi.Common;
+using FortuneVoronoi.Tools;
 
 namespace Assets.Scripts.Helpers
 {
 
-    public class Vector2Comparer : IEqualityComparer<Vector2>
-    {
-        public bool Equals(Vector2 x, Vector2 y)
-        {
-            return x.Equals(y);
-        }
-
-        public int GetHashCode(Vector2 obj)
-        {
-            return obj.GetHashCode();
-        }
-    }
-
-
-    public struct VorCellInfo
-    {
-        public Vector2 Site;
-        public IEnumerable<VoronoiEdge> Edges;
-        public bool IsClosed;
-    }
-
-    public struct VorEdgeInfo
-    {
-        public Vector2 Start;
-        public Vector2 End;
-    }
-
     public sealed class VoronoiHelper
     {
         #region Properties
-
-        private uint _xBoundVerts = 50;
-        public uint XBoundVertsCount
-        {
-            get { return _xBoundVerts; }
-            set { _xBoundVerts = value; }
-        }
-
-        private uint _yBoundVerts = 50;
-        public uint YBoundVertsCount
-        {
-            get { return _yBoundVerts; }
-            set { _yBoundVerts = value; }
-        }
-
+		
+		public int HorBorderSitesCnt = 50;
+		public int VertBorderSitesCnt = 50;
+		public int Resolution = 16;
 
         #endregion // Properties
 
 
         #region Public Methods
-        public VorCellInfo[] GenerateRectVorMap(Vector2 size, int visibleCellsCount)
+		public VoronoiCell[] GenerateRectVorMap(Vector2 size, int internalCellsCount)
         {
             var mapWidth = size.x;
             var mapHeight = size.y;
 
-            var dx = mapWidth / XBoundVertsCount;
-            var dy = mapHeight / YBoundVertsCount;
-            var xMax = mapWidth * 0.5f;
-            var yMax = mapHeight * 0.5f;
+			var cells = new Dictionary<FortuneVoronoi.Common.Point, VoronoiCell>();
 
-            var visibleVerts = new List<Vector2>(visibleCellsCount);
-            var boundingVerts = new List<Vector2>();
+			var dx = mapWidth / HorBorderSitesCnt / Resolution;
+			var dy = mapHeight / VertBorderSitesCnt / Resolution;
+			
+			var borderSites = SitesGridGenerator.GenerateTileBorder(HorBorderSitesCnt, VertBorderSitesCnt, Resolution,
+			                                                        (min, max) => new IntPoint(Random.Range(min,max), Random.Range(min,max)));
+			
+			var internalSites = SitesGridGenerator.GenerateInternalSites(HorBorderSitesCnt, VertBorderSitesCnt, Resolution, internalCellsCount,
+			                                                             (min, max) => new IntPoint(Random.Range(min,max), Random.Range(min,max)));
+			
+			foreach (var site in borderSites.Concat(internalSites))
+			{
+				var x = site.X*dx;
+				var y = site.Y*dy;
+				var v = new FortuneVoronoi.Common.Point(x, y);
+				
+				if (cells.ContainsKey(v))
+				{
+					continue;
+				}
+				
+				cells.Add(v, new VoronoiCell{ IsVisible = !site.IsBorder, Site = new FortuneVoronoi.Common.Point(x, y)});
+			}
+			
+			var graph = Fortune.ComputeVoronoiGraph(cells);
 
-            for (int i = 0; i < XBoundVertsCount / 2; i++)
-            {
-                var x = i * dx;
-                boundingVerts.AddRange(new[] { new Vector2(x, yMax), new Vector2(-x, yMax), new Vector2(x, -yMax), new Vector2(-x, -yMax) });
-            }
-
-            for (int i = 0; i < YBoundVertsCount / 2; i++)
-            {
-                var y = i * dy;
-                boundingVerts.AddRange(new[] { new Vector2(xMax, y), new Vector2(xMax, -y), new Vector2(-xMax, y), new Vector2(-xMax, -y) });
-            }
-
-            boundingVerts = boundingVerts.Distinct(new Vector2Comparer()).ToList();
-
-            for (int i = 0; i < visibleCellsCount; i++)
-            {
-                //visibleVerts.Add(new Vector2(Random.Range(-xMax + dx, xMax - dx), Random.Range(-yMax + dy, yMax - dy)));
-                visibleVerts.Add(new Vector2(Random.Range(-xMax + dx * 0.5f, xMax - dx * 0.5f), Random.Range(-yMax + dy * 0.5f, yMax - dy * 0.5f)));
-            }
-
-            var graph = Fortune.ComputeVoronoiGraph(boundingVerts.Concat(visibleVerts).Select(v => new BenTools.Mathematics.Vector(v.x, v.y)));
-
-
-            var cells = graph.Cells.Select(c =>
-                                            new VorCellInfo
-                                            {
-                                                Site = new Vector2((float)c.Key[0], (float)c.Key[1]),
-                                                Edges = c.Value,
-                                                IsClosed = !c.Value.Any(ed => ed.IsInfinite || ed.IsPartlyInfinite)
-                                            }).ToList();
-            cells.RemoveAll(c => boundingVerts.Contains(c.Site));
-
-            return cells.Where(c => c.IsClosed).ToArray();
+			return cells.Values.Where(c => c.IsVisible && c.IsClosed).ToArray();
         }
 
         #endregion // Public Methods

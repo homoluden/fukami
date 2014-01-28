@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using Assets.Scripts.Helpers;
-using BenTools.Mathematics;
 using System.Collections.Generic;
 using System.Linq;
+
+using FortuneVoronoi;
 
 public class VoronoiMap : MonoBehaviour
 {
     #region Fields
 
-    VoronoiGraph _graph;
     float _timeLeft;
     List<GameObject> _vorCells = new List<GameObject>();
 
@@ -22,10 +22,6 @@ public class VoronoiMap : MonoBehaviour
     public Vector2 MapSize = new Vector2(700f, 300f);
 
     public int CellsCount = 500;
-
-    // The count of vertices on horizontal and vertical borders. Border vertices will not be represented in Voronoi Map
-    public int XBoundVertsCount = 60;
-    public int YBoundVertsCount = 60;
 
     #endregion
 
@@ -58,12 +54,12 @@ public class VoronoiMap : MonoBehaviour
         }
     }
 
-    private void AddSiteObject(VorCellInfo cellData, int cellIndex)
+	private void AddSiteObject(VoronoiCell cellData, int cellIndex)
     {
         var cellObject = new GameObject(string.Format("VorCell_{0}", cellIndex)) { tag = gameObject.tag, layer = gameObject.layer};
 
         cellObject.transform.parent = gameObject.transform;
-        cellObject.transform.localPosition = new Vector3(cellData.Site.x, cellData.Site.y);
+		cellObject.transform.localPosition = new Vector3((float)cellData.Site.X, (float)cellData.Site.Y);
 
         var vorCell = cellObject.AddComponent<VorCell>();
 

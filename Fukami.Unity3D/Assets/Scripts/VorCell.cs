@@ -3,12 +3,14 @@ using System.Collections;
 using Assets.Scripts.Helpers;
 using System.Linq;
 
+using FortuneVoronoi;
+
 public class VorCell : MonoBehaviour
 {
 
     #region Properties
 
-    public VorCellInfo CellData;
+	public VoronoiCell CellData;
     public Material MeshMaterial;
 
     #endregion
@@ -20,30 +22,30 @@ public class VorCell : MonoBehaviour
 
         var edges = CellData.Edges.Select(e =>
         {
-            var vA = new Vector2((float)e.VVertexA[0], (float)e.VVertexA[1]);
-            var vB = new Vector2((float)e.VVertexB[0], (float)e.VVertexB[1]);
+            var vA = e.VVertexA;
+            var vB = e.VVertexB;
             var dA = vA - CellData.Site;
             var dB = vB - CellData.Site;
-            var atanA = Mathf.Atan2(dA.y, dA.x);
-            var atanB = Mathf.Atan2(dB.y, dB.x);
+			var atanA = Mathf.Atan2((float)dA.Y, (float)dA.X);
+			var atanB = Mathf.Atan2((float)dB.Y, (float)dB.X);
 
 
-            VorEdgeInfo edge;
+            VoronoiEdge edge;
             if (atanA > 0f)
             {
                 if (atanA < atanB)
                 {
-                    edge = new VorEdgeInfo { Start = vB - CellData.Site, End = vA - CellData.Site };
+					edge = new VoronoiEdge { VVertexA = vB - CellData.Site, VVertexB = vA - CellData.Site };
                 }
                 else
                 {
                     if (atanA - atanB > Mathf.PI)
                     {
-                        edge = new VorEdgeInfo { Start = vB - CellData.Site, End = vA - CellData.Site };
+						edge = new VoronoiEdge { VVertexA = vB - CellData.Site, VVertexB = vA - CellData.Site };
                     }
                     else
                     {
-                        edge = new VorEdgeInfo { Start = vA - CellData.Site, End = vB - CellData.Site };
+						edge = new VoronoiEdge { VVertexA = vA - CellData.Site, VVertexB = vB - CellData.Site };
                     }
                 }
             }
@@ -51,17 +53,17 @@ public class VorCell : MonoBehaviour
             {
                 if (atanA > atanB)
                 {
-                    edge = new VorEdgeInfo { Start = vA - CellData.Site, End = vB - CellData.Site };
+					edge = new VoronoiEdge { VVertexA = vA - CellData.Site, VVertexB = vB - CellData.Site };
                 }
                 else
                 {
                     if (atanB - atanA > Mathf.PI)
                     {
-                        edge = new VorEdgeInfo { Start = vA - CellData.Site, End = vB - CellData.Site };
+						edge = new VoronoiEdge { VVertexA = vA - CellData.Site, VVertexB = vB - CellData.Site };
                     }
                     else
                     {
-                        edge = new VorEdgeInfo { Start = vB - CellData.Site, End = vA - CellData.Site };
+						edge = new VoronoiEdge { VVertexA = vB - CellData.Site, VVertexB = vA - CellData.Site };
                     }
                 }
             }
@@ -69,10 +71,10 @@ public class VorCell : MonoBehaviour
             return edge;
         }).ToArray();
 
-        var maxDistFromCenter = edges.Max(e => Mathf.Max(e.Start.magnitude, e.End.magnitude));
-        if (edges[0].Start.magnitude > maxDistFromCenter)
+		var maxDistFromCenter = edges.Max(e => Mathf.Max((float)e.VVertexA.Length, (float)e.VVertexB.Length));
+		if (edges[0].VVertexA.Length > maxDistFromCenter)
         {
-            maxDistFromCenter = edges[0].Start.magnitude;
+			maxDistFromCenter = (float)edges[0].VVertexA.Length;
         }
         maxDistFromCenter *= 2; // To make sure that UV coords will be in [-0.5; 0.5] range
 
@@ -89,17 +91,17 @@ public class VorCell : MonoBehaviour
 
         var shift = new Vector2(0.5f, 0.5f); // Shifting texture coords origin 
         uvs[0] = shift;
-        uvs[1] = (edges[0].Start + shift) / maxDistFromCenter;
+		uvs[1] = new Vector2(((float)edges[0].VVertexA.X + shift.x) / maxDistFromCenter, ((float)edges[0].VVertexA.Y + shift.y) / maxDistFromCenter);
 
         for (int i = 0; i < edges.Length; i++)
         {
             var edge = edges[i];
 
-            cellCorners[2 * i + 1] = new Vector3(edges[i].Start.x, edges[i].Start.y, 0f);
-            cellCorners[2 * i + 2] = new Vector3(edges[i].End.x, edges[i].End.y, 0f);
+			cellCorners[2 * i + 1] = new Vector3((float)edges[i].VVertexA.X, (float)edges[i].VVertexA.Y, 0f);
+			cellCorners[2 * i + 2] = new Vector3((float)edges[i].VVertexB.X, (float)edges[i].VVertexB.Y, 0f);
 
-            var uvStart = (edge.Start) / maxDistFromCenter + shift;
-            var uvEnd = (edge.End) / maxDistFromCenter + shift;
+			var uvStart = shift + new Vector2((float)edge.VVertexA.X / maxDistFromCenter, (float)edge.VVertexA.Y / maxDistFromCenter);
+			var uvEnd = shift + new Vector2((float)edge.VVertexB.X / maxDistFromCenter, (float)edge.VVertexB.Y / maxDistFromCenter);
             uvs[2 * i + 1] = new Vector3(uvStart.x, uvStart.y, 0f);
             uvs[2 * i + 2] = new Vector3(uvEnd.x, uvEnd.y, 0f);
 
