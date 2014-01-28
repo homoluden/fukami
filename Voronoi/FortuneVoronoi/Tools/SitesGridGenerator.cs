@@ -25,7 +25,7 @@ namespace FortuneVoronoi.Tools
             margin = 2;
         }
 
-        public static HashSet<IntSite> GenerateTileBorder(int width, int height, int resolution)
+        public static BenTools.Data.HashSet<IntSite> GenerateTileBorder(int width, int height, int resolution)
         {
             if (width < 1 || height < 1)
             {
@@ -39,7 +39,7 @@ namespace FortuneVoronoi.Tools
             int fullWidth, fullHeight, halfX, halfY, margin;
             CalculateGridParameters(width, height, resolution, out fullWidth, out fullHeight, out halfX, out halfY, out margin);
 
-            var vBorderSites = new HashSet<IntSite>();
+            var vBorderSites = new BenTools.Data.HashSet<IntSite>();
             for (int i = margin, j = resolution; i < height - margin; i++, j += resolution)
             {
                 vBorderSites.Add(new IntSite{ IsBorder = true, X = 0, Y = j });
@@ -48,7 +48,7 @@ namespace FortuneVoronoi.Tools
 
             var vBorderRepeated = RepeatHorizontally(Randomize(Shift(vBorderSites, -halfX, -halfY),resolution - 1), fullWidth - resolution);
 
-            var hBorderSites = new HashSet<IntSite>();
+            var hBorderSites = new BenTools.Data.HashSet<IntSite>();
             for (int i = margin, j = resolution; i < width - margin; i++, j += resolution)
             {
                 hBorderSites.Add(new IntSite { IsBorder = true, X = j, Y = 0 });
@@ -57,7 +57,7 @@ namespace FortuneVoronoi.Tools
 
             var hBorderRepeated = RepeatVertically(Randomize(Shift(hBorderSites, -halfX, -halfY), resolution / 2 + 2), fullHeight - resolution);
 
-            var borderWithoutCorners = new HashSet<IntSite>();
+            var borderWithoutCorners = new BenTools.Data.HashSet<IntSite>();
             borderWithoutCorners.AddRange(vBorderRepeated);
             borderWithoutCorners.AddRange(hBorderRepeated);
 
@@ -72,7 +72,7 @@ namespace FortuneVoronoi.Tools
             return borderWithoutCorners;
         }
 
-        public static HashSet<IntSite> GenerateInternalSites(int width, int height, int resolution, int internalSitesCount)
+        public static BenTools.Data.HashSet<IntSite> GenerateInternalSites(int width, int height, int resolution, int internalSitesCount)
         {
             if (width < 1 || height < 1 || internalSitesCount < 1)
             {
@@ -86,7 +86,7 @@ namespace FortuneVoronoi.Tools
             int fullWidth, fullHeight, halfX, halfY, margin;
             CalculateGridParameters(width, height, resolution, out fullWidth, out fullHeight, out halfX, out halfY, out margin);
 
-            var randomSites = new HashSet<IntSite>();
+            var randomSites = new BenTools.Data.HashSet<IntSite>();
 
             for (int i = 0; i < internalSitesCount; i++)
             {

@@ -9,8 +9,8 @@ namespace FortuneVoronoi
 {
 	public class VoronoiGraph
 	{
-		public HashSet<Point> Vertizes = new HashSet<Point>();
-		public HashSet<VoronoiEdge> Edges = new HashSet<VoronoiEdge>();
+		public BenTools.Data.HashSet<Point> Vertizes = new BenTools.Data.HashSet<Point>();
+		public BenTools.Data.HashSet<VoronoiEdge> Edges = new BenTools.Data.HashSet<VoronoiEdge>();
 
         public Dictionary<Point, VoronoiCell> Cells { get; set; }
     }
