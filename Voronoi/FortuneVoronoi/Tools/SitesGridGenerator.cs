@@ -15,23 +15,29 @@ namespace FortuneVoronoi.Tools
             public bool IsBorder;
         }
 
-        public static List<IntSite> GenerateSymmetricIntGrid(int width, int height, int resolution, int internalSitesCount)
+        private static void CalculateGridParameters(int width, int height, int resolution, out int fullWidth, out int fullHeight, out int halfX, out int halfY, out int margin)
+        { 
+            fullWidth = width * resolution;
+            fullHeight = height * resolution;
+            halfX = (int)System.Math.Floor(fullWidth * 0.5);
+            halfY = (int)System.Math.Floor(fullHeight * 0.5);
+
+            margin = 2;
+        }
+
+        public static HashSet<IntSite> GenerateTileBorder(int width, int height, int resolution)
         {
-            if (width < 1 || height < 1 || internalSitesCount < 1)
+            if (width < 1 || height < 1)
             {
-                throw new ArgumentException("'width', 'height', 'internalSitesCount' should be greater than zero.");
+                throw new ArgumentException("'width', 'height' should be greater than zero.");
             }
             if (resolution < 2)
             {
                 throw new ArgumentException("'resolution' should be greater than one.");
             }
 
-            var fullWidth = width*resolution;
-            var fullHeight = height*resolution;
-            var halfX = (int) System.Math.Floor(fullWidth*0.5);
-            var halfY = (int)System.Math.Floor(fullHeight * 0.5);
-
-            var margin = 2;
+            int fullWidth, fullHeight, halfX, halfY, margin;
+            CalculateGridParameters(width, height, resolution, out fullWidth, out fullHeight, out halfX, out halfY, out margin);
 
             var vBorderSites = new HashSet<IntSite>();
             for (int i = margin, j = resolution; i < height - margin; i++, j += resolution)
@@ -39,8 +45,6 @@ namespace FortuneVoronoi.Tools
                 vBorderSites.Add(new IntSite{ IsBorder = true, X = 0, Y = j });
                 vBorderSites.Add(new IntSite { IsBorder = false, X = resolution, Y = j });
             }
-
-            //cornerSites.Add(new IntSite { IsBorder = true, X = 0, Y = 0 }); // Left-Bottom Corner
 
             var vBorderRepeated = RepeatHorizontally(Randomize(Shift(vBorderSites, -halfX, -halfY),resolution - 1), fullWidth - resolution);
 
@@ -57,9 +61,7 @@ namespace FortuneVoronoi.Tools
             borderWithoutCorners.AddRange(vBorderRepeated);
             borderWithoutCorners.AddRange(hBorderRepeated);
 
-            var resultingSites = new List<IntSite>(internalSitesCount + borderWithoutCorners.Count);
-
-            resultingSites.AddRange(new[]
+            borderWithoutCorners.AddRange(new[]
             {
                 new IntSite{ IsBorder = true, X = -halfX, Y = -halfY},
                 new IntSite{ IsBorder = true, X = -halfX, Y = halfY},
@@ -67,28 +69,48 @@ namespace FortuneVoronoi.Tools
                     new IntSite{ IsBorder = true, X = halfX, Y = halfY},
             });
 
+            return borderWithoutCorners;
+        }
+
+        public static HashSet<IntSite> GenerateInternalSites(int width, int height, int resolution, int internalSitesCount)
+        {
+            if (width < 1 || height < 1 || internalSitesCount < 1)
+            {
+                throw new ArgumentException("'width', 'height', 'internalSitesCount' should be greater than zero.");
+            }
+            if (resolution < 2)
+            {
+                throw new ArgumentException("'resolution' should be greater than one.");
+            }
+
+            int fullWidth, fullHeight, halfX, halfY, margin;
+            CalculateGridParameters(width, height, resolution, out fullWidth, out fullHeight, out halfX, out halfY, out margin);
+
+            var randomSites = new HashSet<IntSite>();
+
             for (int i = 0; i < internalSitesCount; i++)
             {
-                resultingSites.Add(new IntSite
-                    {
-                        IsBorder = false,
-                        X = Rnd.Next(-halfX + resolution + margin, halfX - resolution - margin),
-                        Y = Rnd.Next(-halfY + resolution + margin, halfY - resolution - margin)
-                    });
+                randomSites.Add(new IntSite
+                {
+                    IsBorder = false,
+                    X = Rnd.Next(-halfX + resolution + margin, halfX - resolution - margin),
+                    Y = Rnd.Next(-halfY + resolution + margin, halfY - resolution - margin)
+                });
             }
 
 
-            resultingSites.AddRange(borderWithoutCorners);
-
-            return resultingSites;
+            return randomSites;
         }
 
         public static List<IntSite> Randomize(IEnumerable<IntSite> regularGrid, int resolution)
         {
             var result = new List<IntSite>();
+
+            int deviation = resolution / 2;
+
             foreach (var site in regularGrid)
             {
-                result.Add(new IntSite{ IsBorder = site.IsBorder, X = site.X + Rnd.Next(0, resolution), Y = site.Y + Rnd.Next(0, resolution)});
+                result.Add(new IntSite { IsBorder = site.IsBorder, X = site.X + Rnd.Next(-deviation, deviation), Y = site.Y + Rnd.Next(-deviation, deviation) });
             }
 
             return result;

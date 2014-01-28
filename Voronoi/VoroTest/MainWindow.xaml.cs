@@ -48,9 +48,11 @@ namespace VoroTest
             var dx = realWidth/horBorderSitesCnt/resolution;
             var dy = realHeight/vertBorderSitesCnt/resolution;
             
-            var sitesGrid = SitesGridGenerator.GenerateSymmetricIntGrid(horBorderSitesCnt, vertBorderSitesCnt, resolution, internalSitesCnt);
+            var borderSites = SitesGridGenerator.GenerateTileBorder(horBorderSitesCnt, vertBorderSitesCnt, resolution);
 
-            foreach (var site in sitesGrid)
+            var internalSites = SitesGridGenerator.GenerateInternalSites(horBorderSitesCnt, vertBorderSitesCnt, resolution, internalSitesCnt);
+
+            foreach (var site in borderSites.Concat(internalSites))
             {
                 var x = site.X*dx;
                 var y = site.Y*dy;
