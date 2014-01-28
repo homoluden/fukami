@@ -13,7 +13,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using UnityEngine;
 using FortuneVoronoi.Common;
-using VectorF = FortuneVoronoi.Common.Vector;
 using FortuneVoronoi;
 using VoroTest.Helpers;
 using FortuneVoronoi.Tools;
@@ -26,7 +25,6 @@ namespace VoroTest
     public partial class MainWindow : Window
     {
         System.Random _rnd = new System.Random(DateTime.Now.Millisecond);
-        VectorF[] _verts;
 
         public MainWindow()
         {
