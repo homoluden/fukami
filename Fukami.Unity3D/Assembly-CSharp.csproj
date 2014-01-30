@@ -84,6 +84,7 @@
      <Compile Include="Assets\Scripts\SmoothGrow.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
      <Compile Include="Assets\Scripts\VorCell.cs" />
+     <Compile Include="Assets\Scripts\VorTile.cs" />
      <Compile Include="Assets\Scripts\VoronoiMap.cs" />
      <None Include="Assets\Resources\dna.txt" />
      <None Include="Assets\Resources\Json\GeneConditions.txt" />

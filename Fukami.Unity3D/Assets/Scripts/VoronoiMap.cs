@@ -9,79 +9,84 @@ public class VoronoiMap : MonoBehaviour
 {
     #region Fields
 
-    float _timeLeft;
-    List<GameObject> _vorCells = new List<GameObject>();
+    List<GameObject> _vorTiles = new List<GameObject>();
 
     #endregion
 
     #region Properties
 
-    public float RegeneratePeriod = 3f;
     public Material[] MeshMaterials;
 
-    public Vector2 MapSize = new Vector2(700f, 300f);
+    public Vector2 TileSize = new Vector2(300f, 100f);
+	public int[] TileGridDimensions = new []{
+		150, // Major X Ticks count
+		50,  // Major Y Ticks count
+		16   // Minor Ticks resolution (count of ticks between Major ticks)
+	};
+	public int MapWidth = 10;
+	public int MapHeight = 1;
+	public int MapSeed = 120683; // Just a magic number
 
-    public int CellsCount = 500;
+    public int MaxCellsCount = 500;
 
     #endregion
 
     // Use this for initialization
     void Start()
     {
-        if (CellsCount < 1)
+        if (MaxCellsCount < 2)
         {
-            CellsCount = 500;
+            MaxCellsCount = 500;
         }
+		MapWidth = Mathf.Abs (MapWidth); // Make sure it is positive
+		MapHeight = Mathf.Abs (MapHeight); // Make sure it is positive
 
-        _timeLeft = RegeneratePeriod;
         GenerateVorMap();
     }
 
     private void GenerateVorMap()
     {
-        foreach (var cell in _vorCells)
+        foreach (var cell in _vorTiles)
         {
             Destroy(cell, Time.fixedDeltaTime);
         }
-        _vorCells.Clear();
+        _vorTiles.Clear();
 
-        var cells = VoronoiHelper.Instance.GenerateRectVorMap(MapSize, CellsCount);
+		VoronoiHelper.Instance.TilesTag = gameObject.tag;
+		VoronoiHelper.Instance.TilesLayer = gameObject.layer;
+		VoronoiHelper.Instance.TilesSize = TileSize;
+		VoronoiHelper.Instance.InternalSitesCountRange [0] = MaxCellsCount / 2;
+		VoronoiHelper.Instance.InternalSitesCountRange [1] = MaxCellsCount;
 
-        int j = 0;
-        foreach (var cell in cells)
-        {
-            AddSiteObject(cell, j++);
-        }
-    }
+		Random.seed = MapSeed;
 
-	private void AddSiteObject(VoronoiCell cellData, int cellIndex)
-    {
-        var cellObject = new GameObject(string.Format("VorCell_{0}", cellIndex)) { tag = gameObject.tag, layer = gameObject.layer};
+		var dx = TileSize.x / TileGridDimensions [0] / TileGridDimensions [2];
+		var dy = TileSize.y / TileGridDimensions [1] / TileGridDimensions [2];
 
-        cellObject.transform.parent = gameObject.transform;
-		cellObject.transform.localPosition = new Vector3((float)cellData.Site.X, (float)cellData.Site.Y);
+		for (int i = 0; i < MapWidth; i++) {
+			var xOffset = TileSize.x*i + dx;
 
-        var vorCell = cellObject.AddComponent<VorCell>();
+			for (int j = 0; j < MapHeight; j++) {
+				var yOffset = TileSize.y * j + dy;
+				var baseIndex = MapWidth*i + j;
 
-        vorCell.CellData = cellData;
+				var newTile0 = VoronoiHelper.Instance.CreateTileObject(baseIndex, Random.Range(int.MinValue, int.MaxValue),
+				                                                       gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
+				var newTile1 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 1, Random.Range(int.MinValue, int.MaxValue),
+				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
+				var newTile2 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 2, Random.Range(int.MinValue, int.MaxValue),
+				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
+				var newTile3 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 3, Random.Range(int.MinValue, int.MaxValue),
+				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
 
-        if (MeshMaterials.Length > 0)
-        {
-            vorCell.MeshMaterial = MeshMaterials[Random.Range(0, MeshMaterials.Length )];
-        }
-
-        _vorCells.Add(cellObject);
-
+				_vorTiles.AddRange(new []{newTile0,newTile1,newTile2,newTile3});
+			}
+		}
     }
 
     // Update is called once per frame
     void Update()
     {
-        _timeLeft -= Time.deltaTime;
-        if (_timeLeft < 0f)
-        {
-            _timeLeft = RegeneratePeriod;
-            GenerateVorMap();
-        }
+        
     }
 }

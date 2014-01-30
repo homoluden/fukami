@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,43 +13,80 @@ namespace Assets.Scripts.Helpers
     public sealed class VoronoiHelper
     {
         #region Properties
-		
+
+		public string TilesTag;
+		public int TilesLayer;
+		public Vector2 TilesSize;
+
+		public readonly int[] InternalSitesCountRange = new []{200, 500};
+
 		public int HorBorderSitesCnt = 50;
 		public int VertBorderSitesCnt = 50;
 		public int Resolution = 16;
+		public Dictionary<Vector2, BenTools.Data.HashSet<SitesGridGenerator.IntSite>> CachedBorders = new Dictionary<Vector2, BenTools.Data.HashSet<SitesGridGenerator.IntSite>> ();
 
         #endregion // Properties
 
 
         #region Public Methods
-		public VoronoiCell[] GenerateRectVorMap(Vector2 size, int internalCellsCount)
+				
+		public GameObject CreateTileObject(int tileIndex, int tileSeed, Transform parentTransform, Vector2 offset, Material[] materials)
+		{
+			var tile = new GameObject(string.Format("VorTile.{0}", tileIndex)) { tag = TilesTag, layer = TilesLayer};
+			
+			tile.transform.parent = parentTransform;
+			tile.transform.localPosition = new Vector3(offset.x, offset.y);
+			
+			var tileScript = tile.AddComponent<VorTile>();
+			
+			tileScript.Seed = tileSeed;
+			tileScript.MeshMaterials = materials;
+			tileScript.TileSize = TilesSize;
+
+			return tile;
+		}
+		
+		public GameObject CreateCellObject (VoronoiCell cellData, int cellIndex, Transform parentTransform, Material meshMaterial)
+		{
+			var cellObject = new GameObject (string.Format ("VorCell.{0}", cellIndex)) { tag = TilesTag, layer = TilesLayer};
+			
+			cellObject.transform.parent = parentTransform;
+			cellObject.transform.localPosition = new Vector3 ((float)cellData.Site.X, (float)cellData.Site.Y);
+			
+			var vorCell = cellObject.AddComponent<VorCell> ();
+			
+			vorCell.CellData = cellData;
+			vorCell.MeshMaterial = meshMaterial;
+			
+			return cellObject;
+		}
+
+		public VoronoiCell[] GenerateTileCells(int internalCellsCount)
         {
-            var mapWidth = size.x;
-            var mapHeight = size.y;
+			var mapWidth = TilesSize.x;
+			var mapHeight = TilesSize.y;
 
 			var cells = new Dictionary<FortuneVoronoi.Common.Point, VoronoiCell>();
 
 			var dx = mapWidth / HorBorderSitesCnt / Resolution;
 			var dy = mapHeight / VertBorderSitesCnt / Resolution;
-			
-			var borderSites = SitesGridGenerator.GenerateTileBorder(HorBorderSitesCnt, VertBorderSitesCnt, Resolution,
-			                                                        (min, max) => new IntPoint(Random.Range(min,max), Random.Range(min,max)));
+
 			
 			var internalSites = SitesGridGenerator.GenerateInternalSites(HorBorderSitesCnt, VertBorderSitesCnt, Resolution, internalCellsCount,
 			                                                             (min, max) => new IntPoint(Random.Range(min,max), Random.Range(min,max)));
-			
-			foreach (var site in borderSites.Concat(internalSites))
-			{
-				var x = site.X*dx;
-				var y = site.Y*dy;
-				var v = new FortuneVoronoi.Common.Point(x, y);
-				
-				if (cells.ContainsKey(v))
-				{
-					continue;
-				}
-				
-				cells.Add(v, new VoronoiCell{ IsVisible = !site.IsBorder, Site = new FortuneVoronoi.Common.Point(x, y)});
+
+			if (!CachedBorders.ContainsKey(TilesSize)) {
+				var borderSites = SitesGridGenerator.GenerateTileBorder(HorBorderSitesCnt, VertBorderSitesCnt, Resolution,
+				                                                    (min, max) => new IntPoint(Random.Range(min,max), Random.Range(min,max)));
+				CachedBorders.Add(TilesSize, borderSites);
+			}
+
+			foreach (var site in internalSites.Concat(CachedBorders[TilesSize]).Distinct()) {
+				var x = site.X * dx;
+				var y = site.Y * dy;
+				var v = new FortuneVoronoi.Common.Point(x,y);
+
+				cells.Add(v, new VoronoiCell{IsVisible = !site.IsBorder, Site = v});
 			}
 			
 			var graph = Fortune.ComputeVoronoiGraph(cells);
