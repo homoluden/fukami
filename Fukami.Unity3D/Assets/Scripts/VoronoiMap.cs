@@ -71,7 +71,7 @@ public class VoronoiMap : MonoBehaviour
 
 			for (int j = 0; j < MapHeight; j++) {
 				var yOffset = TileSize.y * j;
-				var baseIndex = MapWidth*i + j;
+				var baseIndex = MapWidth*j + i;
 
 				var dxFixed = 3 * i * dx;
 				var dyFixed = 3 * j * dy;
