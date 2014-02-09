@@ -101,13 +101,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c38c5c451768c2459761e55e1b683f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RegeneratePeriod: 3
   MeshMaterials:
   - {fileID: -106926425, guid: 367e5b5841f63fa48a02e2e5c102b385, type: 3}
   - {fileID: 637315684, guid: 99267cd9ef908d8469ef526e479775a6, type: 3}
   - {fileID: 193139059, guid: e43f440ca7a19f24aaa0ce4833f696ff, type: 3}
-  MapSize: {x: 300, y: 100}
-  CellsCount: 200
+  TileSize: {x: 300, y: 100}
+  TileGridDimensions: 
+  MapWidth: 10
+  MapHeight: 1
+  MapSeed: 111222
+  MaxCellsCount: 500
 --- !u!4 &678840558
 Transform:
   m_ObjectHideFlags: 0

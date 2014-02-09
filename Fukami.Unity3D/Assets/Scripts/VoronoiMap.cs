@@ -17,12 +17,8 @@ public class VoronoiMap : MonoBehaviour
 
     public Material[] MeshMaterials;
 
-    public Vector2 TileSize = new Vector2(300f, 100f);
-	public int[] TileGridDimensions = new []{
-		150, // Major X Ticks count
-		50,  // Major Y Ticks count
-		16   // Minor Ticks resolution (count of ticks between Major ticks)
-	};
+    public Vector2 TileSize = new Vector2(250f, 150f);
+	public int[] TileGridDimensions;
 	public int MapWidth = 10;
 	public int MapHeight = 1;
 	public int MapSeed = 120683; // Just a magic number
@@ -38,6 +34,13 @@ public class VoronoiMap : MonoBehaviour
         {
             MaxCellsCount = 500;
         }
+
+		TileGridDimensions = new []{
+			150, // Major X Ticks count
+			50,  // Major Y Ticks count
+			16   // Minor Ticks resolution (count of ticks between Major ticks)
+		};
+
 		MapWidth = Mathf.Abs (MapWidth); // Make sure it is positive
 		MapHeight = Mathf.Abs (MapHeight); // Make sure it is positive
 
@@ -60,26 +63,30 @@ public class VoronoiMap : MonoBehaviour
 
 		Random.seed = MapSeed;
 
-		var dx = TileSize.x / TileGridDimensions [0] / TileGridDimensions [2];
-		var dy = TileSize.y / TileGridDimensions [1] / TileGridDimensions [2];
+		var dx = TileSize.x / TileGridDimensions [0];// / TileGridDimensions [2];
+		var dy = TileSize.y / TileGridDimensions [1];// / TileGridDimensions [2];
 
 		for (int i = 0; i < MapWidth; i++) {
-			var xOffset = TileSize.x*i + dx;
+			var xOffset = TileSize.x*i;
 
 			for (int j = 0; j < MapHeight; j++) {
-				var yOffset = TileSize.y * j + dy;
+				var yOffset = TileSize.y * j;
 				var baseIndex = MapWidth*i + j;
 
-				var newTile0 = VoronoiHelper.Instance.CreateTileObject(baseIndex, Random.Range(int.MinValue, int.MaxValue),
-				                                                       gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
-				var newTile1 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 1, Random.Range(int.MinValue, int.MaxValue),
-				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
-				var newTile2 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 2, Random.Range(int.MinValue, int.MaxValue),
-				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
-				var newTile3 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 3, Random.Range(int.MinValue, int.MaxValue),
-				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
+				var dxFixed = 3 * i * dx;
+				var dyFixed = 3 * j * dy;
 
-				_vorTiles.AddRange(new []{newTile0,newTile1,newTile2,newTile3});
+				var newTile0 = VoronoiHelper.Instance.CreateTileObject(baseIndex, Random.Range(int.MinValue, int.MaxValue),
+				                                                       gameObject.transform, new Vector2(xOffset - dxFixed, yOffset - dyFixed), MeshMaterials);
+//				var newTile1 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 1, Random.Range(int.MinValue, int.MaxValue),
+//				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
+//				var newTile2 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 2, Random.Range(int.MinValue, int.MaxValue),
+//				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
+//				var newTile3 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 3, Random.Range(int.MinValue, int.MaxValue),
+//				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
+
+				//_vorTiles.AddRange(new []{newTile0,newTile1,newTile2,newTile3});
+				_vorTiles.AddRange(new []{newTile0});
 			}
 		}
     }
