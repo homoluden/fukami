@@ -28,7 +28,7 @@ TagManager:
   User Layer 9: 
   User Layer 10: PlantElements
   User Layer 11: Enemies
-  User Layer 12: Bombs
+  User Layer 12: Missiles
   User Layer 13: 
   User Layer 14: 
   User Layer 15: 
@@ -45,7 +45,7 @@ TagManager:
   User Layer 26: 
   User Layer 27: 
   User Layer 28: 
-  User Layer 29: 
+  User Layer 29: TileTriggers
   User Layer 30: 
   User Layer 31: 
   m_SortingLayers:
