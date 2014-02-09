@@ -8,23 +8,23 @@ namespace Assets.Scripts.Helpers
 {
     public sealed class PrefabsManager
     {
-        private Dictionary<string, GameObject> _prefabs = new Dictionary<string, GameObject>();
+        private Dictionary<string, UnityEngine.Object> _prefabs = new Dictionary<string, UnityEngine.Object>();
         
 
-        public GameObject LoadPrefab(string name)
+        public UnityEngine.Object LoadPrefab(string name)
         {
 			if (_prefabs.ContainsKey(name)) {
 				return _prefabs[name];
 			}
 
 			lock (SyncRoot) {
-				var prefab = (GameObject)Resources.Load(string.Format("Prefabs/{0}", name));
+				var prefab = Resources.Load(string.Format("Prefabs/{0}", name));
 				if (prefab != null)
 				{
 					_prefabs.Add(name, prefab);
 				}
-				
-				return prefab;
+
+                return prefab;
 			}            
         }
 
