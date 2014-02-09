@@ -30,7 +30,7 @@ namespace Assets.Scripts.Helpers
 
         #region Public Methods
 				
-		public GameObject CreateTileObject(int tileIndex, int tileSeed, Transform parentTransform, Vector2 offset, Material[] materials)
+		public GameObject CreateTileObject(IntPoint tilePosition, int tileSeed, Transform parentTransform, Vector2 offset, Material[] materials)
 		{
 			var tilePrefab = PrefabsManager.Instance.LoadPrefab("VorMap/VorTile");
             var tile = (GameObject)UnityEngine.Object.Instantiate(tilePrefab);
@@ -38,14 +38,14 @@ namespace Assets.Scripts.Helpers
 			tile.transform.parent = parentTransform;
 			tile.transform.localPosition = new Vector3(offset.x, offset.y);
 			
-			tile.name = string.Format ("VorTile.{0}", tileIndex);
-			tile.tag = TilesTag;
+            tile.tag = TilesTag;
 			tile.layer = TilesLayer;
 			
 			var tileScript = tile.GetComponent<VorTile>();
 			
 			tileScript.Seed = tileSeed;
 			tileScript.MeshMaterials = materials;
+            tileScript.Position = tilePosition;
 
 			return tile;
 		}
@@ -81,7 +81,7 @@ namespace Assets.Scripts.Helpers
 
 			if (!CachedBorders.ContainsKey(TilesSize)) {
 				var borderSites = SitesGridGenerator.GenerateTileBorder(HorBorderSitesCnt, VertBorderSitesCnt, Resolution,
-				                                                    (min, max) => new IntPoint(Random.Range(min,max), Random.Range(min,max)));
+                                                                    (min, max) => new IntPoint(Random.Range(min, max), Random.Range(min, max))); // (int)((min + max) * 0.5f)
 				CachedBorders.Add(TilesSize, borderSites);
 			}
 

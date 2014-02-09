@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 
 using FortuneVoronoi;
+using FortuneVoronoi.Common;
 
 public class VoronoiMap : MonoBehaviour
 {
     #region Fields
 
-    List<GameObject> _vorTiles = new List<GameObject>();
+    GameObject _seedTile;
 
     #endregion
 
@@ -17,10 +18,8 @@ public class VoronoiMap : MonoBehaviour
 
     public Material[] MeshMaterials;
 
-    public Vector2 TileSize = new Vector2(250f, 150f);
+    public Vector2 TileSize;
 	public int[] TileGridDimensions;
-	public int MapWidth = 10;
-	public int MapHeight = 1;
 	public int MapSeed = 120683; // Just a magic number
 
     public int MaxCellsCount = 500;
@@ -41,21 +40,12 @@ public class VoronoiMap : MonoBehaviour
 			16   // Minor Ticks resolution (count of ticks between Major ticks)
 		};
 
-		MapWidth = Mathf.Abs (MapWidth); // Make sure it is positive
-		MapHeight = Mathf.Abs (MapHeight); // Make sure it is positive
-
         GenerateVorMap();
     }
 
     private void GenerateVorMap()
     {
-        foreach (var cell in _vorTiles)
-        {
-            Destroy(cell, Time.fixedDeltaTime);
-        }
-        _vorTiles.Clear();
-
-		VoronoiHelper.Instance.TilesTag = gameObject.tag;
+        VoronoiHelper.Instance.TilesTag = gameObject.tag;
 		VoronoiHelper.Instance.TilesLayer = gameObject.layer;
 		VoronoiHelper.Instance.TilesSize = TileSize;
 		VoronoiHelper.Instance.InternalSitesCountRange [0] = MaxCellsCount / 2;
@@ -63,37 +53,41 @@ public class VoronoiMap : MonoBehaviour
 
 		Random.seed = MapSeed;
 
-		var dx = TileSize.x / TileGridDimensions [0];// / TileGridDimensions [2];
-		var dy = TileSize.y / TileGridDimensions [1];// / TileGridDimensions [2];
-
-		for (int i = 0; i < MapWidth; i++) {
-			var xOffset = TileSize.x*i;
-
-			for (int j = 0; j < MapHeight; j++) {
-				var yOffset = TileSize.y * j;
-				var baseIndex = MapWidth*j + i;
-
-				var dxFixed = 3 * i * dx;
-				var dyFixed = 3 * j * dy;
-
-				var newTile0 = VoronoiHelper.Instance.CreateTileObject(baseIndex, Random.Range(int.MinValue, int.MaxValue),
-				                                                       gameObject.transform, new Vector2(xOffset - dxFixed, yOffset - dyFixed), MeshMaterials);
-//				var newTile1 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 1, Random.Range(int.MinValue, int.MaxValue),
-//				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
-//				var newTile2 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 2, Random.Range(int.MinValue, int.MaxValue),
-//				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
-//				var newTile3 = VoronoiHelper.Instance.CreateTileObject(baseIndex + 3, Random.Range(int.MinValue, int.MaxValue),
-//				                                                      gameObject.transform, new Vector2(xOffset, yOffset), MeshMaterials);
-
-				//_vorTiles.AddRange(new []{newTile0,newTile1,newTile2,newTile3});
-				_vorTiles.AddRange(new []{newTile0});
-			}
-		}
+        _seedTile = VoronoiHelper.Instance.CreateTileObject(new IntPoint(0, 0), 
+                                                            Random.Range(int.MinValue, int.MaxValue),
+                                                            gameObject.transform, 
+                                                            new Vector2(0,0), 
+                                                            MeshMaterials);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void OnLeftTileTriggerEnter(VorTile tileScript)
+    {
+        var tilePos = tileScript.Position;
+
+        int i = tilePos.X;
+        int j = tilePos.Y;
+
+        var dx = 3 * i * TileSize.x / TileGridDimensions[0];
+        var dy = 3 * j * TileSize.y / TileGridDimensions[1];
+
+        var xOffset = TileSize.x * i;
+        var yOffset = TileSize.y * j;
+
+        var newTile = VoronoiHelper.Instance.CreateTileObject(new IntPoint(0, 0),
+                                                            Random.Range(int.MinValue, int.MaxValue),
+                                                            gameObject.transform,
+                                                            new Vector2(xOffset - dx, yOffset - dy),
+                                                            MeshMaterials);
+    }
+
+    void OnRightTileTriggerEnter(VorTile tileScript)
+    {
+
     }
 }

@@ -7,16 +7,31 @@ using FortuneVoronoi;
 
 public class VorTile : MonoBehaviour
 {
+    #region Fields
 
-	private FortuneVoronoi.VoronoiCell[] _cells;
-	private List<GameObject> _cellObjects = new List<GameObject> ();
+    private FortuneVoronoi.VoronoiCell[] _cells;
+    private List<GameObject> _cellObjects = new List<GameObject>();
 
-	public int Seed;
-	public Material[] MeshMaterials;
+    private BoxCollider2D _leftCollider;
+    private BoxCollider2D _rightCollider;
+
+    #endregion // Fields
+
+
+    #region Properties
+
+    public int Seed;
+    public Material[] MeshMaterials;
+
     public GameObject LeftTileTrigger;
+
     public GameObject RightTileTrigger;
 
-	// Use this for initialization
+    public FortuneVoronoi.Common.IntPoint Position;
+
+    #endregion // Properties
+
+    // Use this for initialization
 	void Start ()
 	{
 
@@ -38,18 +53,18 @@ public class VorTile : MonoBehaviour
 
         if (LeftTileTrigger != null)
         {
-            var leftCollider = LeftTileTrigger.GetComponent<BoxCollider2D>();
+            _leftCollider = LeftTileTrigger.GetComponent<BoxCollider2D>();
             LeftTileTrigger.transform.localPosition = new Vector2(tileSize.x * 0.5f, 0f);
-            leftCollider.size = new Vector2(tileSize.x * 0.25f, tileSize.y * 1.5f);
-            leftCollider.isTrigger = true;
+            _leftCollider.size = new Vector2(tileSize.x * 0.25f, tileSize.y * 1.5f);
+            _leftCollider.isTrigger = true;            
         }
 
         if (RightTileTrigger != null)
         {
-            var rightCollider = RightTileTrigger.GetComponent<BoxCollider2D>();
+            _rightCollider = RightTileTrigger.GetComponent<BoxCollider2D>();
             RightTileTrigger.transform.localPosition = new Vector2(-tileSize.x * 0.5f, 0f);
-            rightCollider.size = new Vector2(tileSize.x * 0.25f, tileSize.y * 1.5f);
-            rightCollider.isTrigger = true;
+            _rightCollider.size = new Vector2(tileSize.x * 0.25f, tileSize.y * 1.5f);
+            _rightCollider.isTrigger = true;            
         }
 	}
 
@@ -58,4 +73,5 @@ public class VorTile : MonoBehaviour
 	{
 
 	}
+
 }
