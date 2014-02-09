@@ -32,16 +32,20 @@ namespace Assets.Scripts.Helpers
 				
 		public GameObject CreateTileObject(int tileIndex, int tileSeed, Transform parentTransform, Vector2 offset, Material[] materials)
 		{
-			var tile = new GameObject(string.Format("VorTile.{0}", tileIndex)) { tag = TilesTag, layer = TilesLayer};
-			
+			var tilePrefab = PrefabsManager.Instance.LoadPrefab("VorMap/VorTile");
+            var tile = (GameObject)UnityEngine.Object.Instantiate(tilePrefab);
+
 			tile.transform.parent = parentTransform;
 			tile.transform.localPosition = new Vector3(offset.x, offset.y);
 			
-			var tileScript = tile.AddComponent<VorTile>();
+			tile.name = string.Format ("VorTile.{0}", tileIndex);
+			tile.tag = TilesTag;
+			tile.layer = TilesLayer;
+			
+			var tileScript = tile.GetComponent<VorTile>();
 			
 			tileScript.Seed = tileSeed;
 			tileScript.MeshMaterials = materials;
-			tileScript.TileSize = TilesSize;
 
 			return tile;
 		}
