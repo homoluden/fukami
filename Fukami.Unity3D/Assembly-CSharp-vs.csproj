@@ -64,6 +64,7 @@
      <Compile Include="Assets\Scripts\Helpers\Wrap.cs" />
      <Compile Include="Assets\Scripts\HingeSmoothPos.cs" />
      <Compile Include="Assets\Scripts\LayBombs.cs" />
+     <Compile Include="Assets\Scripts\LeftVorTileCreator.cs" />
      <Compile Include="Assets\Scripts\Pauser.cs" />
      <Compile Include="Assets\Scripts\PickupSpawner.cs" />
      <Compile Include="Assets\Scripts\Plant\BonesApplicant.cs" />
@@ -77,6 +78,7 @@
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\QuatNormalize.cs" />
      <Compile Include="Assets\Scripts\Remover.cs" />
+     <Compile Include="Assets\Scripts\RightVorTileCreator.cs" />
      <Compile Include="Assets\Scripts\Rocket.cs" />
      <Compile Include="Assets\Scripts\Score.cs" />
      <Compile Include="Assets\Scripts\ScoreShadow.cs" />
