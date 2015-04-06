@@ -27,7 +27,7 @@ namespace Renderers
     public partial class CanvasRenderer : UserControl, IDisposable, IRenderer
     {
 private readonly DrawingVisual _drawing = new DrawingVisual();
-        private WriteableBitmap _wbmp;
+        private readonly WriteableBitmap _wbmp;
         private readonly Rect _fullscreenRect;
 
         private readonly SolidColorBrush _defaultBrush = new SolidColorBrush(Colors.WhiteSmoke);
