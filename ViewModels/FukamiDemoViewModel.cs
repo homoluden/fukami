@@ -8,6 +8,9 @@ using System.Linq;
 using System.Windows.Input;
 using Microsoft.Xna.Framework;
 using WorldControllers;
+using FarseerPhysics.Dynamics.Joints;
+using FarseerPhysics.Factories;
+using FarseerPhysics.Common;
 
 namespace Fukami.ViewModels
 {
@@ -154,47 +157,36 @@ namespace Fukami.ViewModels
             var model = core.GetModelDuplicate();
             model.Id = geneApplicationId;
             
-            var coreBody = WillHelper.CreateCoreBody(model, geneApplicationId);
+            var coreObject = WillHelper.CreateCoreBody(model);
 
-            var nodes = WillHelper.BuildNodeSlots(coreBody, geneApplicationId);
-            coreBody.Children = nodes;
-            var corePos = coreBody.State.Position;
+            var nodes = WillHelper.BuildNodeSlots(coreObject);
+			coreObject.Children.Clear();
+			nodes.ForEach(n => coreObject.Children.Add(n));
+			var corePos = coreObject.Body.Position;
 
             var joints = new List<Joint>();
             foreach (var node in nodes)
             {
-                var hinge = new HingeJoint(coreBody, node, (2* node.State.Position.Linear + 8 * corePos.Linear) * 0.1f, new Lifespan())
-                {
-                    DistanceTolerance = 10,
-                    Softness = 100.0
-                };
-                var angle = new AngleJoint(coreBody, node, new Lifespan()) { Softness = 0.0001, BiasFactor = 0.2f };
-
-                joints.Add(hinge);
-                joints.Add(angle);
+				WillHelper.CreateRevoluteJoint(coreObject.Body, node.Body, 0.9f);
             }
-
-
-            Will.Instance.AddModelBodies(new List<BaseModelBody>{ coreBody }.Concat(nodes).ToList());
-            Will.Instance.AddJoints(joints);
         }
 
         private void AddBone(BaseGeneViewModel gene)
         {
-            Will.Instance.RunPauseWilling(false);
+            Will.Instance.Stop();
 
             var boneGene = (BoneGeneViewModel)gene;
 
             var boneModel = boneGene.GetModelDuplicate();
 
-            var boneBody = WillHelper.AddBoneBody(boneModel);
+            var boneBody = WillHelper.CreateBoneBody(boneModel);
 
-            Will.Instance.RunPauseWilling(true);
+            Will.Instance.Run();
         }
 
         private void AddSlot(BaseGeneViewModel gene)
         {
-            Will.Instance.RunPauseWilling(false);
+            Will.Instance.Stop();
 
             var slotGene = (NodeGeneViewModel)gene;
 
@@ -202,11 +194,11 @@ namespace Fukami.ViewModels
 
             if (boneBody == null)
             {
-                Will.Instance.RunPauseWilling(true);
+                Will.Instance.Run();
                 return;
             }
 
-            var parPos = boneBody.State.Position;
+            var parPos = boneBody.Body.Position;
 
             var randSlot = boneBody.Model.ChildSlots.Where(s => s.IsOccupied == false).RandomOrDefault();
 
@@ -217,38 +209,17 @@ namespace Fukami.ViewModels
 
             randSlot.IsOccupied = true;
 
-            var slotBody = WillHelper.CreateConnectionSlotBody(slot, boneBody.ModelId);
+            var slotBody = WillHelper.CreateConnectionSlotBody(slot, boneBody);
             
-
-            var slotXAngle = slot.Direction + parPos.Angular;
-            var slotCenter = Vector2D.Rotate(slotXAngle, new Vector2D(slot.DistanceFromCenter, 0.0f));
-            var slotPos = new ALVector2D(slot.Orientation + slotXAngle, slotCenter + parPos.Linear);
-
-            slotBody.State.Position = slotPos;
-            slotBody.ApplyPosition();
-
-            slotBody.Parent = boneBody;
-
             boneBody.Children.Add(slotBody);
 
             var joints = new List<Joint>();
 
-            var nodePos = slotBody.State.Position;
+            var nodePos = slotBody.Body.Position;
 
-            var hinge = new HingeJoint(boneBody, slotBody, (slot.Size * nodePos.Linear + boneBody.Model.Length * parPos.Linear) * (1/(slot.Size + boneBody.Model.Length)), new Lifespan())
-            {
-                DistanceTolerance = 50,
-                Softness = 10.1
-            };
-            var angle = new AngleJoint(boneBody, slotBody, new Lifespan()) { Softness = 0.00001 };
-
-            joints.Add(hinge);
-            joints.Add(angle);
-
-            Will.Instance.AddBody(slotBody);
-            Will.Instance.AddJoints(joints);
-
-            Will.Instance.RunPauseWilling(true);
+			WillHelper.CreateRevoluteJoint(boneBody.Body, slotBody.Body, 0.9f);//new RevoluteJoint(boneBody.Body, slotBody.Body, )
+            
+            Will.Instance.Run();
         }
 
 
@@ -264,6 +235,10 @@ namespace Fukami.ViewModels
         private IList<BaseGeneViewModel> GenerateGenes()
         {
             var coreSize = 30;
+
+			var randomPosition = new Vector2(70 + _rnd.Next(-100, 100) * 0.01f, 60 + _rnd.Next(-100, 100) * 0.01f);
+			var angle = new Rot(MathHelper.PiOver2);
+
             var result = new List<BaseGeneViewModel>
                 {
                     new CoreGeneViewModel
@@ -274,7 +249,7 @@ namespace Fukami.ViewModels
                         ParentViewModel = this,
                         Model = new CoreModel
                             {
-                                StartingTransform = new ALVector2D(MathHelper.PiOver2, 700 + _rnd.Next(-100, 100) * 0.1, 600 + _rnd.Next(-100, 100) * 0.1),
+                                StartingTransform = new Transform(ref randomPosition, ref angle),
                                 Size = coreSize,
                                 Density = 1,
                                 ConnectionSlots = new []
@@ -365,8 +340,8 @@ namespace Fukami.ViewModels
                                         MaxChildMass = 15,
                                         MaxChildSize = 100,
                                         DistanceFromCenter = 40.0f,
-                                        Direction = 0.4,
-                                        Orientation = 1.15
+                                        Direction = 0.4f,
+                                        Orientation = 1.15f
                                     },
                                 new ConnectionSlotModel
                                     {
@@ -385,8 +360,8 @@ namespace Fukami.ViewModels
                                         MaxChildMass = 15,
                                         MaxChildSize = 100,
                                         DistanceFromCenter = 40.0f,
-                                        Direction = -0.4,
-                                        Orientation = -1.15
+                                        Direction = -0.4f,
+                                        Orientation = -1.15f
                                     }
                             }
                         }
@@ -408,8 +383,8 @@ namespace Fukami.ViewModels
                                         MaxChildMass = 15,
                                         MaxChildSize = 100,
                                         DistanceFromCenter = 30.0f,
-                                        Direction = 0.4,
-                                        Orientation = 1.15
+                                        Direction = 0.4f,
+                                        Orientation = 1.15f
                                     },
                                 new ConnectionSlotModel
                                     {
@@ -428,8 +403,8 @@ namespace Fukami.ViewModels
                                         MaxChildMass = 15,
                                         MaxChildSize = 100,
                                         DistanceFromCenter = 30.0f,
-                                        Direction = -0.4,
-                                        Orientation = -1.15
+                                        Direction = -0.4f,
+                                        Orientation = -1.15f
                                     }
                             }
                         }
@@ -451,8 +426,8 @@ namespace Fukami.ViewModels
                                         MaxChildMass = 15,
                                         MaxChildSize = 100,
                                         DistanceFromCenter = 20.0f,
-                                        Direction = 0.4,
-                                        Orientation = 1.15
+                                        Direction = 0.4f,
+                                        Orientation = 1.15f
                                     },
                                 new ConnectionSlotModel
                                     {
@@ -471,8 +446,8 @@ namespace Fukami.ViewModels
                                         MaxChildMass = 15,
                                         MaxChildSize = 100,
                                         DistanceFromCenter = 20.0f,
-                                        Direction = -0.4,
-                                        Orientation = -1.15
+                                        Direction = -0.4f,
+                                        Orientation = -1.15f
                                     }
                             }
                         }

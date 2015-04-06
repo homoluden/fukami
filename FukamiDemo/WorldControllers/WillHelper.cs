@@ -69,9 +69,11 @@ namespace WorldControllers
             return model;
         }
 
-        public static void CreateAngleJoint(BaseModelBody bodyA, BaseModelBody bodyB)
+        public static void CreateRevoluteJoint(Body bodyA, Body bodyB, float lerpAnchor)
         {
-            JointFactory.CreateAngleJoint(Will.Instance.World, bodyA.Body, bodyB.Body);
+            JointFactory.CreateAngleJoint(Will.Instance.World, bodyA, bodyB);
+
+			JointFactory.CreateRevoluteJoint(Will.Instance.World, bodyA, bodyB, Vector2.Lerp(bodyA.Position, bodyB.Position, lerpAnchor));
         }
 
         /// <summary>
@@ -104,27 +106,15 @@ namespace WorldControllers
             return newCore;
         }
 
-        public static IList<BaseModelBody> BuildNodeSlots(IHaveConnectionSlots parent, Guid modelId)
+        public static List<BaseModelBody> BuildNodeSlots(IHaveConnectionSlots parent)
         {
-            var parPos = parent.Transform;
-
             var slots = parent.Slots.Where(s => !s.IsOccupied);
 
             var result = new List<BaseModelBody>();
 
             foreach (var slot in slots)
             {
-                var nodeSlot = CreateConnectionSlotBody(slot);
-
-                var slotXAngle = slot.Direction + parPos.q.GetAngle();
-
-                var slotCenter = new Vector2(slot.DistanceFromCenter, 0.0f).Rotate(slotXAngle); // Zero Angle corresponds to X Axis
-
-                var slotPos = new Vector2((Scalar)slotCenter.X + parPos.p.X, (Scalar)slotCenter.Y + parPos.p.Y);
-                
-                nodeSlot.Body.SetTransform(ref slotPos, slot.Orientation + slotXAngle);
-
-                nodeSlot.Parent = parent as BaseModelBody;
+                var nodeSlot = CreateConnectionSlotBody(slot, parent);
 
                 result.Add(nodeSlot);
             }
@@ -132,7 +122,7 @@ namespace WorldControllers
             return result;
         }
 
-        public static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot)
+        public static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, IHaveConnectionSlots parent)
         {
             var size = slot.Size;
 
@@ -148,7 +138,19 @@ namespace WorldControllers
 
             var newSlot = new ConnectionSlotBody(slot, rectBody);
 
-            return newSlot;
+			var parentTransform = parent.Transform;
+
+			var slotXAngle = slot.Direction + parentTransform.q.GetAngle();
+
+			var slotCenter = new Vector2(slot.DistanceFromCenter, 0.0f).Rotate(slotXAngle);	// Zero Angle corresponds to X Axis
+
+			var slotPos = new Vector2((Scalar)slotCenter.X + parentTransform.p.X, (Scalar)slotCenter.Y + parentTransform.p.Y);
+
+			newSlot.Body.SetTransform(ref slotPos, slot.Orientation + slotXAngle);
+
+			newSlot.Parent = parent as BaseModelBody;
+
+			return newSlot;
         }
 
         public static BoneBody CreateBoneBody(BoneModel boneModel)
