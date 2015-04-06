@@ -1,17 +1,10 @@
-﻿using Drawables;
-using Shapes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using Physics2DDotNet.Shapes;
+﻿using System.Collections.Concurrent;
+using Drawables;
 using Shapes.Abstract;
 
 namespace Factories
 {
-    public static class DrawableFactory
+	public static class DrawableFactory
     {
         #region Fields
 

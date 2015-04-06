@@ -5,63 +5,48 @@ using Scalar = System.Double;
 using Scalar = System.Single;
 #endif
 
-using Physics2DDotNet;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Physics2DDotNet.Shapes;
-using Physics2DDotNet.Joints;
 using AdvanceMath;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Collision.Shapes;
+using System.Collections.Generic;
+using FarseerPhysics.Dynamics.Joints;
+using FarseerPhysics.Factories;
 
 namespace CustomBodies
 {
-    public class BaseModelBody : Body
+    public class BaseModelBody
     {
         #region Properties
 
         public Guid ModelId { get; set; }
-        public Scalar Age { get { return Lifetime.Age; } }
+
+        public Body Body { get; set; }
 
         #endregion
 
 
         #region Ctors
 
-        public BaseModelBody(PhysicsState state, IShape shape, double mass, Coefficients coefficients, Lifespan lifetime, Guid modelId)
-            : this(state, shape, new MassInfo { Mass = mass }, coefficients, lifetime, modelId)
+        public BaseModelBody()
+            : this(Guid.NewGuid(), null)
         {
         }
 
-        public BaseModelBody(PhysicsState state, IShape shape, MassInfo massInfo, Coefficients coefficients, Lifespan lifetime, Guid modelId) 
-            : base(state, shape, massInfo, coefficients, lifetime)
+        public BaseModelBody(Body body)
+            : this(Guid.NewGuid(), body)
         {
-            if (modelId == Guid.Empty)
-            {
-                throw new ArgumentException("'guid' cannot be empty!");
-            }
+        }
 
-            ModelId = modelId;
+        public BaseModelBody(Guid id, Body body)
+        {
+            ModelId = id;
+
+            Body = body;
         }
 
         #endregion
 
     }
 
-    public static class BaseModelBodyExtensions
-    {
-        public static Tuple<HingeJoint, AngleJoint> ConnectWith(this BaseModelBody parentBody, BaseModelBody childBody, Vector2D hingeLocation)
-        {
-
-            var hinge = new HingeJoint(parentBody, childBody, hingeLocation, new Lifespan())
-            {
-                DistanceTolerance = 50,
-                Softness = 10000.1
-            };
-            var angle = new AngleJoint(parentBody, childBody, new Lifespan()) { Softness = -0.00000001, BiasFactor = 0.3};
-
-            return new Tuple<HingeJoint, AngleJoint>(hinge, angle);
-        }
-    }
 }

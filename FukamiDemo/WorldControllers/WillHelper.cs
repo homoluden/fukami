@@ -5,35 +5,30 @@ using Scalar = System.Double;
 using Scalar = System.Single;
 #endif
 
-
-using AdvanceMath;
-using Physics2DDotNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Physics2DDotNet.Shapes;
-using Factories;
-using Shapes;
-using Physics2DDotNet.Joints;
-using Drawables;
-using Shapes.Abstract;
 using CustomBodies;
 using CustomBodies.Models;
 using Interfaces;
+using FarseerPhysics.Dynamics;
+using Microsoft.Xna.Framework;
+using FarseerPhysics.Factories;
+using FarseerPhysics.Common;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Dynamics.Joints;
+
+using MathHelper = Microsoft.Xna.Framework.MathHelper;
 
 namespace WorldControllers
 {
-    public static class WillHelper
+	public static class WillHelper
     {
         #region Constants
 
-        public static readonly Scalar DefaultAngleSoftness = 0.00001;
+        public static readonly Scalar DefaultAngleSoftness = 0.00001f;
 
-        public static readonly Scalar DefaultHingeSoftness = 1.0;
-
-        public static readonly Coefficients Coefficients = new Coefficients(.5f, 1);
+        public static readonly Scalar DefaultHingeSoftness = 1.0f;
 
         public static readonly Random Noise = new Random(Environment.TickCount);
 
@@ -42,111 +37,55 @@ namespace WorldControllers
         /// <summary>
         /// Creates new Rectange Body
         /// </summary>
-        /// <param name="height">Height of the Body</param>
-        /// <param name="width">Width of the Body</param>
-        /// <param name="mass">Mass of the Body</param>
-        /// <param name="position">Initial Direction and Linear Position of the Body</param>
-        /// <returns>Return the new value of the BasePolygonBody</returns>
-        /// <remarks>The Guid of new Body will be stored in Body.Tags["Guid"]. The raw Colored Drawable of new Body will be stored in Body.Tags["Drawable"].</remarks>
-        public static Body CreateRectangle(Scalar height, Scalar width, Scalar mass, ALVector2D position)
+        public static void AttachRectangleFixture(this Body body, Scalar height, Scalar width, Scalar density, Vector2 position)
         {
-            var vertices = VertexHelper.CreateRectangle(width, height);
-            vertices = VertexHelper.Subdivide(vertices, Math.Min(height, width) / 5);
-
-            var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertices, Math.Min(height, width) / 5);
-
-            var newBody = new Body(new PhysicsState(position), boxShape, mass, Coefficients.Duplicate(), new Lifespan());
-            
-            return newBody;
+            var fixture = FixtureFactory.AttachRectangle(width, height, density, position, body);
         }
 
         /// <summary>
         /// Adds new Circle Body into World
         /// </summary>
-        /// <param name="radius">Radius of the Circle Shape</param>
-        /// <param name="verticesCount">Count of vertices  of the Circle Shape</param>
-        /// <param name="mass">Mass of corresponding Body</param>
-        /// <param name="position">Position of the Circle Shape</param>
-        /// <param name="modelId">Id of the parent Model</param>
-        /// <returns>Newly created and added into world Body object.</returns>
-        public static BaseModelBody AddCircle(Scalar radius, ushort verticesCount, Scalar mass, ALVector2D position, Guid modelId)
+        public static Fixture AttachCircleFixture(this Body body, Scalar radius, Scalar density, Vector2 position)
         {
-            var newBody = CreateCircle(radius, verticesCount, mass, modelId);
-
-            newBody.State.Position = position;
-            newBody.ApplyPosition();
-
-            Will.Instance.AddBody(newBody);
-
-            return newBody;
+            return FixtureFactory.AttachCircle(radius, density, body, position);
         }
-
-        public static BaseModelBody CreateCircle(Scalar radius, ushort verticesCount, Scalar mass, Guid modelId)
-        {
-            var shape = ShapeFactory.CreateColoredCircle(radius, verticesCount);
-
-            var newBody = new BaseModelBody(new PhysicsState(), shape, mass, Coefficients.Duplicate(), new Lifespan(), modelId);
-
-            return newBody;
-        }
-
-
+		
         /// <summary>
         /// Builds the chain of Bodies with joints and add this chain into World.
         /// </summary>
-        /// <param name="position">Direction and position of first chain member.</param>
-        /// <param name="boxLength">Chain member (rectangle) length</param>
-        /// <param name="boxWidth">Chain member (rectangle) height</param>
-        /// <param name="boxMass">Chain member mass</param>
-        /// <param name="spacing">Distance between chain members</param>
-        /// <param name="length">The chain length</param>
-        /// <param name="modelId">Id of the parent Model entity</param>
-        /// <returns>The list of Bodies created</returns>
-        public static IList<BaseModelBody> BuildChain(Vector2D position, Scalar boxLength, Scalar boxWidth, Scalar boxMass, Scalar spacing, Scalar length, Guid modelId)
+        public static IList<BaseModelBody> BuildChain(Vector2 posFrom, Vector2 posTo, Scalar boxLength, Scalar boxThickness, Scalar boxDensity, int boxCount)
         {
-            var bodies = new List<BaseModelBody>();
-            ChainMember last = null;
-            for (Scalar x = 0; x < length; x += boxLength + spacing, position.X += boxLength + spacing)
-            {
-                var current = ChainMember.Create(CreateRectangle(boxWidth, boxLength, boxMass, new ALVector2D(0, position)), modelId);
-                Will.Instance.AddBody(current);
+			Path path = new Path();
 
-                if (last != null)
-                {
-                    var anchor = (current.State.Position.Linear + last.State.Position.Linear) * .5f;
+			path.Add(posTo);
 
-                    var joint = new HingeJoint(last, current, anchor, new Lifespan()) {DistanceTolerance = 50, Softness = 0.005f};
+			var shapes = new List<Shape>(2);
+			shapes.Add(
+				new PolygonShape(
+					PolygonTools.CreateRectangle(boxLength, boxThickness, new Vector2(0.5f * boxLength, 0.5f * boxThickness), 0f), boxDensity));
+			var bodies = PathManager.EvenlyDistributeShapesAlongPath(Will.Instance._world, path, shapes, BodyType.Dynamic, boxCount, 1);
+			PathManager.AttachBodiesWithRevoluteJoint(Will.Instance._world, bodies, new Vector2(0, 0.5f), new Vector2(0, -0.5f), false, true);
 
-                    last.EndJoint = current.BegJoint = joint;
+			return bodies.Select(b => Will.Instance.CreateModelForBody<BaseModelBody>(b)).ToList();
+		}
 
-                    Will.Instance.AddJoint(joint);
-                }
-
-                bodies.Add(current);
-                
-                last = current;
-            }
-            return bodies;
-        }
-
-        public static CoreBody CreateCoreBody(CoreModel core, Guid modelId)
+        public static CoreBody CreateCoreBody(CoreModel core)
         {
-            var newCircleBody = CreateCircle(core.Size, 10, core.Mass, modelId);
-            newCircleBody.Coefficients = new Physics2DDotNet.Coefficients(0.4, 0.2);
-            newCircleBody.State.Position = core.StartPosition;
-            newCircleBody.ApplyPosition();
+			var dynBody = Will.Instance.CreateDynamicBody();
+            dynBody.AttachCircleFixture(core.Size, core.Density, new Vector2(0.0f, -0.5f * core.Size));
 
-            var newCore = new CoreBody(newCircleBody.State, newCircleBody.Shape, newCircleBody.Mass, newCircleBody.Coefficients, newCircleBody.Lifetime, modelId) 
-            { 
-                Model = core
-            };
+			dynBody.LinearDamping = 0.4f;
+			dynBody.AngularDamping = 0.2f;
+			
+			var newCore = Will.Instance.CreateModelForBody<CoreBody>(dynBody);
+			newCore.Model = core;
 
             return newCore;
         }
 
         public static IList<BaseModelBody> BuildNodeSlots(IHaveConnectionSlots parent, Guid modelId)
         {
-            var parPos = parent.Position;
+            var parPos = parent.Transform;
 
             var slots = parent.Slots.Where(s => !s.IsOccupied);
 
@@ -154,14 +93,15 @@ namespace WorldControllers
 
             foreach (var slot in slots)
             {
-                var nodeSlot = CreateConnectionSlotBody(slot, modelId);
+                var nodeSlot = CreateConnectionSlotBody(slot);
 
-                var slotXAngle = slot.Direction + parPos.Angular;
-                var slotCenter = Vector2D.Rotate(slotXAngle, new Vector2D(slot.DistanceFromCenter, 0.0f)); // Zero Angle corresponds X Axis
-                var slotPos = new ALVector2D(slot.Orientation + slotXAngle, slotCenter + parPos.Linear);
+                var slotXAngle = slot.Direction + parPos.q.GetAngle();
 
-                nodeSlot.State.Position = slotPos;
-                nodeSlot.ApplyPosition();
+				var slotCenter = new Vector2(slot.DistanceFromCenter, 0.0f).Rotate(slotXAngle); // Zero Angle corresponds to X Axis
+
+				var slotPos = new Vector2((Scalar)slotCenter.X + parPos.p.X, (Scalar)slotCenter.Y + parPos.p.Y);
+				
+                nodeSlot.Body.SetTransform(ref slotPos, slot.Orientation + slotXAngle);
 
                 nodeSlot.Parent = parent as BaseModelBody;
 
@@ -171,31 +111,25 @@ namespace WorldControllers
             return result;
         }
 
-        public static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot, Guid modelId)
+        public static ConnectionSlotBody CreateConnectionSlotBody(IConnectionSlot slot)
         {
             var size = slot.Size;
 
-            var vertexList = VertexHelper.CreateRectangle(slot.Size, slot.Size).ToList();
-            vertexList.Insert(0, new Vector2D(size, 0));
-            
-            var vertices = VertexHelper.Subdivide(vertexList.ToArray(), Math.Min(size, size) / 5);
+            var vertexList = PolygonTools.CreateRectangle(slot.Size, slot.Size);
+            vertexList.Insert(0, new Vector2(size, 0));
 
-            var boxShape = ShapeFactory.GetOrCreateColoredPolygonShape(vertices, Math.Min(size, size) / 5);
+			var rectBody = new Body(Will.Instance._world, Vector2.Zero, 0.0f, BodyType.Dynamic);
 
-            var rectBody = new Body(new PhysicsState(ALVector2D.Zero), boxShape, 0.0001, Coefficients.Duplicate(), new Lifespan());
-            
-            rectBody.Coefficients = new Physics2DDotNet.Coefficients(0.1, 0.7);
+			rectBody.SleepingAllowed = true;
+			rectBody.LinearDamping = 0.1f;
+			rectBody.AngularDamping = 0.7f;
 
-            var newSlot = new ConnectionSlotBody(rectBody.State, rectBody.Shape, rectBody.Mass, rectBody.Coefficients, rectBody.Lifetime, modelId)
-            {
-                Model = slot,
-                IsCollidable = false
-            };
+			var newSlot = new ConnectionSlotBody(slot, rectBody);;
 
             return newSlot;
         }
 
-        public static BoneBody AddBoneBody(BoneModel boneModel)
+        public static BoneBody CreateBoneBody(BoneModel boneModel)
         {
             var slotBody = Will.Instance.Bodies.RandomOrDefault<ConnectionSlotBody>(b => !b.Model.IsOccupied);
             if (slotBody == null)
@@ -209,46 +143,44 @@ namespace WorldControllers
         }
 
 
-        #region Extensions
+		#region Extensions
 
-        public static BoneBody AddBone(this ConnectionSlotBody slotBody, BoneModel boneModel)
+		public static void AngleRevoluteWith(this Body bodyA, Body bodyB, Vector2 anchor)
+		{
+			var angle = JointFactory.CreateAngleJoint(Will.Instance._world, bodyA, bodyB);
+			var revolute = JointFactory.CreateRevoluteJoint(Will.Instance._world, bodyA, bodyB, anchor);
+        }
+
+        public static BoneBody AddBone(this ConnectionSlotBody slotObject, BoneModel boneModel)
         {
-            var slot = slotBody.Model;
+            var slot = slotObject.Model;
             slot.IsOccupied = true;
 
-            var slotPos = slotBody.State.Position;
-            var slotSize = slotBody.Model.Size;
-            var centerLoc = Vector2D.FromLengthAndAngle((boneModel.Length + slotSize) * 0.5, slotPos.Angular);
+			Transform slotTransform;
+			slotObject.Body.GetTransform(out slotTransform);
 
-            var bonePos = new ALVector2D(slotPos.Angular, slotPos.Linear + centerLoc);
+            var slotSize = slotObject.Model.Size;
+			
+			var centerLoc = new Vector2((boneModel.Length + slotSize) * 0.5f, 0.0f).Rotate(slotTransform.q.GetAngle());
 
-            var rectBody = CreateRectangle(boneModel.Thickness, boneModel.Length, 0.00001, bonePos);
+            var bonePos = new Vector2(slotTransform.p.X + (Scalar)centerLoc.X, slotTransform.p.Y + (Scalar)centerLoc.Y);
 
-            var newBone = rectBody.CopyAsBone(slotBody.ModelId);
+			var boneBody = Will.Instance.CreateDynamicBody();
+			boneBody.AttachRectangleFixture(boneModel.Thickness, boneModel.Length, 0.0001f, Vector2.Zero);
+
+			var newBone = Will.Instance.CreateModelForBody<BoneBody>(boneBody);
+
             newBone.Model = boneModel;
-            newBone.Parent = slotBody;
+            newBone.Parent = slotObject;
 
-            var joints = slotBody.ConnectWith(newBone, (2 * bonePos.Linear + 8 * slotBody.State.Position.Linear) * 0.1f);
-
-            Will.Instance.AddBody(newBone);
-            Will.Instance.AddJoint(joints.Item1);
-            Will.Instance.AddJoint(joints.Item2);
-
+            slotObject.Body.AngleRevoluteWith(boneBody, (2 * bonePos + 8 * slotTransform.p) * 0.1f);
+			
             return newBone;
         }
-
-        public static BaseModelBody AsModelBody(this Body body, Guid modelId)
+		
+        public static T RandomOrDefault<T>(this IEnumerable<Body> items, Func<T, bool> predicate) where T : BaseModelBody
         {
-            if (body is BaseModelBody)
-            {
-                return (BaseModelBody) body;
-            }
-            return new BaseModelBody(body.State, body.Shape, body.Mass, body.Coefficients, body.Lifetime, modelId);
-        }
-
-        public static T RandomOrDefault<T>(this IEnumerable<Body> items, Func<T, bool> predicate) where T : Body
-        {
-            var randomItem = items.AsParallel().OfType<T>().Where(predicate).RandomOrDefault();
+            var randomItem = items.Where(b => b.UserData is T).Select(b => (T)b.UserData).Where(predicate).AsParallel().RandomOrDefault();
 
             return randomItem;
         }
@@ -269,83 +201,130 @@ namespace WorldControllers
 
         public static InterconnectionBody TryAddInterconnectionBody(this InterconnectionModel model, int maxTryCount)
         {
-            var allSlots = Will.Instance.Bodies.OfType<ConnectionSlotBody>().Where(s => s.Model.IsOccupied == false).ToList();
+			Will.Instance.Stop();
+
+            var allSlots = Will.Instance.Bodies.Where(b => b.UserData is ConnectionSlotBody)
+				.Select(b => (ConnectionSlotBody)b.UserData)
+				.Where(s => !s.Model.IsOccupied)
+				.ToList();
             
             while (allSlots.Count > 0 && --maxTryCount > 0)
             {                
-                var randSlot = allSlots.RandomOrDefault<ConnectionSlotBody>();
-                var begPos = randSlot.State.Position;
+                var randSlot = allSlots.RandomOrDefault();
 
-                var alignedSlot = allSlots.Where(s => !s.Parent.Equals(randSlot.Parent)).FirstOrDefault(s =>
-                {
-                    var angle = MathHelper.WrapClamp(s.State.Position.Angular + MathHelper.Pi, 0.0f, MathHelper.TwoPi);
+				if (randSlot == null)
+				{
+					continue;
+				}
 
-                    var diff = Math.Abs(angle - begPos.Angular);
+				var begPos = randSlot.Body.Position;
+				var begRot = randSlot.Body.Rotation;
 
-                    var dist = (begPos.Linear - s.State.Position.Linear).Magnitude;
-                    
-                    return diff <= model.MaxMissAlign && dist <= model.MaxDistance;
-                });
+				var alignedSlot = allSlots.Where(s => !s.Parent.Equals(randSlot.Parent)).FirstOrDefault(s =>
+				{
+					var angle = MathHelper.Clamp(s.Body.Rotation + MathHelper.Pi, 0.0f, MathHelper.TwoPi);
 
-                if (alignedSlot == null)
-                {
-                    continue;
-                }
+					var diff = Math.Abs(angle - randSlot.Body.Rotation);
 
-                //Aligned slots pair found. Let's build a connection between
+					var dist = (randSlot.Body.Position - s.Body.Position).Length();
 
-                randSlot.Model.IsOccupied = true;
+					return diff <= model.MaxMissAlign && dist <= model.MaxDistance;
+				});
+
+				if (alignedSlot == null)
+				{
+					continue;
+				}
+
+				//Aligned slots pair found. Let's build a connection between
+
+				randSlot.Model.IsOccupied = true;
                 alignedSlot.Model.IsOccupied = true;
+				
+				var endPos = alignedSlot.Body.Position;
+				var endRot = alignedSlot.Body.Rotation;
 
-                var endPos = alignedSlot.State.Position;
-                var centerPos = (begPos.Linear + endPos.Linear) * 0.5;
-                var begToCenter = centerPos - begPos.Linear;
-                var connPos = new ALVector2D(begToCenter.Angle, centerPos);
+				var centerPos = Vector2.Lerp(begPos, endPos, 0.5f);
+                var begToCenter = centerPos - begPos;
+				
+				var interconnBody = Will.Instance.CreateDynamicBody();
+				interconnBody.AttachRectangleFixture(1.0f, model.Length, 0.0001f, Vector2.Zero);
+				interconnBody.SetTransform(centerPos, begToCenter.GetAngle().Value);
 
-                var rectBody = CreateRectangle(1, begToCenter.Magnitude * 1.8, 0.00001, connPos);
-                var connBody = rectBody.CopyAsInterconnection(randSlot.ModelId);
-                connBody.IsCollidable = false;
-                connBody.BegSlot = randSlot;
-                connBody.EndSlot = alignedSlot;
+				var newInterconnObject = Will.Instance.CreateModelForBody<InterconnectionBody>(interconnBody);
 
-                Will.Instance.RunPauseWilling(false);
+				newInterconnObject.Model = model;
+				newInterconnObject.BegSlot = randSlot;
+				newInterconnObject.EndSlot = alignedSlot;
+				
+                randSlot.Body.Rotation = begToCenter.GetAngle().Value;
+                alignedSlot.Body.Rotation = (-begToCenter).GetAngle().Value;
 
-                Will.Instance.AddBody(connBody);
+				randSlot.Body.AngleRevoluteWith(interconnBody, (8 * begPos + 2 * centerPos) * 0.1f);
+				newInterconnObject.Body.AngleRevoluteWith(alignedSlot.Body, (2 * centerPos + 8 * endPos) * 0.1f);
+				
+                Will.Instance.Run();
 
-                //randSlot.State.Position = new ALVector2D((begToCenter.Angle+begPos.Angular)*0.5, begPos.Linear);
-                //alignedSlot.State.Position = new ALVector2D(((-begToCenter).Angle+endPos.Angular)*0.5, endPos.Linear);
-                randSlot.State.Position = new ALVector2D(begToCenter.Angle, begPos.Linear);
-                alignedSlot.State.Position = new ALVector2D((-begToCenter).Angle, endPos.Linear);
-
-                var begJoint = new HingeJoint(randSlot, connBody, (2 * centerPos + 8 * begPos.Linear) * 0.1f, new Lifespan())
-                {
-                    DistanceTolerance = model.MaxDistance * 0.5,
-                    Softness = 10
-                };
-                var begAngle = new AngleJoint(randSlot, connBody, new Lifespan()) { Softness = 0.0001, BiasFactor = 0.2f };
-
-                var endJoint = new HingeJoint(connBody, alignedSlot, (2 * centerPos + 8 * endPos.Linear) * 0.1f, new Lifespan())
-                {
-                    DistanceTolerance = model.MaxDistance * 0.5,
-                    Softness = 10
-                };
-                var endAngle = new AngleJoint(connBody, alignedSlot, new Lifespan()) { Softness = 0.0001, BiasFactor = 0.2f };
-
-                Will.Instance.AddJoint(begJoint);
-                Will.Instance.AddJoint(begAngle);
-                Will.Instance.AddJoint(endAngle);
-
-                Will.Instance.RunPauseWilling(true);
-
-                return connBody;
+                return newInterconnObject;
             }
 
             // Sorry :( Aligned pair not found. Please, try again later.
             return null;
         }
 
-        #endregion
+		/// <summary>
+		/// Returns the angle of the vector in radians using the standard
+		/// polar coordinate system, or null if the vector's length is 0.
+		/// Assumes the vector is on a grid where x increases to the left 
+		/// and y increases downward.
+		/// </summary>
+		/// <param name="v"></param>
+		/// <returns></returns>
+		public static Scalar? GetAngle(this Vector2 v)
+		{
+			if (v.X == 0)
+				if (v.Y == 0)
+					return null;
+				else
+					return MathHelper.PiOver2 * (v.Y < 0 ? 1 : -1);
+			else
+				return MathHelper.WrapAngle((Scalar)(Math.Atan(-v.Y / v.X) + ((v.X < 0) ? Math.PI : 0)));
+		}
+
+		/// <summary>
+		/// Returns a new Vector2 object specified by angle and length using
+		/// the standard polar coordinate system.
+		/// </summary>
+		/// <param name="angle">The direction of the Vector2 in radians.</param>
+		/// <param name="length">The magnitude of the Vector2.</param>
+		/// <returns></returns>
+		public static Vector2 CreateVector2(Scalar angle, Scalar length)
+		{
+			return new Vector2((Scalar)Math.Cos(angle) * length, (Scalar)Math.Sin(-angle) * length);
+		}
+
+		public static Vector2 Rotate(this Vector2 source, Scalar radianAngle)
+		{
+			Scalar num1 = -radianAngle;
+			Scalar num2 = (Scalar)Math.Cos(num1);
+			Scalar num3 = (Scalar)Math.Sin(num1);
+			Vector2 vector;
+			vector.X = source.X * num2 + source.Y * num3;
+			vector.Y = source.Y * num2 - source.X * num3;
+			return vector;
+		}
+
+		public static void Rotate(this Vector2 source, Scalar radianAngle, out Vector2 result)
+		{
+			Scalar num1 = -radianAngle;
+			Scalar num2 = (Scalar)Math.Cos(num1);
+			Scalar num3 = (Scalar)Math.Sin(num1);
+			result.X = source.X * num2 + source.Y * num3;
+			result.Y = source.Y * num2 - source.X * num3;
+		}
+
+		#endregion
 
 
-    }
+	}
 }

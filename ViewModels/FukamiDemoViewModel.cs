@@ -331,7 +331,7 @@ namespace Fukami.ViewModels
                             {
                                 StartPosition = new ALVector2D(MathHelper.PiOver2, 700 + _rnd.Next(-100, 100) * 0.1, 600 + _rnd.Next(-100, 100) * 0.1),
                                 Size = coreSize,
-                                Mass = 1,
+                                Density = 1,
                                 ConnectionSlots = new []
                                     {
                                         new ConnectionSlotModel

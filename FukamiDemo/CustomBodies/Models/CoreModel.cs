@@ -8,10 +8,8 @@ using Scalar = System.Single;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Physics2DDotNet;
 using Interfaces;
+using Microsoft.Xna.Framework;
 
 namespace CustomBodies.Models
 {
@@ -19,10 +17,10 @@ namespace CustomBodies.Models
     {
         public Guid Id { get; set; }
         public Scalar Size { get; set; }
-        public Scalar Mass { get; set; }
+        public Scalar Density { get; set; }
         public ulong MaxHealth { get; set; }
 
-        public ALVector2D StartPosition { get; set; }
+        public Vector2 StartPosition { get; set; }
         public IEnumerable<IConnectionSlot> ConnectionSlots { get; set; }
 
         public object Clone()
@@ -31,7 +29,7 @@ namespace CustomBodies.Models
             {
                 Id = Guid.NewGuid(),
                 Size = this.Size,
-                Mass = this.Mass,
+                Density = this.Density,
                 MaxHealth = this.MaxHealth,
                 StartPosition = this.StartPosition,
                 ConnectionSlots = this.ConnectionSlots.Select(s => (IConnectionSlot)s.Duplicate())

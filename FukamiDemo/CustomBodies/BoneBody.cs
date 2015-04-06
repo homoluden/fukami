@@ -1,24 +1,29 @@
 ﻿using CustomBodies.Models;
 using Interfaces;
-using Physics2DDotNet;
-using Physics2DDotNet.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
 
 namespace CustomBodies
 {
     public class BoneBody : BaseModelBody, IHaveConnectionSlots
     {
-        public BoneModel Model 
-        {
-            get { return (BoneModel)Tags["Model"]; }
-            set { Tags["Model"] = value; }
-        }
+        public BoneModel Model { get; set; }
         public IEnumerable<IConnectionSlot> Slots { get { return Model.ChildSlots; } }
-        public ALVector2D Position { get { return State.Position; } }
+        public Transform Transform
+		{
+			get
+			{
+				Transform transform;
+				Body.GetTransform(out transform);
+
+				return transform;
+			}
+		}
 
         public BaseModelBody Parent { get; set; }
 
@@ -36,18 +41,16 @@ namespace CustomBodies
             set { _children = value; }
         }
 
-        public BoneBody(PhysicsState state, IShape shape, MassInfo massInfo, Coefficients coefficients, Lifespan lifetime, Guid modelId)
-            : base(state, shape, massInfo, coefficients, lifetime, modelId)
+        public BoneBody(BoneModel model, Body body)
+            : base(body)
         {
-
+			Model = model;
         }
-    }
 
-    public static class BoneBodyExtensions
-    {
-        public static BoneBody CopyAsBone(this Body originalBody, Guid modelId)
+        public BoneBody()
+            : base()
         {
-            return new BoneBody(originalBody.State, originalBody.Shape, originalBody.Mass, originalBody.Coefficients, originalBody.Lifetime, modelId);
+
         }
     }
 }

@@ -5,18 +5,11 @@ using Scalar = System.Double;
 using Scalar = System.Single;
 #endif
 
-using AdvanceMath;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Physics2DDotNet;
 using Interfaces;
 
 namespace CustomBodies.Models
 {
-    public class ConnectionSlotModel : IConnectionSlot
+	public class ConnectionSlotModel : IConnectionSlot
     {
         /// <summary>
         /// The distance between slot and its owner

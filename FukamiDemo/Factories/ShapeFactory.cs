@@ -7,20 +7,16 @@ using Scalar = System.Single;
 
 
 using AdvanceMath;
-using Physics2DDotNet.Shapes;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shapes;
 using System.Collections.Concurrent;
 using Shapes.Abstract;
-using Shapes.Colors;
+using FarseerPhysics.Collision.Shapes;
+using Microsoft.Xna.Framework;
+using FarseerPhysics.Common;
 
 namespace Factories
 {
-    public static class ShapeFactory
+	public static class ShapeFactory
     {
         #region Consts
 
@@ -30,7 +26,7 @@ namespace Factories
 
         #region Fields
 
-        internal static ConcurrentDictionary<ColoredPolygon, IShape> _colShapes = new ConcurrentDictionary<ColoredPolygon, IShape>();
+        internal static ConcurrentDictionary<ColoredPolygon, Shape> _colShapes = new ConcurrentDictionary<ColoredPolygon, Shape>();
 
         #endregion
 
@@ -41,9 +37,9 @@ namespace Factories
         /// <param name="rest">Color of all array items except first one</param>
         /// <param name="count">The length of array</param>
         /// <returns>The array of colors created.</returns>
-        public static ScalarColor3[] CreateColor3Array(ScalarColor3 first, ScalarColor3 rest, int count)
+        public static Vector3[] CreateColor3Array(Vector3 first, Vector3 rest, int count)
         {
-            var result = new ScalarColor3[count];
+            var result = new Vector3[count];
             result[0] = first;
             for (int index = 1; index < count; ++index)
             {
@@ -53,19 +49,19 @@ namespace Factories
         }
 
 
-        public static ScalarColor3[] CreateColor3Array(int count)
+        public static Vector3[] CreateColor3Array(int count)
         {
-            return CreateColor3Array(new ScalarColor3(1, .5f, 0), new ScalarColor3(1, 1, 1), count);
+            return CreateColor3Array(new Vector3(1, .5f, 0), new Vector3(1, 1, 1), count);
         }
 
         public static PolygonShape CreatePolygonShape(Polygon polygon, Scalar gridSpacing)
         {
-            return new PolygonShape(polygon.Vertices.ToArray(), gridSpacing);
+            return new PolygonShape(polygon.Vertices, gridSpacing);
         }
 
-        public static IShape GetOrCreateColoredPolygonShape(Vector2D[] vertices, Scalar gridSpacing)
+        public static Shape GetOrCreateColoredPolygonShape(Vertices vertices, Scalar gridSpacing)
         {
-            var reduced = VertexHelper.Reduce(vertices);
+            var reduced = new Path(vertices);
             
             var polygon = new ColoredPolygon(reduced, CreateColor3Array(reduced.Length));
 

@@ -1,24 +1,32 @@
 ﻿using AdvanceMath;
 using CustomBodies;
-using Physics2DDotNet;
-using Physics2DDotNet.Joints;
-using Physics2DDotNet.PhysicsLogics;
+using FarseerPhysics;
+using FarseerPhysics.Dynamics;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework;
+using FarseerPhysics.Dynamics.Joints;
+using System.Threading;
 
 namespace WorldControllers
 {
+    
+
     public class Will
     {
         #region Fields
 
-        PhysicsEngine _engine;
-        PhysicsTimer _timer;
+        internal World _world;
+        Stopwatch _timer;
 
+        CancellationTokenSource _worldUpdateToken;
+        Task _worldUpdateTask;
+        
         //private readonly ConcurrentDictionary<Guid, Body> _bodies = new ConcurrentDictionary<Guid, Body>();
 
         #endregion // Fields
@@ -28,7 +36,7 @@ namespace WorldControllers
 
         public IEnumerable<Body> Bodies 
         {
-            get { return _engine.Bodies.AsEnumerable(); }
+            get { return _world.BodyList.AsEnumerable(); }
         }
 
         #endregion // Properties
@@ -36,7 +44,7 @@ namespace WorldControllers
 
         #region Events
 
-        public event EventHandler<UpdatedEventArgs> Updated;
+        //public event EventHandler<UpdatedEventArgs> Updated;
 
         #endregion // Events
 
@@ -50,66 +58,56 @@ namespace WorldControllers
 
         public void Purge()
         {
-            foreach (var body in _engine.Bodies)
+            RunPauseWilling(false);
+
+            foreach (var body in _world.BodyList)
             {
-                body.Lifetime.IsExpired = true;
+                _world.RemoveBody(body);
             }
             
-            foreach (var joint in _engine.Joints)
+            foreach (var joint in _world.JointList)
             {
-                joint.Lifetime.IsExpired = true;
+                _world.RemoveJoint(joint);
             }
         }
 
-        public void RunPauseWilling(bool? setToIsRunning = null)
+		public void Run()
+		{
+			StartWork();
+		}
+
+		public void Stop()
+		{
+			StopWork();
+		}
+
+        /// <summary>
+        /// Adds the body into internal dictionary and underlying physics engine
+        /// </summary>
+        public Body CreateDynamicBody()
         {
-            if (setToIsRunning.HasValue)
-            {
-                _timer.IsRunning = setToIsRunning.Value;
-            }
-            else
-            {
-                _timer.IsRunning = !_timer.IsRunning;
-            }
+            var dynBody = BodyFactory.CreateBody(_world, default(Vector2), 0f, BodyType.Dynamic);
+            dynBody.SleepingAllowed = true;
+			
+            return dynBody;
         }
 
         /// <summary>
-        /// Adds the body into internal dictionary and underlying physical engine
+        /// Creates a model for Body and links them together
         /// </summary>
-        /// <param name="body">The Body which value will be copied</param>
-        public void AddBody(Body body)
+        public T CreateModelForBody<T>(Body body) where T : BaseModelBody, new()
         {
-            _engine.AddBody(body);
+            var model = new T();
+
+			model.Body = body;
+            body.UserData = model;
+
+            return model;
         }
 
-        /// <summary>
-        /// Adds the body into internal dictionary and underlying physical engine
-        /// </summary>
-        /// <param name="bodies">The list of bodies to add</param>
-        public void AddModelBodies(IList<BaseModelBody> bodies)
+        public void CreateAngleJoint(BaseModelBody bodyA, BaseModelBody bodyB)
         {
-            foreach (var body in bodies)
-            {
-                AddBody(body);
-            }
-        }
-
-        public void AddJoint(Joint joint)
-        {
-            _engine.AddJoint(joint);
-        }
-
-        /// <summary>
-        /// Adds the joints into internal dictionary and underlying physical engine
-        /// </summary>
-        /// <param name="joints">The list of joints to add</param>
-        /// <remarks>Warning: adding joints before adding bodies will generate exception!</remarks>
-        public void AddJoints(IList<Joint> joints)
-        {
-            foreach (var joint in joints)
-            {
-                AddJoint(joint);
-            }
+            JointFactory.CreateAngleJoint(_world, bodyA.Body, bodyB.Body);
         }
 
         /// <summary>
@@ -120,8 +118,8 @@ namespace WorldControllers
         {
             var snapshot = new WorldSnapshot()
             {
-                Bodies = _engine.Bodies.ToArray(),
-                Joints = _engine.Joints.ToArray()
+                Bodies = _world.BodyList.ToArray(),
+                Joints = _world.JointList.ToArray()
             };
 
             return snapshot;
@@ -136,28 +134,9 @@ namespace WorldControllers
 
         private Will() 
         {
-            _engine = new PhysicsEngine
-                {
-                    BroadPhase = new Physics2DDotNet.Detectors.SelectiveSweepDetector(),
-                    Solver = new Physics2DDotNet.Solvers.SequentialImpulsesSolver
-                        {
-                            AllowedPenetration = 0.0001f
-                        }
-                };
-            _engine.AddLogic(new GravityField(new Vector2D(0, -300), new Lifespan()));
+            _world = new World(new Vector2(0f, 9.82f));
 
-            _engine.Updated += OnEngineUpdated;
-
-            _timer = new PhysicsTimer(_engine.Update, .005f);
-
-        }
-
-        void OnEngineUpdated(object sender, UpdatedEventArgs e)
-        {
-            if (Updated != null)
-            {
-                Updated(sender, e);
-            }
+            _timer = new Stopwatch();
         }
 
         public static Will Instance
@@ -176,7 +155,51 @@ namespace WorldControllers
                 return _instance;
             }
         }
-	#endregion
+        #endregion
 
+
+        #region Private Methods
+
+        void StopWork()
+        {
+            _worldUpdateToken.Cancel();
+
+            try
+            {
+                _timer.Stop();
+                _worldUpdateTask.Wait();
+            }
+            catch (AggregateException) { }
+        }
+
+        void StartWork()
+        {
+            _worldUpdateToken = new CancellationTokenSource();
+
+            _worldUpdateTask = Task.Run(async () =>  // <- marked async
+            {
+                _timer.Stop();
+                _timer.Start();
+
+                while (true)
+                {
+                    var elapsed = _timer.ElapsedMilliseconds * 0.001f;
+                    UpdateWorld(elapsed);
+                    var elapsedWithUpdate = _timer.ElapsedMilliseconds * 0.001f;
+                    var updateTime = elapsedWithUpdate - elapsed;
+                    var dynamicDelay = Math.Min((int)((0.033333f - updateTime) * 1000), 10); // Min Delay is 10 msec
+
+                    _timer.Reset();
+
+                    await Task.Delay(dynamicDelay, _worldUpdateToken.Token); // <- await with cancellation
+                }
+            }, _worldUpdateToken.Token);
+        }
+
+        public void UpdateWorld(float dt)
+        {
+            _world.Step(dt);
+        }
+        #endregion // Private Methods
     }
 }

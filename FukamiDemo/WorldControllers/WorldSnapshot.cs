@@ -1,17 +1,14 @@
-﻿using Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Joints;
+using Interfaces;
 
 namespace WorldControllers
 {
     public class WorldSnapshot : IWorldSnapshot
     {
 
-        public Physics2DDotNet.Body[] Bodies { get; set; }
+        public Body[] Bodies { get; set; }
 
-        public Physics2DDotNet.Joints.Joint[] Joints { get; set; }
+        public Joint[] Joints { get; set; }
     }
 }

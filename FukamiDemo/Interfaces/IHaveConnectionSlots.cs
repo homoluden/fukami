@@ -1,15 +1,12 @@
-﻿using Physics2DDotNet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using FarseerPhysics.Common;
+using Microsoft.Xna.Framework;
 
 namespace Interfaces
 {
-    public interface IHaveConnectionSlots
+	public interface IHaveConnectionSlots
     {
         IEnumerable<IConnectionSlot> Slots { get; }
-        ALVector2D Position { get; }
+		Transform Transform { get; }
     }
 }

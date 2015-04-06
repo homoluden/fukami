@@ -16,8 +16,8 @@ namespace CustomBodies.Models
 {
     public class BoneModel
     {
-        public double Thickness { get; set; }
-        public double Length { get; set; }
+        public Scalar Thickness { get; set; }
+        public Scalar Length { get; set; }
         public IList<IConnectionSlot> ChildSlots { get; set; }
 
         public BoneModel Duplicate()

@@ -5,7 +5,6 @@ using Scalar = System.Double;
 using Scalar = System.Single;
 #endif
 
-using Physics2DDotNet;
 using System;
 
 namespace Interfaces
