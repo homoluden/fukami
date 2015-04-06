@@ -1,9 +1,9 @@
-﻿using System;
-using CustomBodies.Models;
-using System.Collections.Generic;
-using Physics2DDotNet;
-using AdvanceMath;
+﻿using CustomBodies.Models;
+using FarseerPhysics.Common;
 using Interfaces;
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace Fukami.ViewModels
 {
@@ -11,7 +11,7 @@ namespace Fukami.ViewModels
     {
         #region Fields
 
-        Random _rnd = new Random(1133);
+        readonly Random _rnd = new Random(Environment.TickCount);
         
         #endregion
 
@@ -23,14 +23,14 @@ namespace Fukami.ViewModels
             get { return Model.MaxHealth; }
         }
 
-        public double Size
+        public float Size
         {
             get { return Model.Size; }
         }
 
-        public ALVector2D SpawningPosition
+        public Transform StartingTransform
         {
-            get { return Model.StartPosition; }
+            get { return Model.StartingTransform; }
         }
 
         public IEnumerable<IConnectionSlot> ConnectionSlots
@@ -46,9 +46,12 @@ namespace Fukami.ViewModels
         {
             if (Model == null)
             {
+                var randomOffset = StartingTransform.p + new Vector2(_rnd.Next(-100, 100)*0.1f, _rnd.Next(-100, 100)*0.1f);
+                var randomRotation = new Rot(StartingTransform.q.GetAngle() + _rnd.Next(-100, 100) * 0.003f);
+
                 Model = new CoreModel
                 {
-                    StartPosition = this.SpawningPosition + new ALVector2D(_rnd.Next(-100, 100) * 0.003, _rnd.Next(-100, 100) * 0.1, _rnd.Next(-100, 100) * 0.1),
+                    StartingTransform = new Transform(ref randomOffset, ref randomRotation) ,
                     Size = this.Size,
                     Density = 200,
                     ConnectionSlots = new []

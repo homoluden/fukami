@@ -1,17 +1,14 @@
-﻿using AdvanceMath;
+﻿using System.Collections.Concurrent;
+using System.Linq;
 using CustomBodies;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
-using FarseerPhysics.Dynamics.Joints;
-using System.Threading;
 
 namespace WorldControllers
 {
@@ -21,34 +18,31 @@ namespace WorldControllers
     {
         #region Fields
 
-        internal World _world;
-        Stopwatch _timer;
+        internal World World;
+        readonly Stopwatch _timer;
 
         CancellationTokenSource _worldUpdateToken;
         Task _worldUpdateTask;
         
-        //private readonly ConcurrentDictionary<Guid, Body> _bodies = new ConcurrentDictionary<Guid, Body>();
+        private readonly ConcurrentBag<Func<WorldSnapshot, Task>> _worldUpdateCallbacksAsync = new ConcurrentBag<Func<WorldSnapshot, Task>>(); 
 
         #endregion // Fields
 
 
         #region Properties
 
+        public bool IsRunning {
+            get { return _timer.IsRunning; }
+        }
+
         public IEnumerable<Body> Bodies 
         {
-            get { return _world.BodyList.AsEnumerable(); }
+            get { return World.BodyList.AsEnumerable(); }
         }
 
         #endregion // Properties
 
-
-        #region Events
-
-        //public event EventHandler<UpdatedEventArgs> Updated;
-
-        #endregion // Events
-
-
+        
         #region Private Methods
 
         #endregion // Private Methods
@@ -56,58 +50,39 @@ namespace WorldControllers
 
         #region Public Methods
 
+        public void AddWorldUpdateCallback(Func<WorldSnapshot, Task> callbackAsync)
+        {
+            if (callbackAsync == null)
+            {
+                throw new ArgumentNullException("callbackAsync");
+            }
+
+            _worldUpdateCallbacksAsync.Add(callbackAsync);
+        }
+
         public void Purge()
         {
-            RunPauseWilling(false);
+            Stop();
 
-            foreach (var body in _world.BodyList)
+            foreach (var body in World.BodyList)
             {
-                _world.RemoveBody(body);
+                World.RemoveBody(body);
             }
             
-            foreach (var joint in _world.JointList)
+            foreach (var joint in World.JointList)
             {
-                _world.RemoveJoint(joint);
+                World.RemoveJoint(joint);
             }
         }
 
-		public void Run()
-		{
-			StartWork();
-		}
-
-		public void Stop()
-		{
-			StopWork();
-		}
-
-        /// <summary>
-        /// Adds the body into internal dictionary and underlying physics engine
-        /// </summary>
-        public Body CreateDynamicBody()
+        public void Run()
         {
-            var dynBody = BodyFactory.CreateBody(_world, default(Vector2), 0f, BodyType.Dynamic);
-            dynBody.SleepingAllowed = true;
-			
-            return dynBody;
+            StartWork();
         }
 
-        /// <summary>
-        /// Creates a model for Body and links them together
-        /// </summary>
-        public T CreateModelForBody<T>(Body body) where T : BaseModelBody, new()
+        public void Stop()
         {
-            var model = new T();
-
-			model.Body = body;
-            body.UserData = model;
-
-            return model;
-        }
-
-        public void CreateAngleJoint(BaseModelBody bodyA, BaseModelBody bodyB)
-        {
-            JointFactory.CreateAngleJoint(_world, bodyA.Body, bodyB.Body);
+            StopWork();
         }
 
         /// <summary>
@@ -118,44 +93,14 @@ namespace WorldControllers
         {
             var snapshot = new WorldSnapshot()
             {
-                Bodies = _world.BodyList.ToArray(),
-                Joints = _world.JointList.ToArray()
+                Bodies = World.BodyList.ToArray(),
+                Joints = World.JointList.ToArray()
             };
 
             return snapshot;
         }
 
         #endregion // Public Methods
-
-
-        #region Singleton
-        private static volatile Will _instance;
-        private static readonly object SyncRoot = new Object();
-
-        private Will() 
-        {
-            _world = new World(new Vector2(0f, 9.82f));
-
-            _timer = new Stopwatch();
-        }
-
-        public static Will Instance
-        {
-            get 
-            {
-                if (_instance == null) 
-                {
-                lock (SyncRoot) 
-                {
-                    if (_instance == null)
-                        _instance = new Will();
-                }
-                }
-
-                return _instance;
-            }
-        }
-        #endregion
 
 
         #region Private Methods
@@ -185,8 +130,13 @@ namespace WorldControllers
                 {
                     var elapsed = _timer.ElapsedMilliseconds * 0.001f;
                     UpdateWorld(elapsed);
+                    var snapshot = GetWorldSnapshot();
                     var elapsedWithUpdate = _timer.ElapsedMilliseconds * 0.001f;
                     var updateTime = elapsedWithUpdate - elapsed;
+
+                    // Run rendering tasks w/o waiting their completion
+                    _worldUpdateCallbacksAsync.ToList().ForEach(t => t.Invoke(snapshot).Start()); 
+
                     var dynamicDelay = Math.Min((int)((0.033333f - updateTime) * 1000), 10); // Min Delay is 10 msec
 
                     _timer.Reset();
@@ -198,8 +148,38 @@ namespace WorldControllers
 
         public void UpdateWorld(float dt)
         {
-            _world.Step(dt);
+            World.Step(dt);
         }
         #endregion // Private Methods
+
+
+        #region Singleton
+        private static volatile Will _instance;
+        private static readonly object SyncRoot = new Object();
+
+        private Will()
+        {
+            World = new World(new Vector2(0f, 9.82f));
+
+            _timer = new Stopwatch();
+        }
+
+        public static Will Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (SyncRoot)
+                    {
+                        if (_instance == null)
+                            _instance = new Will();
+                    }
+                }
+
+                return _instance;
+            }
+        }
+        #endregion
     }
 }

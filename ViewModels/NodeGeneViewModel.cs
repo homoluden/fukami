@@ -3,7 +3,7 @@ namespace Fukami.ViewModels
 {
     public class NodeGeneViewModel : BaseGeneViewModel<IConnectionSlot>
     {
-        public double Size
+        public float Size
         {
             get { return Model.Size; }
             set

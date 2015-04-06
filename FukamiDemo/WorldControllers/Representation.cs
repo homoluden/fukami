@@ -1,12 +1,9 @@
 ﻿using CustomBodies;
-using Drawables;
 using Interfaces;
-using Physics2DDotNet;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WorldControllers
@@ -15,12 +12,7 @@ namespace WorldControllers
     {
         #region Constants
 
-        /// <summary>
-        /// Gets or Sets the count of Will Updates before do actual frame rendering
-        /// </summary>
-        public static sbyte WILL_UPDATE_SKIPS_COUNT = 2;
-
-	    #endregion
+        #endregion
 
         #region Fields
 
@@ -30,14 +22,12 @@ namespace WorldControllers
         private TaskScheduler _renderingContext;
         private bool _isRenderingCompleted = true;
 
-        private sbyte _updatesToSkip = WILL_UPDATE_SKIPS_COUNT;
-
         #endregion
 
 
         #region Public Methods
 
-        public void RegisterModel(Guid modelId, IList<BaseModelBody> modelBodies)
+        public void RegisterCompositeModel(Guid modelId, IList<BaseModelBody> modelBodies)
         {
             if (modelId == Guid.Empty)
             {
@@ -50,10 +40,11 @@ namespace WorldControllers
 
             _gameModels.AddOrUpdate(modelId, modelBodies, (id, list) =>
                 {
-                    foreach (var body in list.Where(body => !modelBodies.Contains(body)))
+                    foreach (var bodyModel in list.Where(body => !modelBodies.Contains(body)))
                     {
-                        body.Lifetime.IsExpired = true;
+                        Will.Instance.World.RemoveBody(bodyModel.Body);
                     }
+
                     return modelBodies;
                 });
         }
@@ -87,42 +78,34 @@ namespace WorldControllers
         #region Singleton
 
         private static volatile Representation _instance;
-        private static object syncRoot = new Object();
+        private static readonly object SyncRoot = new Object();
 
         private Representation()
         {
-            Will.Instance.Updated += OnWillUpdated;
+            Will.Instance.AddWorldUpdateCallback(OnWorldUpdated);
         }
 
-        void OnWillUpdated(object sender, UpdatedEventArgs e)
+        private async Task OnWorldUpdated(WorldSnapshot snapshot)
         {
             if (!_isRenderingCompleted)
-	        {
-                return;
-	        }
-
-            _updatesToSkip--;
-            
-            if (_updatesToSkip < 0 )
             {
-                _updatesToSkip = WILL_UPDATE_SKIPS_COUNT;
+                return;
+            }
 
-                Task.Factory.StartNew<IRenderer>(s =>
+            await Task.Delay(10).ContinueWith(t =>
+            {
+                _isRenderingCompleted = false;
+
+                IRenderer renderer;
+                if (_renderer.TryGetTarget(out renderer))
                 {
-                    IRenderer renderer;
-                    if (_renderer.TryGetTarget(out renderer))
-                    {
-                        var snapshot = Will.Instance.GetWorldSnapshot();                        
-                        renderer.RenderWorld(snapshot);
-                    }
-                    else
-                    {
-                        throw new ArgumentNullException("_renderer");
-                    }
-
-                    return renderer;
-                }, 
-                _renderingContext).ContinueWith(t =>
+                    renderer.RenderWorld(snapshot);
+                }
+                else
+                {
+                    throw new ArgumentNullException("_renderer");
+                }
+            }, _renderingContext).ContinueWith(t =>
                 {
                     if (t.IsFaulted)
                     {
@@ -131,27 +114,26 @@ namespace WorldControllers
 
                     _isRenderingCompleted = true;
                 });
-            }
         }
 
         public static Representation Instance
         {
-            get 
+            get
             {
-                if (_instance == null) 
+                if (_instance == null)
                 {
-                lock (syncRoot) 
-                {
-                    if (_instance == null)
-                        _instance = new Representation();
-                }
+                    lock (SyncRoot)
+                    {
+                        if (_instance == null)
+                            _instance = new Representation();
+                    }
                 }
 
                 return _instance;
             }
         }
 
-	    #endregion
+        #endregion
 
     }
 }

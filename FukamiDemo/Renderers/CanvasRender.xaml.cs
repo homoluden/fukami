@@ -1,34 +1,26 @@
-﻿using AdvanceMath;
-using AdvanceMath.Geometry2D;
-using CustomBodies;
+﻿using System.Linq;
+using Drawables;
+using Factories;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Dynamics;
 using Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Microsoft.Xna.Framework;
 using WorldControllers;
-using Physics2DDotNet;
+using Color = System.Windows.Media.Color;
 
 namespace Renderers
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class CanvasRenderer : UserControl, IDisposable, IRenderer
+    public partial class CanvasRenderer : IDisposable, IRenderer
     {
 private readonly DrawingVisual _drawing = new DrawingVisual();
-        private WriteableBitmap _wbmp;
-        private readonly Rect _fullscreenRect;
+        private readonly WriteableBitmap _wbmp;
 
         private readonly SolidColorBrush _defaultBrush = new SolidColorBrush(Colors.WhiteSmoke);
 
@@ -40,7 +32,6 @@ private readonly DrawingVisual _drawing = new DrawingVisual();
             InitializeComponent();
 
             _wbmp = BitmapFactory.New(1280, 1024);
-            _fullscreenRect = new Rect(0, 0, _wbmp.PixelWidth, _wbmp.PixelHeight);
             RenderingImage.Source = _wbmp;
 
             Representation.Instance.RegisterRenderer(this, TaskScheduler.FromCurrentSynchronizationContext());
@@ -53,23 +44,73 @@ private readonly DrawingVisual _drawing = new DrawingVisual();
 
         private void DrawBodyPolygon(BitmapContext ctx, Body body)
         {
-            var isStatic = body.IgnoresGravity;
+            var isStatic = body.IsStatic;
 
-            var pts = new int[body.Shape.Vertexes.Count() * 2 + 2];
-            
-            var pos = body.State.Position;
-
-            int i = 0;
-
-            foreach (var v in body.Shape.Vertexes)
+            body.FixtureList.ForEach(f =>
             {
-                var vr = Vector2D.Rotate(pos.Angular, v);
-                pts[i] = (int)(vr.X + pos.X); pts[i + 1] = (int)(vr.Y + pos.Y);
-                i += 2;
-            }
-            pts[i] = pts[0]; pts[i + 1] = pts[1];
+                var shape = f.Shape;
 
-            ctx.WriteableBitmap.FillPolygon(pts, isStatic ? _statBodyColor : _dynBodyColor);            
+                ColoredPolygon polygon = null;
+                var pos = body.Position;
+                var rot = body.Rotation;
+
+                var baseColor = isStatic ? _statBodyColor : _dynBodyColor;
+                var border = new Vector4(baseColor.R * 0.003921f, baseColor.G * 0.003921f, baseColor.B * 0.003921f, 1.0f);
+                var fill = new Vector4(border.X, border.Y, border.Z, 0.2f);
+
+                if (shape.ShapeType == ShapeType.Circle)
+                {
+                    var circle = (CircleShape)shape;
+                    var circleSpec = new CircleSpec
+                    {
+                        Radius = circle.Radius,
+                        SegmentsCount = 16,
+                        Border = border,
+                        Fill = fill
+                    };
+
+                    pos += circle.Position;
+
+                    polygon = DrawableFactory.GetOrCreateCircleDrawable(circleSpec);
+                }
+                else if (shape.ShapeType == ShapeType.Polygon)
+                {
+                    var rectangle = (PolygonShape)shape;
+                    var rectangleSpec = new PolygonSpec
+                    {
+                        Vertices = rectangle.Vertices,
+                        Border = border,
+                        Fill = fill
+                    };
+
+                    polygon = DrawableFactory.GetOrCreateColoredPolygonDrawable(rectangleSpec);
+                }
+
+                if (polygon != null)
+                {
+                    var pts = new int[polygon.Vertices.Count * 2 + 2];
+            
+                    int i = 0;
+
+                    foreach (var vr in polygon.Vertices.Select(v => v.Rotate(rot)))
+                    {
+                        pts[i] = WorldToScreenCoordinates(vr.X + pos.X); pts[i + 1] = WorldToScreenCoordinates(vr.Y + pos.Y);
+                        i += 2;
+                    }
+                    pts[i] = pts[0]; pts[i + 1] = pts[1];
+
+                    var fillColor = Color.FromArgb((byte)(fill.W*255), (byte)(fill.X*255), (byte)(fill.Y*255), (byte)(fill.Z*255));
+                    ctx.WriteableBitmap.FillPolygon(pts, fillColor);
+
+                    var borderColor = Color.FromArgb((byte)(border.W * 255), (byte)(border.X * 255), (byte)(border.Y * 255), (byte)(border.Z * 255));
+                    ctx.WriteableBitmap.DrawPolyline(pts, borderColor); 
+                }
+            
+
+
+            });
+
+          
         }
 
         private void RenderWorldInternal(IWorldSnapshot snapshot)
@@ -94,6 +135,11 @@ private readonly DrawingVisual _drawing = new DrawingVisual();
             {
                 op.Wait();
             }
+        }
+
+        public int WorldToScreenCoordinates(float worldCoords)
+        {
+            return (int)Math.Round(worldCoords*10);
         }
     }
 }

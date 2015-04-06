@@ -1,15 +1,11 @@
-﻿using AdvanceMath;
-using CustomBodies.Models;
+﻿using CustomBodies.Models;
 using Interfaces;
-using Physics2DDotNet;
-using System;
 using System.Collections.Generic;
 namespace Fukami.ViewModels
 {
     public class BoneGeneViewModel : BaseGeneViewModel<BoneModel>
     {
-        private double _thick;
-        public double Thickness
+        public float Thickness
         {
             get { return Model.Thickness; }
             set
@@ -19,8 +15,7 @@ namespace Fukami.ViewModels
             }
         }
 
-        private double _length;
-        public double Length
+        public float Length
         {
             get { return Model.Length; }
             set
@@ -32,7 +27,7 @@ namespace Fukami.ViewModels
 
         public override BoneModel GetModelDuplicate()
         {
-            return (BoneModel)Model.Duplicate();
+            return Model.Duplicate();
         }
 
         #region Citors
@@ -45,12 +40,12 @@ namespace Fukami.ViewModels
         protected BoneGeneViewModel(ulong id, string category, string description)
             : base(id, category, description)
         {
-            var mid = 10.0;
+            const float mid = 10.0f;
 
             Model = new BoneModel
             {
                 Length = mid * 2,
-                Thickness = 3.0,
+                Thickness = 3.0f,
                 ChildSlots = new List<IConnectionSlot> { 
                         new ConnectionSlotModel
                             {
@@ -59,8 +54,8 @@ namespace Fukami.ViewModels
                                 MaxChildMass = 15,
                                 MaxChildSize = 100,
                                 DistanceFromCenter = mid + 4.0f,
-                                Direction = 0.4,
-                                Orientation = 1.15
+                                Direction = 0.4f,
+                                Orientation = 1.15f
                             },
                         new ConnectionSlotModel
                             {
@@ -79,8 +74,8 @@ namespace Fukami.ViewModels
                                 MaxChildMass = 15,
                                 MaxChildSize = 100,
                                 DistanceFromCenter = mid + 4.0f,
-                                Direction = -0.4,
-                                Orientation = -1.15
+                                Direction = -0.4f,
+                                Orientation = -1.15f
                             }
                     }
             };

@@ -1,4 +1,4 @@
-﻿
+﻿using FarseerPhysics.Common;
 #if UseDouble
 using Scalar = System.Double;
 #else
@@ -20,7 +20,8 @@ namespace CustomBodies.Models
         public Scalar Density { get; set; }
         public ulong MaxHealth { get; set; }
 
-        public Vector2 StartPosition { get; set; }
+        public Transform StartingTransform { get; set; }
+
         public IEnumerable<IConnectionSlot> ConnectionSlots { get; set; }
 
         public object Clone()
@@ -31,7 +32,7 @@ namespace CustomBodies.Models
                 Size = this.Size,
                 Density = this.Density,
                 MaxHealth = this.MaxHealth,
-                StartPosition = this.StartPosition,
+                StartingTransform = this.StartingTransform,
                 ConnectionSlots = this.ConnectionSlots.Select(s => (IConnectionSlot)s.Duplicate())
             };
             return clone;
