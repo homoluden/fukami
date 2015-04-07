@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
         
         <!--Rendering Pane goes here-->
-        <Viewbox x:Name="RenderingBox" Stretch="UniformToFill">
+        <Viewbox x:Name="RenderingBox" Stretch="Uniform">
             <rdr:CanvasRenderer Width="Auto" Height="Auto">
                 <rdr:CanvasRenderer.LayoutTransform>
                     <ScaleTransform ScaleY="-1"/>

@@ -70,21 +70,38 @@ namespace Fukami.ViewModels
             }
         }
 
-        private void AddCoreCommandExecute(object parameter)
+        private void AddFloor(Vector2 floorPosition)
         {
-            Will.Instance.Purge();
-
-            var floorPosition = new Vector2(101, 300);
-            //var angle = MathHelper.ToRadians(15.0f);
-
             var floorBody = WillHelper.CreateStaticBody();
             var floorModel = WillHelper.CreateModelForBody<BaseModelBody>(floorBody);
 
             floorBody.Position = floorPosition;
 
-            floorBody.AttachRectangleFixture(50, 1024, float.PositiveInfinity, new Vector2(-512, -25));
+            floorBody.AttachRectangleFixture(1, 1, float.PositiveInfinity, new Vector2(0f, 0f));
 
-            Representation.Instance.RegisterCompositeModel(floorModel.ModelId, new List<BaseModelBody>{floorModel});
+            Representation.Instance.RegisterCompositeModel(floorModel.ModelId, new List<BaseModelBody> { floorModel });
+
+        }
+
+        private void AddCoreCommandExecute(object parameter)
+        {
+            Will.Instance.Purge();
+
+            var floorPosition = new Vector2(-64f, -51.2f);
+
+            AddFloor(floorPosition);
+
+            floorPosition = new Vector2(64f, -51.2f);
+
+            AddFloor(floorPosition);
+
+            floorPosition = new Vector2(64f, 51.2f);
+
+            AddFloor(floorPosition);
+
+            floorPosition = new Vector2(-64f, 51.2f);
+
+            AddFloor(floorPosition);
 
             Will.Instance.Run();
         }

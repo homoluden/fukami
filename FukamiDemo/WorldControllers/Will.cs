@@ -21,7 +21,7 @@ namespace WorldControllers
         internal World World;
         readonly Stopwatch _timer;
 
-        CancellationTokenSource _worldUpdateToken;
+        CancellationTokenSource _worldUpdateToken = new CancellationTokenSource();
         Task _worldUpdateTask;
         
         private readonly ConcurrentBag<Func<WorldSnapshot, Task>> _worldUpdateCallbacksAsync = new ConcurrentBag<Func<WorldSnapshot, Task>>(); 
@@ -112,7 +112,11 @@ namespace WorldControllers
             try
             {
                 _timer.Stop();
-                _worldUpdateTask.Wait();
+
+                if (_worldUpdateTask != null)
+                {
+                    _worldUpdateTask.Wait();
+                }
             }
             catch (AggregateException) { }
         }
@@ -135,7 +139,7 @@ namespace WorldControllers
                     var updateTime = elapsedWithUpdate - elapsed;
 
                     // Run rendering tasks w/o waiting their completion
-                    _worldUpdateCallbacksAsync.ToList().ForEach(t => t.Invoke(snapshot).Start()); 
+                    _worldUpdateCallbacksAsync.ToList().ForEach(t => t.Invoke(snapshot)); 
 
                     var dynamicDelay = Math.Min((int)((0.033333f - updateTime) * 1000), 10); // Min Delay is 10 msec
 
