@@ -21,9 +21,8 @@ namespace Renderers
     {
 private readonly DrawingVisual _drawing = new DrawingVisual();
         private readonly WriteableBitmap _wbmp;
-
-        private readonly SolidColorBrush _defaultBrush = new SolidColorBrush(Colors.WhiteSmoke);
-
+        private readonly Vector2 _worldCenterOffset = new Vector2(64f, 51.2f);
+        
         private readonly Color _dynBodyColor = new Color { ScA = 1.0f, ScR = 1.0f, ScG = 1.0f, ScB = 1.0f };
         private readonly Color _statBodyColor = new Color { ScA = 1.0f, ScR = 0.5f, ScG = 0.5f, ScB = 0.5f };
 
@@ -51,7 +50,7 @@ private readonly DrawingVisual _drawing = new DrawingVisual();
                 var shape = f.Shape;
 
                 ColoredPolygon polygon = null;
-                var pos = body.Position;
+                var pos = body.Position + _worldCenterOffset;
                 var rot = body.Rotation;
 
                 var baseColor = isStatic ? _statBodyColor : _dynBodyColor;
