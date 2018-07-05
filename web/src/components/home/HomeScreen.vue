@@ -10,7 +10,7 @@
         <md-button @click="showSidepanel = true">Favorites</md-button>
       </div>
     </md-toolbar>
-    
+
     <md-drawer :md-active.sync="showNavigation">
       <md-toolbar class="md-transparent" md-elevation="0">
         <span class="md-title">My App name</span>
@@ -74,9 +74,10 @@
     <md-content class="main-content">
       <md-bottom-bar class="md-alignment-top-center"
         md-type="shift" :md-theme="'bottom-bar-' + theme">
-        <md-bottom-bar-item md-label="Home" md-icon="home" @click="theme = 'teal'"></md-bottom-bar-item>
-        <md-bottom-bar-item md-label="Pages" md-icon="pages" @click="theme = 'orange'"></md-bottom-bar-item>
-        <md-bottom-bar-item md-label="Favorites" md-icon="favorite" @click="theme = 'red'"></md-bottom-bar-item>
+        <md-bottom-bar-item md-label="Ready" md-icon="done_all" @click="theme = 'teal'"></md-bottom-bar-item>
+        <md-bottom-bar-item md-label="Drafts" md-icon="rounded_corner" @click="theme = 'orange'"></md-bottom-bar-item>
+        <md-bottom-bar-item md-label="Raw" md-icon="block" @click="theme = 'red'"></md-bottom-bar-item>
+        <md-bottom-bar-item md-label="Demo" md-icon="developer_mode" @click="theme = 'black'"></md-bottom-bar-item>
       </md-bottom-bar>
     </md-content>
   </div>
@@ -98,7 +99,7 @@ export default {
 <style lang="scss">
 @import "~vue-material/dist/theme/engine";
 
-$active-border-color: md-get-palette-color(bluegrey, 500);
+$active-border-color: md-get-palette-color(black, 300);
 .page-container {
   min-height: 100vh;
   overflow: hidden;
@@ -159,6 +160,10 @@ $active-border-color: md-get-palette-color(bluegrey, 500);
 
   @include md-register-theme("bottom-bar-red", (
     primary: md-get-palette-color(red, A200)
+  ));
+
+  @include md-register-theme("bottom-bar-black", (
+    primary: md-get-palette-color(lightblue, 900)
   ));
 
   @import "~vue-material/dist/theme/all";
