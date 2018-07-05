@@ -1,22 +1,13 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+  <div>
+    <div class="viewport">
+      <md-bottom-bar class="md-alignment-top-center"
+        md-type="shift" :md-theme="'bottom-bar-' + theme">
+        <md-bottom-bar-item md-label="Home" md-icon="home" @click="theme = 'teal'"></md-bottom-bar-item>
+        <md-bottom-bar-item md-label="Pages" md-icon="pages" @click="theme = 'orange'"></md-bottom-bar-item>
+        <md-bottom-bar-item md-label="Favorites" md-icon="favorite" @click="theme = 'red'"></md-bottom-bar-item>
+      </md-bottom-bar>
+    </div>
   </div>
 </template>
 
@@ -25,26 +16,57 @@ export default {
   name: 'HelloWorld',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      theme: 'teal',
     };
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
+<style lang="scss">
+@import "~vue-material/dist/theme/engine";
+
+$active-border-color: md-get-palette-color(bluegrey, 500);
+
+.viewport {
+  width: 100vw;
+  height: 100vh;
+  display: inline-flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border: 1px solid rgba(#000, .26);
+  background: rgba(#000, .06);
+
+  .md-bottom-bar .md-bottom-bar-item.md-active {
+    width: initial;
+    border-top: 5px $active-border-color solid;
+  }
+
+  .md-bottom-bar>.md-ripple {
+    justify-content: center;
+  }
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
+</style>
+
+<style lang="scss">
+  @import "~vue-material/dist/theme/engine";
+
+  @include md-register-theme("bottom-bar-teal", (
+    primary: md-get-palette-color(teal, A200)
+  ));
+
+  @include md-register-theme("bottom-bar-orange", (
+    primary: md-get-palette-color(orange, A200)
+  ));
+
+  @include md-register-theme("bottom-bar-blue", (
+    primary: md-get-palette-color(blue, A200),
+    accent: md-get-palette-color(red, A200)
+  ));
+
+  @include md-register-theme("bottom-bar-red", (
+    primary: md-get-palette-color(red, A200)
+  ));
+
+  @import "~vue-material/dist/theme/all";
 </style>
