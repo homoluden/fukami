@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'HomeScreen',
   data() {
     return {
       theme: 'teal',
