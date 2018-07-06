@@ -114,6 +114,7 @@ $active-border-color: md-get-palette-color(black, 300);
   right: 0;
   padding: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
