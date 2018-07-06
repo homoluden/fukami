@@ -1,73 +1,51 @@
 <template>
   <div class="page-container md-layout-column">
-    <md-toolbar class="md-primary">
+    <md-toolbar class="md-primary md-layout md-alignment-center-space-between">
       <md-button class="md-icon-button" @click="showNavigation = true">
         <md-icon>menu</md-icon>
       </md-button>
-      <span class="md-title">Fukami Game Resources</span>
-
-      <div class="md-toolbar-section-end">
-        <md-button @click="showSidepanel = true">Favorites</md-button>
-      </div>
+      <span class="md-title md-alignment-center">Fukami Game</span>
+      <md-button @click="showSidepanel = true"><md-icon  class="md-size-2x">face</md-icon></md-button>
     </md-toolbar>
 
     <md-drawer :md-active.sync="showNavigation">
       <md-toolbar class="md-transparent" md-elevation="0">
-        <span class="md-title">My App name</span>
+        <span class="md-title">Menu</span>
       </md-toolbar>
 
       <md-list>
         <md-list-item>
-          <md-icon>move_to_inbox</md-icon>
-          <span class="md-list-item-text">Inbox</span>
+          <md-icon>library_books</md-icon>
+          <span class="md-list-item-text">Readings</span>
         </md-list-item>
 
         <md-list-item>
-          <md-icon>send</md-icon>
-          <span class="md-list-item-text">Sent Mail</span>
+          <md-icon>videogame_asset</md-icon>
+          <span class="md-list-item-text">Demos</span>
         </md-list-item>
 
         <md-list-item>
-          <md-icon>delete</md-icon>
-          <span class="md-list-item-text">Trash</span>
+          <md-icon>help</md-icon>
+          <span class="md-list-item-text">About</span>
         </md-list-item>
 
-        <md-list-item>
-          <md-icon>error</md-icon>
-          <span class="md-list-item-text">Spam</span>
-        </md-list-item>
       </md-list>
     </md-drawer>
 
     <md-drawer class="md-right" :md-active.sync="showSidepanel">
       <md-toolbar class="md-transparent" md-elevation="0">
-        <span class="md-title">Favorites</span>
+        <span class="md-title">User Info</span>
       </md-toolbar>
 
       <md-list>
         <md-list-item>
-          <span class="md-list-item-text">Abbey Christansen</span>
+          <span class="md-list-item-text">John Smith</span>
 
           <md-button class="md-icon-button md-list-action">
-            <md-icon class="md-primary">chat_bubble</md-icon>
+            <md-icon class="md-primary">email</md-icon>
           </md-button>
         </md-list-item>
 
-        <md-list-item>
-          <span class="md-list-item-text">Alex Nelson</span>
-
-          <md-button class="md-icon-button md-list-action">
-            <md-icon class="md-primary">chat_bubble</md-icon>
-          </md-button>
-        </md-list-item>
-
-        <md-list-item>
-          <span class="md-list-item-text">Mary Johnson</span>
-
-          <md-button class="md-icon-button md-list-action">
-            <md-icon>chat_bubble</md-icon>
-          </md-button>
-        </md-list-item>
       </md-list>
     </md-drawer>
 
@@ -77,7 +55,6 @@
         <md-bottom-bar-item md-label="Ready" md-icon="done_all" @click="theme = 'teal'"></md-bottom-bar-item>
         <md-bottom-bar-item md-label="Drafts" md-icon="rounded_corner" @click="theme = 'orange'"></md-bottom-bar-item>
         <md-bottom-bar-item md-label="Raw" md-icon="block" @click="theme = 'red'"></md-bottom-bar-item>
-        <md-bottom-bar-item md-label="Demo" md-icon="developer_mode" @click="theme = 'black'"></md-bottom-bar-item>
       </md-bottom-bar>
     </md-content>
   </div>
