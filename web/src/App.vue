@@ -2,11 +2,13 @@
   <div id="app">
     <div class="page-container md-layout-column">
       <md-toolbar class="md-primary md-layout md-alignment-center-space-between">
-        <md-button class="md-icon-button" @click="showNavigation = true">
-          <md-icon>menu</md-icon>
-        </md-button>
+        <div class="toolbar-container left">
+          <md-button class="md-icon-button" @click="showNavigation = true">
+            <md-icon>menu</md-icon>
+          </md-button>
+        </div>
         <span class="md-title md-alignment-center">Fukami Game</span>
-        <md-button @click="showSidepanel = true"><md-icon  class="md-size-2x">face</md-icon></md-button>
+        <div class="toolbar-container right"/>
       </md-toolbar>
 
       <md-drawer :md-active.sync="showNavigation">
@@ -33,31 +35,9 @@
         </md-list>
       </md-drawer>
 
-      <md-drawer class="md-right" :md-active.sync="showSidepanel">
-        <md-toolbar class="md-transparent" md-elevation="0">
-          <span class="md-title">User Info</span>
-        </md-toolbar>
-
-        <md-list>
-          <md-list-item>
-            <span class="md-list-item-text">John Smith</span>
-
-            <md-button class="md-icon-button md-list-action">
-              <md-icon class="md-primary">email</md-icon>
-            </md-button>
-          </md-list-item>
-
-        </md-list>
-      </md-drawer>
-
       <md-content class="main-content">
         <router-view/>
       </md-content>
-      <md-bottom-bar class="md-alignment-top-center" md-type="shift" :md-theme="'bottom-bar-' + theme" md-sync-route="true">
-        <md-bottom-bar-item to="/" md-label="Ready" md-icon="done_all" @click="theme = 'teal'"></md-bottom-bar-item>
-        <md-bottom-bar-item to="/drafts" md-label="Drafts" md-icon="rounded_corner" @click="theme = 'orange'"></md-bottom-bar-item>
-        <md-bottom-bar-item to="/raw" md-label="Raw" md-icon="block" @click="theme = 'red'"></md-bottom-bar-item>
-      </md-bottom-bar>
     </div>
   </div>
 </template>
@@ -67,9 +47,7 @@ export default {
   name: 'app',
   data() {
     return {
-      theme: 'teal',
       showNavigation: false,
-      showSidepanel: false,
     };
   },
 };
@@ -82,6 +60,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+div.toolbar-container {
+  width: 100px;
 }
 </style>
 
@@ -96,7 +78,6 @@ $active-border-color: md-get-palette-color(black, 300);
   border: 1px solid rgba(#000, .12);
 }
 
-  // Demo purposes only
 .md-drawer {
   width: 230px;
   max-width: calc(100vw - 125px);
@@ -109,7 +90,7 @@ $active-border-color: md-get-palette-color(black, 300);
 .main-content {
   position: fixed;
   top: 64px;
-  bottom: 57px;
+  bottom: 0;
   left: 0;
   right: 0;
   padding: 0;
@@ -121,47 +102,4 @@ $active-border-color: md-get-palette-color(black, 300);
   border: 1px solid rgba(#000, .26);
   background: rgba(#000, .06);
 }
-
-.md-bottom-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.md-bottom-bar .md-bottom-bar-item.md-active {
-  width: initial;
-  border-top: 5px $active-border-color solid;
-}
-
-.md-bottom-bar>.md-ripple {
-  justify-content: center;
-}
-</style>
-
-<style lang="scss">
-  @import "~vue-material/dist/theme/engine";
-
-  @include md-register-theme("bottom-bar-teal", (
-    primary: md-get-palette-color(teal, A200)
-  ));
-
-  @include md-register-theme("bottom-bar-orange", (
-    primary: md-get-palette-color(orange, A200)
-  ));
-
-  @include md-register-theme("bottom-bar-blue", (
-    primary: md-get-palette-color(blue, A200),
-    accent: md-get-palette-color(red, A200)
-  ));
-
-  @include md-register-theme("bottom-bar-red", (
-    primary: md-get-palette-color(red, A200)
-  ));
-
-  @include md-register-theme("bottom-bar-black", (
-    primary: md-get-palette-color(lightblue, 900)
-  ));
-
-  @import "~vue-material/dist/theme/all";
 </style>
