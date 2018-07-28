@@ -44,6 +44,12 @@ module.exports = {
         ]
       }
     ],
+    "no-plusplus": [
+      "error",
+      { 
+        "allowForLoopAfterthoughts": true 
+      }
+    ],
     // allow optionalDependencies
     "import/no-extraneous-dependencies": [
       "error",
