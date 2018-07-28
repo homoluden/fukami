@@ -30,11 +30,29 @@ export default {
     return {
       svgWidth: 0,
       svgHeight: 0,
+      sites: [],
     };
   },
   mounted() {
     this.svgWidth = this.$refs.vorMap.clientWidth;
     this.svgHeight = this.$refs.vorMap.clientHeight;
+
+    const w = this.mapData.width;
+    const dw = this.svgWidth / w;
+    const halfDw = dw / 2;
+    const h = this.mapData.height;
+    const dh = this.svgHeight / h;
+    const halfDh = dh / 2;
+
+    this.sites = [];
+    for (let i = 0; i < h; i++) {
+      for (let j = 0; j < w; j++) {
+        this.sites.push({
+          x: halfDw + (i * dw),
+          y: halfDh + (j * dh),
+        });
+      }
+    }
   },
 };
 </script>
