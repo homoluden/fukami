@@ -33,11 +33,15 @@ export default {
     };
   },
   mounted() {
-    this.data.svgWidth = this.$refs.vorMap.width;
-    this.data.svgHeight = this.$refs.vorMap.height;
+    this.svgWidth = this.$refs.vorMap.clientWidth;
+    this.svgHeight = this.$refs.vorMap.clientHeight;
   },
 };
 </script>
 
 <style>
+div.vor-map {
+  width: 100%;
+  height: 100%;
+}
 </style>
