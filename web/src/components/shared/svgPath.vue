@@ -23,12 +23,15 @@ export default {
   path.svg-path {
     fill: $fill-norm;
     cursor: pointer;
+    stroke: md-get-palette-color(grey, 900);
+    stroke-width: 1;
+    opacity: 0.1;
 
     &:hover {
       fill: $fill-hover;
-      border: 1px solid #eee;
       stroke: $stroke;
-      stroke-width: 1;
+      stroke-width: 4;
+      opacity: 1;
     }
   }
 </style>
