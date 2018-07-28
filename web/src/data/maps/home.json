@@ -1,0 +1,14 @@
+{
+    "name": "home",
+    "width": 5,
+    "height": 5,
+    "activeCells": [
+        {
+            "id": "c13",
+            "r": 1,
+            "c": 3,
+            "url": "#/about",
+            "color": "rgba(19, 72, 65, 0.7)"
+        }
+    ]
+}

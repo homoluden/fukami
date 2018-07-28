@@ -1,5 +1,7 @@
 <template>
-  <path class="svg-path" :d="data"/>
+  <path
+    :d="data"
+    class="svg-path"/>
 </template>
 
 <script>

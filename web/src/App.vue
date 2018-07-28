@@ -3,7 +3,9 @@
     <div class="page-container md-layout-column">
       <md-toolbar class="md-primary md-layout md-alignment-center-space-between">
         <div class="toolbar-container left">
-          <md-button class="md-icon-button" @click="showNavigation = true">
+          <md-button
+            class="md-icon-button"
+            @click="showNavigation = true">
             <md-icon>menu</md-icon>
           </md-button>
         </div>
@@ -12,7 +14,9 @@
       </md-toolbar>
 
       <md-drawer :md-active.sync="showNavigation">
-        <md-toolbar class="md-transparent" md-elevation="0">
+        <md-toolbar
+          class="md-transparent"
+          md-elevation="0">
           <span class="md-title">Menu</span>
         </md-toolbar>
 
@@ -44,7 +48,7 @@
 
 <script>
 export default {
-  name: 'app',
+  name: 'App',
   data() {
     return {
       showNavigation: false,
