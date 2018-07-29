@@ -50,17 +50,15 @@ export default {
     generateSites() {
       const w = this.mapData.width;
       const dw = this.svgWidth / w;
-      const halfDw = dw / 2;
       const h = this.mapData.height;
       const dh = this.svgHeight / h;
-      const halfDh = dh / 2;
 
       this.sites = [];
       for (let i = 0; i < h; i++) {
         for (let j = 0; j < w; j++) {
           this.sites.push({
-            x: fkMath.round(halfDw + (i * dw)),
-            y: fkMath.round(halfDh + (j * dh)),
+            x: fkMath.round((i * dw) + (Math.random() * dw)),
+            y: fkMath.round((j * dh) + (Math.random() * dh)),
             row: i + 1,
             col: j + 1,
           });
