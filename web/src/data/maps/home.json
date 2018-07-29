@@ -8,7 +8,7 @@
             "row": 4,
             "col": 7,
             "title": "About Fukami Game",
-            "preview": "<div class=\"md-layout\"><div class=\"md-layout-item md-size-100\">Brief overview about what Fukami Game is.</div><div class=\"md-layout-item md-size-100\"><a href=\"/#/about\">Read more...</a></div></div>",
+            "preview": "<div class=\"md-layout\"><div class=\"md-layout-item md-size-100\">Brief overview about what Fukami Game is.</div><div class=\"md-layout-item md-size-100\"><a href=\"#/about\">Read more...</a></div></div>",
             "url": "#/about",
             "color": "rgba(19, 72, 65, 0.9)"
         }
