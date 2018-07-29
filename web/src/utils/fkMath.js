@@ -1,3 +1,7 @@
+import {
+  isArray,
+} from 'lodash';
+
 function fkRound(number, fraction = 4) {
   let result = number;
 
@@ -14,8 +18,23 @@ function fkRound(number, fraction = 4) {
   return result;
 }
 
+function fkRoundArray(array, fraction = 4) {
+  if (!isArray(array) || array.length === 0) {
+    return [];
+  }
+
+  if (isArray(array[0])) {
+    // Let's round nested arrays
+    const roundedArrays = array.map(arr => fkRoundArray(arr));
+    return roundedArrays;
+  }
+
+  return array.map(num => fkRound(num, fraction));
+}
+
 const fkMath = {
   round: fkRound,
+  roundArray: fkRoundArray,
 };
 
 window.fkMath = fkMath;
