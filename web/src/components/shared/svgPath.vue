@@ -1,17 +1,23 @@
 <template>
   <path
-    :d="data"
+    :d="d"
     class="svg-path"/>
 </template>
 
 <script>
 export default {
   props: {
-    data: {
-      type: String,
-      required: true,
-      default: 'M0,0L100,0L100,100L0,100L0,0Z',
+    points: {
+      type: Array,
+      default() {
+        return [[0, 0], [100, 0], [100, 100], [0, 100]];
+      },
     },
+  },
+  data() {
+    return {
+      d: `M${this.points.join('L')}Z`,
+    };
   },
 };
 </script>

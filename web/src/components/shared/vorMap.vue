@@ -6,7 +6,7 @@
       v-if="svgWidth && svgHeight"
       :width="svgWidth"
       :height="svgHeight">
-      <svg-path />
+      <svg-path data="M0,0L100,0L100,100L0,100L0,0Z" />
     </svg-canvas>
   </div>
 </template>
