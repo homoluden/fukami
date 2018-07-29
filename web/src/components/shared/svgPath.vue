@@ -1,6 +1,10 @@
 <template>
   <path
     :d="d"
+    :style="{
+      fill: (activeCell ? activeCell.color : null),
+      opacity: (activeCell ? 1.0 : null)
+    }"
     class="svg-path"/>
 </template>
 
@@ -12,6 +16,10 @@ export default {
       default() {
         return [[0, 0], [100, 0], [100, 100], [0, 100]];
       },
+    },
+    activeCell: {
+      type: Object,
+      default: null,
     },
   },
   data() {

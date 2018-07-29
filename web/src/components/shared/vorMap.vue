@@ -9,7 +9,8 @@
       <svg-path
         v-for="cell in cells"
         :key="cell.key"
-        :points="cell.points"/>
+        :points="cell.points"
+        :active-cell="cell.site.activeCell"/>
     </svg-canvas>
   </div>
 </template>
@@ -61,11 +62,11 @@ export default {
       const w = this.mapData.width;
       const dw = this.svgWidth / w;
       const halfDw = dw * 0.5;
-      const qtrDw = dw * 0.25;
+      const qtrDw = dw * 0.35;
       const h = this.mapData.height;
       const dh = this.svgHeight / h;
       const halfDh = dh * 0.5;
-      const qtrDh = dh * 0.25;
+      const qtrDh = dh * 0.35;
 
       this.sites = [];
       for (let i = 0; i < h; i++) {
@@ -75,12 +76,20 @@ export default {
           let y = (i * dh) + halfDh;
           y += (Math.random() * halfDh) - qtrDh;
 
-          this.sites.push({
+          const s = {
             x: fkMath.round(x),
             y: fkMath.round(y),
             row: i + 1,
             col: j + 1,
-          });
+          };
+
+          const activeCell = this.mapData.activeCells
+            .find(ac => ac.row === s.row && ac.col === s.col);
+          if (activeCell) {
+            s.activeCell = activeCell;
+          }
+
+          this.sites.push(s);
         }
       }
     },
@@ -89,10 +98,10 @@ export default {
       const diagram = voronoi(this.sites.map(s => [s.x, s.y]));
       let polygons = diagram.polygons();
 
-      polygons = polygons.map((p) => {
+      polygons = polygons.map((p, i) => {
         const result = {
           key: `s[${p.data.join(',')}]`,
-          site: p.data,
+          site: this.sites[i],
           points: fkMath.roundArray(p),
         };
 
