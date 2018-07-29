@@ -60,15 +60,24 @@ export default {
     generateSites() {
       const w = this.mapData.width;
       const dw = this.svgWidth / w;
+      const halfDw = dw * 0.5;
+      const qtrDw = dw * 0.25;
       const h = this.mapData.height;
       const dh = this.svgHeight / h;
+      const halfDh = dh * 0.5;
+      const qtrDh = dh * 0.25;
 
       this.sites = [];
       for (let i = 0; i < h; i++) {
         for (let j = 0; j < w; j++) {
+          let x = (j * dw) + halfDw;
+          x += (Math.random() * halfDw) - qtrDw;
+          let y = (i * dh) + halfDh;
+          y += (Math.random() * halfDh) - qtrDh;
+
           this.sites.push({
-            x: fkMath.round((i * dw) + (Math.random() * dw)),
-            y: fkMath.round((j * dh) + (Math.random() * dh)),
+            x: fkMath.round(x),
+            y: fkMath.round(y),
             row: i + 1,
             col: j + 1,
           });
