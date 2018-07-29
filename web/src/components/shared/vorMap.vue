@@ -113,11 +113,15 @@ export default {
       return polygons;
     },
     onCellPreview(activeCell) {
-      if (!isObject(activeCell)) {
+      const ac = activeCell;
+      if (!isObject(ac)) {
         return;
       }
 
-      this.$swal('Active Cell clicked');
+      this.$swal({
+        title: ac.title,
+        html: ac.preview,
+      });
     },
   },
 };
