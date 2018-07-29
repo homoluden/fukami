@@ -2,10 +2,11 @@
   <path
     :d="d"
     :style="{
+      cursor: (activeCell ? 'pointer' : null),
       fill: (activeCell ? activeCell.color : null),
       opacity: (activeCell ? 1.0 : null)
     }"
-    class="svg-path"
+    :class="{'svg-path': true, 'active-cell': activeCell}"
     @click="cellClicked"/>
 </template>
 
@@ -57,7 +58,6 @@ export default {
 
   path.svg-path {
     fill: $fill-norm;
-    cursor: pointer;
     stroke: md-get-palette-color(grey, 900);
     stroke-width: 1;
     opacity: 0.1;
@@ -65,8 +65,11 @@ export default {
     &:hover {
       fill: $fill-hover;
       stroke: $stroke;
-      stroke-width: 4;
+      stroke-width: 1;
       opacity: 1;
+    }
+    &.active-cell:hover {
+      stroke-width: 4;
     }
   }
 </style>
