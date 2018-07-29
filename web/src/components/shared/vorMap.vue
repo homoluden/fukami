@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import fkMath from '@/utils/fkMath';
 import SvgCanvas from './svgCanvas';
 import SvgPath from './svgPath';
 
@@ -48,8 +49,10 @@ export default {
     for (let i = 0; i < h; i++) {
       for (let j = 0; j < w; j++) {
         this.sites.push({
-          x: halfDw + (i * dw),
-          y: halfDh + (j * dh),
+          x: fkMath.round(halfDw + (i * dw)),
+          y: fkMath.round(halfDh + (j * dh)),
+          row: i + 1,
+          col: j + 1,
         });
       }
     }
