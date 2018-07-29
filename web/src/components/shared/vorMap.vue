@@ -10,7 +10,8 @@
         v-for="cell in cells"
         :key="cell.key"
         :points="cell.points"
-        :active-cell="cell.site.activeCell"/>
+        :active-cell="cell.site.activeCell"
+        :preview-cell="onCellPreview"/>
     </svg-canvas>
   </div>
 </template>
@@ -19,6 +20,7 @@
 import * as d3 from 'd3';
 import {
   debounce,
+  isObject,
 } from 'lodash';
 import fkMath from '@/utils/fkMath';
 import SvgCanvas from './svgCanvas';
@@ -109,6 +111,13 @@ export default {
       });
 
       return polygons;
+    },
+    onCellPreview(activeCell) {
+      if (!isObject(activeCell)) {
+        return;
+      }
+
+      this.$swal('Active Cell clicked');
     },
   },
 };

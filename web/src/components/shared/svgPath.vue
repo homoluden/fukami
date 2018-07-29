@@ -5,10 +5,16 @@
       fill: (activeCell ? activeCell.color : null),
       opacity: (activeCell ? 1.0 : null)
     }"
-    class="svg-path"/>
+    class="svg-path"
+    @click="cellClicked"/>
 </template>
 
 <script>
+import {
+  isFunction,
+  isObject,
+} from 'lodash';
+
 export default {
   props: {
     points: {
@@ -21,11 +27,24 @@ export default {
       type: Object,
       default: null,
     },
+    previewCell: {
+      type: Function,
+      default: null,
+    },
   },
   data() {
     return {
       d: `M${this.points.join('L')}Z`,
     };
+  },
+  methods: {
+    cellClicked() {
+      if (!isObject(this.activeCell) || !isFunction(this.previewCell)) {
+        return;
+      }
+
+      this.previewCell(this.activeCell);
+    },
   },
 };
 </script>
