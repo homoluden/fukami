@@ -5,8 +5,8 @@
     "activeCells": [
         {
             "id": "c13",
-            "r": 1,
-            "c": 3,
+            "row": 1,
+            "col": 3,
             "url": "#/about",
             "color": "rgba(19, 72, 65, 0.7)"
         }
