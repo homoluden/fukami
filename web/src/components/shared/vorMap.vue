@@ -16,6 +16,9 @@
 
 <script>
 import * as d3 from 'd3';
+import {
+  debounce,
+} from 'lodash';
 import fkMath from '@/utils/fkMath';
 import SvgCanvas from './svgCanvas';
 import SvgPath from './svgPath';
@@ -39,14 +42,21 @@ export default {
       cells: [],
     };
   },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.resizeHandler);
+  },
   mounted() {
-    this.svgWidth = this.$refs.vorMap.clientWidth;
-    this.svgHeight = this.$refs.vorMap.clientHeight;
-
-    this.generateSites();
-    this.cells = this.generateCells();
+    window.addEventListener('resize', this.resizeHandler = debounce(this.regenerateCells, 300));
+    this.regenerateCells();
   },
   methods: {
+    regenerateCells() {
+      this.svgWidth = this.$refs.vorMap.clientWidth;
+      this.svgHeight = this.$refs.vorMap.clientHeight;
+
+      this.generateSites();
+      this.cells = this.generateCells();
+    },
     generateSites() {
       const w = this.mapData.width;
       const dw = this.svgWidth / w;
