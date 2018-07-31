@@ -46,8 +46,8 @@ module.exports = {
     ],
     "no-plusplus": [
       "error",
-      { 
-        "allowForLoopAfterthoughts": true 
+      {
+        "allowForLoopAfterthoughts": true
       }
     ],
     // allow optionalDependencies
@@ -59,6 +59,6 @@ module.exports = {
     ],
     // allow debugger during development
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
-    "linebreak-style": ["error", "windows"]
+    "linebreak-style": "off"
   }
 };
